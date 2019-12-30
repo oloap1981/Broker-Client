@@ -176,41 +176,6 @@
           }
         }
       }
-    },
-    "broker-lib": {
-      "projectType": "library",
-      "root": "projects/broker-lib",
-      "sourceRoot": "projects/broker-lib/src",
-      "prefix": "",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "projects/broker-lib/tsconfig.lib.json",
-            "project": "projects/broker-lib/ng-package.json"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/broker-lib/src/test.ts",
-            "tsConfig": "projects/broker-lib/tsconfig.spec.json",
-            "karmaConfig": "projects/broker-lib/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/broker-lib/tsconfig.lib.json",
-              "projects/broker-lib/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
     }
   },
   "cli": {

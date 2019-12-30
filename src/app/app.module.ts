@@ -34,6 +34,7 @@ import { PipesModule } from './pipes/pipes.module';
 import { AmmortamentoPageModule } from './pages/ammortamento/ammortamento.module';
 import { ClientHomePageModule } from './pages/client-home/client-home.module';
 import { ClientHomePage } from './pages/client-home/client-home.page';
+import { ClientImmobiliPageModule } from './pages/client-immobili/client-immobili.module';
 
 const routes: Routes = [
     { path: '', redirectTo: 'client-home', pathMatch: 'full' },
@@ -50,6 +51,7 @@ const routes: Routes = [
     { path: 'report-analisi', loadChildren: () => import('./pages/report-analisi/report-analisi.module').then(m => m.ReportAnalisiPageModule) },
     { path: 'ammortamento', loadChildren: () => import('./pages/ammortamento/ammortamento.module').then(m => m.AmmortamentoPageModule) },
     { path: 'client-home', loadChildren: () => import('./pages/client-home/client-home.module').then(m => m.ClientHomePageModule) },
+    { path: 'client-immobili', loadChildren: () => import('./pages/client-immobili/client-immobili.module').then(m => m.ClientImmobiliPageModule) },
 ];
 
 @NgModule({
@@ -75,6 +77,7 @@ const routes: Routes = [
     BrowserAnimationsModule,
     HttpClientModule,
     ClientHomePageModule,
+    ClientImmobiliPageModule,
     PipesModule,
     IonicModule.forRoot()
   ],

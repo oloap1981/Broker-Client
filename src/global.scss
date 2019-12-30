@@ -2026,6 +2026,9 @@ input:checked + .slider:before {
     .content {
         position: inherit;
         overflow: auto;
+        &.lista-immobili {
+            top: 0;
+        }
         .scheda {
             position: inherit;
             top: 10px;
@@ -2041,7 +2044,7 @@ input:checked + .slider:before {
         }
         .list {
             position: inherit;
-            top: 10px;
+            top: 0;
             left: 0;
             right: 0;
             overflow: inherit;
