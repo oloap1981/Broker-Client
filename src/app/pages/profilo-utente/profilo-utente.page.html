@@ -1,0 +1,78 @@
+<div class="main-body  body-no-right-menu wizard">
+    <div class="content-area">
+        <div class="tool-area">
+            <div class="tool-table">
+                <div class="tool-row">
+                    <div class="tool">
+                        <button (click)="goToHome()" class="button back only-icon">&nbsp;</button>
+                        <h3 class="page-title no-icon">Modifica password</h3>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="content">
+            <div class="scheda">
+                <div class="scheda-header">
+                    <div class="scheda-table">
+                        <div class="scheda-row">
+                            <div class="item tipologia cliente"></div>
+                            <div class="item indirizzo">
+                                {{getUtenteEmail()}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="scheda-content">
+                    <div class="scheda-table single-column">
+                        <!--<div class="scheda-row">
+                            <div class="item">
+                                <div class="item-title"> Invia la richiesta per ricevere i dati catastali
+                                </div>
+                            </div>
+                        </div>-->
+                        <div class="scheda-table">
+                            <div class="item">
+                                <div class="item-list form auto-height">
+                                    <div class="form-item left" style="width: 33%;">
+                                        <label>Password attuale</label>
+                                        <input type="password" [(ngModel)]="cambioPasswordRequest.vecchia_password">
+                                    </div>
+                                    <div class="form-item left" style="width: 33%;">
+                                        <label>Password nuova</label>
+                                        <input type="password" [(ngModel)]="cambioPasswordRequest.nuova_password"
+                                            maxlength="20">
+                                    </div>
+                                    <div class="form-item left" style="width: 33%;">
+                                        <label>Ripeto password nuova</label>
+                                        <input type="password" class="alert"
+                                            [(ngModel)]="cambioPasswordRequest.ripeti_password" maxlength="20">
+                                    </div>
+                                </div>
+                                <div class="item-list form auto-height" style="margin-bottom: 0;"
+                                    *ngIf="cambioPasswordRequest.nuova_password != cambioPasswordRequest.ripeti_password">
+                                    <div class="form-item alert">Le password non coincidono</div>
+                                </div>
+                                <div class="item-list form auto-height" style="margin-bottom: 0;"
+                                    *ngIf="cambioPasswordRequest.vecchia_password == cambioPasswordRequest.nuova_password">
+                                    <div class="form-item alert">La nuova password deve essere diversa dalla vecchia
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="scheda-table single-column">
+                            <div class="item">
+                                <div class="item-list ">
+                                    <button class="button forward right" (click)="salvaNuovaPassword()"
+                                        [disabled]="cambioPasswordRequest.vecchia_password == cambioPasswordRequest.nuova_password 
+                                        && cambioPasswordRequest.nuova_password != cambioPasswordRequest.ripeti_password">Salva</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

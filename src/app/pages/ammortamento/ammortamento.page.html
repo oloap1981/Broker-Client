@@ -1,0 +1,128 @@
+<div class="main-body body">
+    <div class="content-area">
+        <div class="tool-area">
+            <div class="tool-table">
+                <div class="tool-row">
+                    <div class="tool">
+                        <button class="button back only-icon"
+                            (click)="apriSchedaImmobile(immobile.proprieta_id)">&nbsp;</button>
+                        <h3 class="page-title cliente">
+                            {{sessionService.getCliente().nome + ' ' + sessionService.getCliente().cognome}} - Piano
+                            Ammortamento</h3>
+                        <div style="float: right"><a href="#" class="button upload">Invia scheda</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content">
+            <div class="scheda">
+                <div class="scheda-header">
+                    <div class="scheda-table">
+                        <div class="scheda-row">
+                            <div [ngClass]="getIconaClasseImmobileItem(immobile.codice_tipologia)"></div>
+                            <div class="item indirizzo">
+                                {{immobile.indirizzo + ' ' + immobile.civico + ', ' + immobile.citta}}</div>
+                            <div class="item date">{{immobile.data_aggiornamento | raDateFormat_gg_mm_aaaa}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="scheda-content ammortamento">
+                    <div class="scheda-table single-column">
+                        <div class="scheda-row">
+                            <div class="item">
+                                <div class="overflow-container">
+                                    <div *ngFor="let annoPiano of anniPianoAmmortamento">
+                                        <h3 class="item-title">
+                                            <div class="table">
+                                                <div class="table-row">
+                                                    <div class="table-cell">{{annoPiano.anno}}</div>
+                                                    <div class="table-cell">importo rata</div>
+                                                    <div class="table-cell">quota interessi</div>
+                                                    <div class="table-cell">quota capitale</div>
+                                                    <div class="table-cell">interessi residui</div>
+                                                    <div class="table-cell">capitale residuo</div>
+                                                </div>
+                                            </div>
+                                        </h3>
+                                        <ul class="item-list full-height">
+                                            <div class="table">
+                                                <div class="table-row"
+                                                    *ngFor="let piano of annoPiano.piano_lista; let i = index">
+                                                    <div class="table-cell">rata n.{{i}}</div>
+                                                    <div class="table-cell">&euro; {{piano.importo_rata}}</div>
+                                                    <div class="table-cell">&euro; {{piano.quota_interessi}}</div>
+                                                    <div class="table-cell">&euro; {{piano.quota_capitale}}</div>
+                                                    <div class="table-cell">&euro; {{piano.interessi_residui}}</div>
+                                                    <div class="table-cell">&euro; {{piano.capitale_residuo}}</div>
+                                                </div>
+                                                <div class="table-row totale">
+                                                    <div class="table-cell">Tot. {{annoPiano.anno}}:</div>
+                                                    <div class="table-cell">&euro;
+                                                        {{getTotaleAnnoRate(annoPiano) | number : '1.2-2'}}
+                                                    </div>
+                                                    <div class="table-cell">&euro;
+                                                        {{getTotaleAnnoInteressi(annoPiano) | number : '1.2-2'}}
+                                                    </div>
+                                                    <div class="table-cell">&euro;
+                                                        {{getTotaleAnnoCapitale(annoPiano) | number : '1.2-2'}}
+                                                    </div>
+                                                </div>
+                                                <div class="table-row totale">
+                                                    <div class="table-cell">Rimanente:</div>
+                                                    <div class="table-cell">&euro; {{getTotaleRate()}}</div>
+                                                    <div class="table-cell">&euro; {{getTotaleInteressi()}}</div>
+                                                    <div class="table-cell">&euro; {{getTotaleCapitale()}}</div>
+                                                </div>
+                                            </div>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="right-area">
+        <div class="header">
+            <div class="row">
+                <div class="header-cell">
+                    <span class="small">immobili di</span>
+                    <span
+                        class="nome">{{sessionService.getCliente().nome + ' ' + sessionService.getCliente().cognome}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="list">
+            <ul class="lista-immobile">
+                <li class="immobile" *ngFor="let immobileLista of sessionService.getImmobiliCliente()"
+                    (click)="apriSchedaImmobile(immobileLista.proprieta_id)">
+                    <div class="indirizzo">{{immobileLista.indirizzo}},
+                        {{immobileLista.civico}}<br>{{immobileLista.cap}} {{immobileLista.citta}}
+                        ({{immobileLista.provincia}})</div>
+                    <div class="tipologia table">
+                        <div class="row">
+                            <div [ngClass]="getIconaClasseImmobileCell(immobileLista.codice_tipologia)">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="quota table">
+                        <div class="row">
+                            <div class="cell">
+                                {{immobileLista.quota}}<small>%</small>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="footer table">
+            <div class="row">
+                <div class="cell">
+                    <a hef="#" class="button add">immobile</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

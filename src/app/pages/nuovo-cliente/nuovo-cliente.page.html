@@ -1,0 +1,87 @@
+<div class="main-body  body-no-right-menu wizard">
+    <div class="content-area">
+        <div class="tool-area">
+            <div class="tool-table">
+                <div class="tool-row">
+                    <div class="tool">
+                        <button (click)="goToHome()" class="button back only-icon">&nbsp;</button>
+                        <h3 class="page-title no-icon">Nuovo cliente</h3>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="content">
+            <div class="scheda">
+                <div class="scheda-header">
+                    <div class="scheda-table">
+                        <div class="scheda-row">
+                            <div class="item tipologia cliente"></div>
+                            <div class="item indirizzo">
+                                Invia la richiesta per ricevere i dati catastali
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="scheda-content">
+                    <div class="scheda-table single-column">
+                        <!--<div class="scheda-row">
+                            <div class="item">
+                                <div class="item-title"> Invia la richiesta per ricevere i dati catastali
+                                </div>
+                            </div>
+                        </div>-->
+                        <div class="scheda-table">
+                            <div class="item">
+                                <div class="item-list form auto-height">
+                                    <div class="form-item left" style="width: 50%;">
+                                        <label>Nome</label>
+                                        <input type="text" placeholder="nome" [(ngModel)]="nuovoCliente.nome">
+                                    </div>
+                                    <div class="form-item left" style="width: 50%;">
+                                        <label>Cognome</label>
+                                        <input type="text" placeholder="cognome" [(ngModel)]="nuovoCliente.cognome">
+                                    </div>
+                                    <div class="form-item left" style="width: 50%;">
+                                        <label>Codice Fiscale</label>
+                                        <input type="text" placeholder="CF" [(ngModel)]="nuovoCliente.codice_fiscale">
+                                    </div>
+                                    <div class="form-item left" style="width: 50%;">
+                                        <label>Email</label>
+                                        <input type="text" placeholder="Email" [(ngModel)]="nuovoCliente.email">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="scheda-table single-column">
+                            <div class="item">
+                                <div class="item-list ">
+                                    <button class="button forward right" (click)="saveNewCliente()">Invia la
+                                        richiesta</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--<div class="right-area">
+        <div class="header">
+            <div class="row">
+                <div class="header-cell">
+                    <span class="small">Nessun cliente selezionato</span>
+                </div>
+            </div>
+        </div>
+        <div class="list">
+            <ul class="lista-immobile">
+
+            </ul>
+        </div>
+        <div class="footer table">
+
+        </div>
+    </div>-->
+</div>
