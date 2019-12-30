@@ -2039,6 +2039,145 @@ input:checked + .slider:before {
                 height: auto !important;
             }
         }
+        .list {
+            position: inherit;
+            top: 10px;
+            left: 0;
+            right: 0;
+            overflow: inherit;
+            background-image: none;
+            background-color: #fff;
+            border-left: solid 1px #ccc;
+            padding: 0;
+            &.no-footer {
+                bottom: 0;
+            }
+        }
+        .immobile {
+            padding: 27px 0 0 10px;
+            border-bottom: solid 1px #ccc;
+            position: relative;
+            height: 90px;
+            &.selected {
+                background-color: $default-light-blue;
+            }
+            .indirizzo {
+                font-size: .9em;
+                padding-left: 20px;
+                background: url('/assets/img/icon-position@2x.png') no-repeat left top;
+
+            }
+            .tipologia, .quota {
+                position: absolute;
+                height: 45px;
+                width: 60px;
+                text-align:center;
+                border-left: solid 1px #ccc;
+                right: 0;
+            }
+            .tipologia {
+                border-bottom: solid 1px #ccc;
+                top: 0;
+                .magazzino {
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    background-image: url('/assets/img/icon-magazzino@2x.png') ;
+                }
+                .negozio {
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    background-image: url('/assets/img/icon-negozio@2x.png') ;
+                }
+                .garage {
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    background-image: url('/assets/img/icon-garage@2x.png') ;
+                }
+                .casa {
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    background-image: url('/assets/img/icon-casa@2x.png') ;
+                }
+                .villa {
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    background-image: url('/assets/img/icon-villa@2x.png') ;
+                }
+                .agricolo {
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    background-image: url('/assets/img/icon-agricolo@2x.png') ;
+                }
+                .ufficio {
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    background-image: url('/assets/img/icon-ufficio@2x.png') ;
+                }
+                .albergo {
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    background-image: url('/assets/img/icon-albergo@2x.png') ;
+                }
+                .ospedale {
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    background-image: url('/assets/img/icon-ospedale@2x.png') ;
+                }
+                .scuola {
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    background-image: url('/assets/img/icon-scuola@2x.png') ;
+                }
+                .museo {
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    background-image: url('/assets/img/icon-museo@2x.png') ;
+                }
+                .chiesa {
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    background-image: url('/assets/img/icon-chiesa@2x.png') ;
+                }
+                .sport {
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    background-image: url('/assets/img/icon-sport@2x.png') ;
+                }
+                .fabbrica {
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    background-image: url('/assets/img/icon-fabbrica@2x.png') ;
+                }
+                .teatro {
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    background-image: url('/assets/img/icon-teatro@2x.png') ;
+                }
+                .banca {
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    background-image: url('/assets/img/icon-banca@2x.png') ;
+                }
+                .ponte {
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    background-image: url('/assets/img/icon-ponte@2x.png');
+                }
+                .stazione {
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    background-image: url('/assets/img/icon-stazione@2x.png');
+                }
+                .cantiere {
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    background-image: url('/assets/img/icon-cantiere@2x.png');
+                }
+            }
+            .quota {
+                bottom: 0;
+            }
+        }
     }
 }
 
