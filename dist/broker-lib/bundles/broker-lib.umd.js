@@ -2833,6 +2833,7 @@
     exports.Cliente = Cliente;
     exports.ClientiService = ClientiService;
     exports.CointestatarioDettaglio = CointestatarioDettaglio;
+    exports.Connection = Connection;
     exports.DatiCatastaliDettaglio = DatiCatastaliDettaglio;
     exports.DdlItem = DdlItem;
     exports.DropdownService = DropdownService;
