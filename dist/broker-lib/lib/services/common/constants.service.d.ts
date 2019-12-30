@@ -39,4 +39,7 @@ export declare class ConstantsService {
     readonly tipologiaImmobilePonte: string;
     readonly tipologiaImmobileStazione: string;
     readonly tipologiaImmobileCantiere: string;
+    readonly getDdlEuribor: string;
+    readonly getDdlAffittuari: string;
+    readonly getDdlTasse: string;
 }

@@ -55,6 +55,10 @@ var ConstantsService = /** @class */ (function () {
         this.tipologiaImmobilePonte = 'ponte';
         this.tipologiaImmobileStazione = 'stazione';
         this.tipologiaImmobileCantiere = 'cantiere';
+        // dropdown
+        this.getDdlEuribor = 'getDdlTipoEuribor';
+        this.getDdlAffittuari = 'getDdlTipoAffittuari';
+        this.getDdlTasse = 'getDdlTasse';
     }
     ConstantsService.decorators = [
         { type: Injectable }
@@ -142,6 +146,12 @@ if (false) {
     ConstantsService.prototype.tipologiaImmobileStazione;
     /** @type {?} */
     ConstantsService.prototype.tipologiaImmobileCantiere;
+    /** @type {?} */
+    ConstantsService.prototype.getDdlEuribor;
+    /** @type {?} */
+    ConstantsService.prototype.getDdlAffittuari;
+    /** @type {?} */
+    ConstantsService.prototype.getDdlTasse;
 }
 
 /**
