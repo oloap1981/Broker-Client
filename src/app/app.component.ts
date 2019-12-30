@@ -4,11 +4,11 @@ import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
-import { SessionService, StoreService, LogErroriService, AlertService, IconeService } from 'broker-lib';
+import { SessionService, StoreService, LogErroriService, AlertService, IconeService, Connection } from 'broker-lib';
 
 import { HomePage } from './pages/home/home.page';
 // import { AppConstantsService } from './services/costants/appcostants.service';
-import { Connection } from 'projects/broker-lib/src/lib/models/common/connection';
+// import { Connection } from 'projects/broker-lib/src/lib/models/common/connection';
 import { BaseComponent } from './component/base.component';
 import { Router } from '@angular/router';
 

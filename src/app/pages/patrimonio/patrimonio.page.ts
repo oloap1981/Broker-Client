@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { BaseComponent } from 'src/app/component/base.component';
-import { SessionService, StoreService, LogErroriService, AlertService, ClientiService, LoginService, BookValue, Immobile, IconeService } from 'broker-lib';
+import { SessionService, StoreService, LogErroriService, AlertService, ClientiService, LoginService, BookValue, Immobile, IconeService, Cliente } from 'broker-lib';
 import { Router } from '@angular/router';
-import { Cliente } from 'projects/broker-lib/src/public-api';
+// import { Cliente } from 'projects/broker-lib/src/public-api';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 

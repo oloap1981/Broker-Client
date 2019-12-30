@@ -46,7 +46,7 @@ export class LoginPage implements OnInit {
         const data: WsToken = r.Data;
         // per il momento si ipotizza che se Success=true allora ci si è loggati
         this.sessionService.setUserData(data);
-        this.router.navigate(['home']);
+        this.router.navigate(['client-home']);
         // this.router.navigate(['home']);
       } else {
         this.alertService.presentErrorAlert('Problema durante il login: ' + r.ErrorMessage.msg_testo);
