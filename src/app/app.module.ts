@@ -35,6 +35,8 @@ import { AmmortamentoPageModule } from './pages/ammortamento/ammortamento.module
 import { ClientHomePageModule } from './pages/client-home/client-home.module';
 import { ClientHomePage } from './pages/client-home/client-home.page';
 import { ClientImmobiliPageModule } from './pages/client-immobili/client-immobili.module';
+import { ClientDocumentalePageModule } from './pages/client-documentale/client-documentale.module';
+import { ClientDocumentaleFilePageModule } from './pages/client-documentale-file/client-documentale-file.module';
 
 const routes: Routes = [
     { path: '', redirectTo: 'client-home', pathMatch: 'full' },
@@ -52,6 +54,8 @@ const routes: Routes = [
     { path: 'ammortamento', loadChildren: () => import('./pages/ammortamento/ammortamento.module').then(m => m.AmmortamentoPageModule) },
     { path: 'client-home', loadChildren: () => import('./pages/client-home/client-home.module').then(m => m.ClientHomePageModule) },
     { path: 'client-immobili', loadChildren: () => import('./pages/client-immobili/client-immobili.module').then(m => m.ClientImmobiliPageModule) },
+    { path: 'client-documentale', loadChildren: () => import('./pages/client-documentale/client-documentale.module').then(m => m.ClientDocumentalePageModule) },
+    { path: 'client-documentale-file', loadChildren: () => import('./pages/client-documentale-file/client-documentale-file.module').then(m => m.ClientDocumentaleFilePageModule) },
 ];
 
 @NgModule({
@@ -78,6 +82,8 @@ const routes: Routes = [
     HttpClientModule,
     ClientHomePageModule,
     ClientImmobiliPageModule,
+    ClientDocumentalePageModule,
+    ClientDocumentaleFilePageModule,
     PipesModule,
     IonicModule.forRoot()
   ],
