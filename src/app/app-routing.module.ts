@@ -4,6 +4,9 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
     { path: '', loadChildren: () => import('./pages/client-home/client-home.module').then(m => m.ClientHomePageModule) },
     { path: 'client-home', loadChildren: () => import('./pages/client-home/client-home.module').then(m => m.ClientHomePageModule) },
+    { path: 'client-immobili', loadChildren: () => import('./pages/client-immobili/client-immobili.module').then(m => m.ClientImmobiliPageModule) },
+    { path: 'client-documentale', loadChildren: () => import('./pages/client-documentale/client-documentale.module').then(m => m.ClientDocumentalePageModule) },
+    { path: 'client-documentale-file', loadChildren: () => import('./pages/client-documentale-file/client-documentale-file.module').then(m => m.ClientDocumentaleFilePageModule) },
     // { path: 'home', loadChildren: () => import('./pages/home/home.module').then(m => m.HomePageModule) },
     // { path: 'profilo-utente', loadChildren: () => import('./pages/profilo-utente/profilo-utente.module').then(m => m.ProfiloUtentePageModule) },
     { path: 'login', loadChildren: () => import('./pages/login/login.module').then(m => m.LoginPageModule) },
