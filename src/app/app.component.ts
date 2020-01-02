@@ -4,40 +4,41 @@ import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
-import { SessionService, StoreService, LogErroriService, AlertService, IconeService, Connection } from 'broker-lib';
+import { SessionService, StoreService, LogErroriService, AlertService, IconeService, WsToken } from 'broker-lib';
 
-import { HomePage } from './pages/home/home.page';
-// import { AppConstantsService } from './services/costants/appcostants.service';
-// import { Connection } from 'projects/broker-lib/src/lib/models/common/connection';
-import { BaseComponent } from './component/base.component';
 import { Router } from '@angular/router';
+import { ClientHomePage } from './pages/client-home/client-home.page';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss']
 })
-export class AppComponent extends BaseComponent implements OnInit {
+export class AppComponent implements OnInit {
 
-  public rootPage: any = HomePage;
+  public rootPage: any = ClientHomePage;
+  public wsToken: WsToken;
 
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    public sessionService: SessionService,
-    public storeService: StoreService,
     public router: Router,
-    public logErroriService: LogErroriService,
-    public alertService: AlertService,
-    public iconeService: IconeService
-    // private appConstants: AppConstantsService
+    private sessionService: SessionService,
+    private alertService: AlertService
   ) {
-    super(sessionService, storeService, router, logErroriService, alertService, iconeService);
   }
 
   ngOnInit(): void {
     this.initializeApp();
+  }
+
+  public getUtenteEmail(): string {
+    if (this.wsToken !== undefined) {
+      return this.wsToken.utente.email;
+    } else {
+      return 'email utente';
+    }
   }
 
   initializeApp() {
@@ -52,17 +53,10 @@ export class AppComponent extends BaseComponent implements OnInit {
         this.wsToken = this.sessionService.getUserData();
       } else {
         this.alertService.presentAlert('Token assente, necessario login');
-        this.goToPage('login');
+        this.router.navigate(['login']);
       }
     });
     this.sessionService.loadUserData();
-
-    // const connection: Connection = new Connection();
-    // connection.url = this.appConstants.baseAppUrl;
-    // connection.pathseparator = this.appConstants.pathSeparator;
-    // connection.headertokenkey = this.appConstants.tokenHeaderKey;
-
-    // this.sessionService.setConnection(connection);
   }
 
 }
