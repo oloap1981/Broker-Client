@@ -441,6 +441,9 @@ input:checked + .slider:before {
             color: $label-color;
         }
     }
+    &.documentale {
+        background-image: url('/assets/img/icon-documentale@2x.png');
+    }
     &.forward {
         background-image: url('/assets/img/icon-forward@2x.png');
         background-position: right 12px center;
@@ -1977,7 +1980,6 @@ input:checked + .slider:before {
         }
         &.bv {
             width: auto;
-            
                 .view {
                     float: right;
                 }
@@ -1991,6 +1993,80 @@ input:checked + .slider:before {
                 width: 100%;
                 margin: 4px 0;
                 top: 0;
+            }
+        }
+        &.path {
+            height: auto;
+            padding: 6px 0 6px 10px;
+            font-size: .9em;
+            .button {
+                top: 0;
+                margin: 0;
+                padding: 8px 16px 6px 16px;
+            }
+            .tipologia {
+                background-repeat: no-repeat;
+                background-position: center;
+                display: inline-block;
+                width: 2em;
+                background-size: contain;
+                &.magazzino {
+                    background-image: url('/assets/img/icon-magazzino@2x.png') ;
+                }
+                &.negozio {
+                    background-image: url('/assets/img/icon-negozio@2x.png') ;
+                }
+                &.garage {
+                    background-image: url('/assets/img/icon-garage@2x.png') ;
+                }
+                &.casa {
+                    background-image: url('/assets/img/icon-casa@2x.png') ;
+                }
+                &.villa {
+                    background-image: url('/assets/img/icon-villa@2x.png') ;
+                }
+                &.agricolo {
+                    background-image: url('/assets/img/icon-agricolo@2x.png') ;
+                }
+                &.ufficio {
+                    background-image: url('/assets/img/icon-ufficio@2x.png') ;
+                }
+                &.albergo {
+                    background-image: url('/assets/img/icon-albergo@2x.png') ;
+                }
+                &.ospedale {
+                    background-image: url('/assets/img/icon-ospedale@2x.png') ;
+                }
+                &.scuola {
+                    background-image: url('/assets/img/icon-scuola@2x.png') ;
+                }
+                &.museo {
+                    background-image: url('/assets/img/icon-museo@2x.png') ;
+                }
+                &.chiesa {
+                    background-image: url('/assets/img/icon-chiesa@2x.png') ;
+                }
+                &.sport {
+                    background-image: url('/assets/img/icon-sport@2x.png') ;
+                }
+                &.fabbrica {
+                    background-image: url('/assets/img/icon-fabbrica@2x.png') ;
+                }
+                &.teatro {
+                    background-image: url('/assets/img/icon-teatro@2x.png') ;
+                }
+                &.banca {
+                    background-image: url('/assets/img/icon-banca@2x.png') ;
+                }
+                &.ponte {
+                    background-image: url('/assets/img/icon-ponte@2x.png');
+                }
+                &.stazione {
+                    background-image: url('/assets/img/icon-stazione@2x.png');
+                }
+                &.cantiere {
+                    background-image: url('/assets/img/icon-cantiere@2x.png');
+                }
             }
         }
         span {
@@ -2028,6 +2104,9 @@ input:checked + .slider:before {
         overflow: auto;
         &.lista-immobili {
             top: 0;
+        }
+        &.lista-documentali {
+            top: 35px;
         }
         .scheda {
             position: inherit;
@@ -2179,6 +2258,35 @@ input:checked + .slider:before {
             }
             .quota {
                 bottom: 0;
+            }
+        }
+        .documentale {
+            padding: 15px 0;
+            border-bottom: solid 1px #ccc;
+            position: relative;
+            &.folder {
+                display: block;
+                font-size: .9em;
+                padding-left: 50px;
+                padding-right: 40px;
+                background-repeat: no-repeat;
+                background-position: center left 10px;
+                background-image: url('/assets/img/icon-folder@2x.png');
+            }
+            &.file {
+                display: block;
+                font-size: .9em;
+                padding-left: 50px;
+                padding-right: 40px;
+                background-repeat: no-repeat;
+                background-position: center left 10px;
+                background-image: url('/assets/img/icon-file@2x.png');
+            }
+            .item-count {
+                position: absolute;
+                right: 0;
+                top: 0;
+                padding: 15px 10px;
             }
         }
     }
