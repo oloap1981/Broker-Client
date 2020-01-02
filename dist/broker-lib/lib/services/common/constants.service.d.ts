@@ -42,4 +42,6 @@ export declare class ConstantsService {
     readonly getDdlEuribor: string;
     readonly getDdlAffittuari: string;
     readonly getDdlTasse: string;
+    readonly getDdlOmi: string;
+    readonly getDdlCategoriaCatastale: string;
 }
