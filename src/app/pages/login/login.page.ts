@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { LoginService, StoreService, SessionService, AlertService } from 'broker-lib';
+import { LoginService, StoreService, SessionService, AlertService, ClientiService, Cliente } from 'broker-lib';
 
 import { LoginRequest, WsToken } from 'broker-lib';
 
@@ -33,7 +33,7 @@ export class LoginPage implements OnInit {
     const loginRequest: LoginRequest = new LoginRequest();
     loginRequest.username = this.username;
     loginRequest.password = this.password;
-    loginRequest.app_chiamante = 'P';
+    loginRequest.app_chiamante = 'C';
     loginRequest.id_phone = '12345';
 
     this.loginService.Login(loginRequest).pipe(
@@ -44,6 +44,16 @@ export class LoginPage implements OnInit {
         const data: WsToken = r.Data;
         // per il momento si ipotizza che se Success=true allora ci si è loggati
         this.sessionService.setUserData(data);
+
+        // nella app clienti vado subito a prendere i dati del cliente che si logga
+        const cliente = new Cliente();
+        cliente.cliente_id = data.utente.utente_id;
+        cliente.codice_fiscale = data.utente.codice_fiscale;
+        cliente.cognome = data.utente.cognome;
+        cliente.nome = data.utente.nome;
+        cliente.email = data.utente.email;
+        this.sessionService.setCliente(cliente);
+
         this.router.navigate(['client-home']);
         // this.router.navigate(['home']);
       } else {

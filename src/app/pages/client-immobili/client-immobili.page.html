@@ -15,27 +15,28 @@
                 <li>
                     <div class="voice dashboard selected" routerLink="/dashboard" routerDirection="root">Dashboard</div>
                 </li>
-                <li>
+                <!-- <li>
                     <div class="voice list" routerLink="/dashboard" routerDirection="root">Client list</div>
                 </li>
                 <li>
                     <div class="voice report" routerLink="/dashboard" routerDirection="root">Report</div>
-                </li>
+                </li> -->
             </ul>
         </div>
     </div>
     <div class="content-area">
-        <div class="area-spec" style="display: none;">
+        <!-- <div class="area-spec" style="display: none;">
             <div class="item immobili"><span class="badge">4</span></div>
             <div class="item bv"><span class="bv_label">Book Value (&euro;)</span><span class="bv_value">450K</span></div>
-        </div>
+        </div> -->
         <div class="content lista-immobili">
             <div class="list">
                 <ul class="lista-immobile">
-                    <li class="immobile">
-                        <div class="indirizzo">Via Nino Bixio,
-                            48<br>57111 Perugia
-                            (PE)</div>
+                    <li class="immobile" *ngFor="let immobileLista of immobiliCliente"
+                        (click)="apriSchedaImmobile(immobileLista.proprieta_id)">
+                        <div class="indirizzo">{{immobileLista.indirizzo}},
+                            {{immobileLista.civico}}<br>{{immobileLista.cap}} {{immobileLista.citta}}
+                            ({{immobileLista.provincia}})</div>
                         <div class="tipologia table">
                             <div class="row">
                                 <div class="cell casa">
