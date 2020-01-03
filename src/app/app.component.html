@@ -1,16 +1,28 @@
 <ion-app>
     <!-- HEADER COMUNE A TUTTE LE PAGINE -->
-    <div class="main-header" style="z-index: 1000">
-        <div class="logo"></div>
-        <div class="header-bar">
-            <img src="/assets/img/readvice-logo@2x.png" class="title">
-        </div>
-        <div class="tools" style="display: none;">
-            <a href="#" class="hints tasks"><span>10</span></a>
-            <a href="#" class="hints alerts"><span>10</span></a>
-            <button class="user" (click)="goToProfiloUtente()">{{getUtenteEmail()}}</button>
+    <div class="main-header client" style="z-index: 1000;">
+        <div class="hamburger"> </div>
+        <div class="header-bar" style="padding-right: 0;">
+            <a href="#" class="client-area">Patrimonio</a>
         </div>
     </div>
     <!-- FINE HEADER COMUNE -->
     <ion-router-outlet animated="false"></ion-router-outlet>
+    <div class="left-menu left-side-element " style="display: none; z-index: 1001">
+        <ion-buttons slot="start" class="logo left-side-element" no-padding no-margin> </ion-buttons>
+        <div class="base">
+            <ul>
+                <li>
+                    <div class="voice dashboard selected" routerLink="/dashboard" routerDirection="root">Dashboard</div>
+                </li>
+                <li>
+                    <div class="voice list" routerLink="/dashboard" routerDirection="root">Client list</div>
+                </li>
+                <li>
+                    <div class="voice report" routerLink="/dashboard" routerDirection="root">Report</div>
+                </li>
+            </ul>
+        </div>
+    </div>
 </ion-app>
+
