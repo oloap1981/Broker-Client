@@ -4,6 +4,7 @@ import { __awaiter } from 'tslib';
 import { AlertController } from '@ionic/angular';
 import { Storage, IonicStorageModule } from '@ionic/Storage';
 import { Subject } from 'rxjs';
+import { Router } from '@angular/router';
 
 /**
  * @fileoverview added by tsickle
@@ -17,20 +18,20 @@ class ConstantsService {
         this.loginServiceName = 'login';
         this.cambioPasswordServiceName = 'putPassword';
         // immobili
-        this.getImmobiliServiceName = 'getImmobili';
-        this.getImmobileServiceName = 'getImmobile';
-        this.putImmobileServiceName = 'putImmobile';
+        this.getImmobiliServiceName = 'getimmobili';
+        this.getImmobileServiceName = 'getimmobile';
+        this.putImmobileServiceName = 'putimmobile';
         this.delImmobileServiceName = 'delimmobile';
         this.getCatastoServiceName = 'getcatasto';
         this.getPianoAmmortamentoServiceName = 'getPiano';
         // clienti
-        this.getClientiServiceName = 'getClienti';
-        this.putClientiServiceName = 'putCliente';
+        this.getClientiServiceName = 'getclienti';
+        this.putClientiServiceName = 'putcliente';
         this.abilitaAppClienteServiceName = 'appcliente';
-        this.bookValueServiceName = 'getBookValue';
+        this.bookValueServiceName = 'getbookvalue';
         this.pianoAmmortamentoServiceName = 'getpiano';
         // report
-        this.situazioneGeneraleServiceName = 'getSituazione';
+        this.situazioneGeneraleServiceName = 'getsituazione';
         this.graficiServiceName = 'getgrafici';
         this.pdfReportServiceName = 'getpdfreport';
         this.postErroreServiceName = 'writeLog';
@@ -56,9 +57,11 @@ class ConstantsService {
         this.tipologiaImmobileStazione = 'stazione';
         this.tipologiaImmobileCantiere = 'cantiere';
         // dropdown
-        this.getDdlEuribor = 'getDdlTipoEuribor';
-        this.getDdlAffittuari = 'getDdlTipoAffittuari';
-        this.getDdlTasse = 'getDdlTasse';
+        this.getDdlEuribor = 'get_ddl_tipo_euribor';
+        this.getDdlAffittuari = 'get_ddl_tipo_affittuari';
+        this.getDdlTasse = 'get_ddl_tasse';
+        this.getDdlOmi = 'get_ddl_omi';
+        this.getDdlCategoriaCatastale = 'get_ddl_categoria_catastale';
     }
 }
 ConstantsService.decorators = [
@@ -151,6 +154,10 @@ if (false) {
     ConstantsService.prototype.getDdlAffittuari;
     /** @type {?} */
     ConstantsService.prototype.getDdlTasse;
+    /** @type {?} */
+    ConstantsService.prototype.getDdlOmi;
+    /** @type {?} */
+    ConstantsService.prototype.getDdlCategoriaCatastale;
 }
 
 /**
@@ -317,76 +324,6 @@ if (false) {
      * @private
      */
     LogErroriService.prototype.constants;
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-// import { Platform, MenuController, Nav, NavController, AlertController, ToastController } from 'ionic-angular';
-class AlertService {
-    /**
-     * @param {?} alertController
-     */
-    constructor(alertController) {
-        this.alertController = alertController;
-    }
-    /**
-     * @param {?} alertMessage
-     * @return {?}
-     */
-    presentAlert(alertMessage) {
-        return __awaiter(this, void 0, void 0, function* () {
-            /** @type {?} */
-            const alert = this.alertController.create({
-                header: 'Conferma',
-                message: alertMessage,
-                buttons: ['OK']
-            });
-            alert.then((/**
-             * @param {?} _alert
-             * @return {?}
-             */
-            (_alert) => {
-                _alert.present();
-            }));
-        });
-    }
-    /**
-     * @param {?} alertMessage
-     * @return {?}
-     */
-    presentErrorAlert(alertMessage) {
-        return __awaiter(this, void 0, void 0, function* () {
-            /** @type {?} */
-            const alert = this.alertController.create({
-                header: 'Errore',
-                message: alertMessage,
-                buttons: ['CHIUDI']
-            });
-            alert.then((/**
-             * @param {?} _alert
-             * @return {?}
-             */
-            (_alert) => {
-                _alert.present();
-            }));
-        });
-    }
-}
-AlertService.decorators = [
-    { type: Injectable }
-];
-/** @nocollapse */
-AlertService.ctorParameters = () => [
-    { type: AlertController }
-];
-if (false) {
-    /**
-     * @type {?}
-     * @private
-     */
-    AlertService.prototype.alertController;
 }
 
 /**
@@ -643,6 +580,81 @@ if (false) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+class ImmobileDettaglio {
+}
+if (false) {
+    /** @type {?} */
+    ImmobileDettaglio.prototype.proprieta_id;
+    /** @type {?} */
+    ImmobileDettaglio.prototype.tipologie_catastali_id;
+    /** @type {?} */
+    ImmobileDettaglio.prototype.codice_tipologia;
+    /** @type {?} */
+    ImmobileDettaglio.prototype.descrizione_tipologia;
+    /** @type {?} */
+    ImmobileDettaglio.prototype.data_aggiornamento;
+    /** @type {?} */
+    ImmobileDettaglio.prototype.valore_acquisto;
+    /** @type {?} */
+    ImmobileDettaglio.prototype.quota;
+    /** @type {?} */
+    ImmobileDettaglio.prototype.catastale_cod;
+    /** @type {?} */
+    ImmobileDettaglio.prototype.comune_zone_cod;
+    /** @type {?} */
+    ImmobileDettaglio.prototype.indirizzo;
+    /** @type {?} */
+    ImmobileDettaglio.prototype.civico;
+    /** @type {?} */
+    ImmobileDettaglio.prototype.citta;
+    /** @type {?} */
+    ImmobileDettaglio.prototype.cap;
+    /** @type {?} */
+    ImmobileDettaglio.prototype.provincia;
+    /** @type {?} */
+    ImmobileDettaglio.prototype.istat_cod;
+    /** @type {?} */
+    ImmobileDettaglio.prototype.latitudine;
+    /** @type {?} */
+    ImmobileDettaglio.prototype.longitudine;
+    /** @type {?} */
+    ImmobileDettaglio.prototype.prima_casa;
+    /** @type {?} */
+    ImmobileDettaglio.prototype.destinazione_uso_id;
+    /** @type {?} */
+    ImmobileDettaglio.prototype.descrizione_uso;
+    /** @type {?} */
+    ImmobileDettaglio.prototype.mutuo;
+    /** @type {?} */
+    ImmobileDettaglio.prototype.tasso;
+    /** @type {?} */
+    ImmobileDettaglio.prototype.affitto;
+    /** @type {?} */
+    ImmobileDettaglio.prototype.detrazione_interessi;
+    /** @type {?} */
+    ImmobileDettaglio.prototype.euribor_id;
+    /** @type {?} */
+    ImmobileDettaglio.prototype.descrizione_euribor;
+    /** @type {?} */
+    ImmobileDettaglio.prototype.cointestatari;
+    /** @type {?} */
+    ImmobileDettaglio.prototype.tasse;
+    /** @type {?} */
+    ImmobileDettaglio.prototype.spese;
+    /** @type {?} */
+    ImmobileDettaglio.prototype.affitto_dettaglio;
+    /** @type {?} */
+    ImmobileDettaglio.prototype.mutuo_dettaglio;
+    /** @type {?} */
+    ImmobileDettaglio.prototype.dati_catastali;
+    /** @type {?} */
+    ImmobileDettaglio.prototype.omi;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 class Connection {
 }
 if (false) {
@@ -652,6 +664,120 @@ if (false) {
     Connection.prototype.pathseparator;
     /** @type {?} */
     Connection.prototype.headertokenkey;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class DatiCatastaliDettaglio {
+}
+if (false) {
+    /** @type {?} */
+    DatiCatastaliDettaglio.prototype.proprieta_catasto_id;
+    /** @type {?} */
+    DatiCatastaliDettaglio.prototype.sezione;
+    /** @type {?} */
+    DatiCatastaliDettaglio.prototype.foglio;
+    /** @type {?} */
+    DatiCatastaliDettaglio.prototype.zona;
+    /** @type {?} */
+    DatiCatastaliDettaglio.prototype.micro_zona;
+    /** @type {?} */
+    DatiCatastaliDettaglio.prototype.particella;
+    /** @type {?} */
+    DatiCatastaliDettaglio.prototype.subalterno;
+    /** @type {?} */
+    DatiCatastaliDettaglio.prototype.categoria;
+    /** @type {?} */
+    DatiCatastaliDettaglio.prototype.classe;
+    /** @type {?} */
+    DatiCatastaliDettaglio.prototype.rendita;
+    /** @type {?} */
+    DatiCatastaliDettaglio.prototype.vani;
+    /** @type {?} */
+    DatiCatastaliDettaglio.prototype.superficie_interni;
+    /** @type {?} */
+    DatiCatastaliDettaglio.prototype.superficie_totale;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class OmiDettaglio {
+}
+if (false) {
+    /** @type {?} */
+    OmiDettaglio.prototype.valore_omi;
+    /** @type {?} */
+    OmiDettaglio.prototype.valore_pot;
+    /** @type {?} */
+    OmiDettaglio.prototype.affitto_pot;
+    /** @type {?} */
+    OmiDettaglio.prototype.ammortamento_decadenza;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class MutuoDettaglio {
+}
+if (false) {
+    /** @type {?} */
+    MutuoDettaglio.prototype.proprieta_mutuo_id;
+    /** @type {?} */
+    MutuoDettaglio.prototype.detrazione_interessi;
+    /** @type {?} */
+    MutuoDettaglio.prototype.tipo_tasso;
+    /** @type {?} */
+    MutuoDettaglio.prototype.euribor_id;
+    /** @type {?} */
+    MutuoDettaglio.prototype.descrizione_euribor;
+    /** @type {?} */
+    MutuoDettaglio.prototype.spread;
+    /** @type {?} */
+    MutuoDettaglio.prototype.rate_id;
+    /** @type {?} */
+    MutuoDettaglio.prototype.descrizione_rate;
+    /** @type {?} */
+    MutuoDettaglio.prototype.numero_rate;
+    /** @type {?} */
+    MutuoDettaglio.prototype.durata;
+    /** @type {?} */
+    MutuoDettaglio.prototype.data_inizio;
+    /** @type {?} */
+    MutuoDettaglio.prototype.importo_iniziale;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class AffittoDettaglio {
+}
+if (false) {
+    /** @type {?} */
+    AffittoDettaglio.prototype.proprieta_affitto_id;
+    /** @type {?} */
+    AffittoDettaglio.prototype.tipo_affittuario_id;
+    /** @type {?} */
+    AffittoDettaglio.prototype.descrizione_affittuario;
+    /** @type {?} */
+    AffittoDettaglio.prototype.spese_condominiali;
+    /** @type {?} */
+    AffittoDettaglio.prototype.importo_spese_condominiali;
+    /** @type {?} */
+    AffittoDettaglio.prototype.cedolare_secca;
+    /** @type {?} */
+    AffittoDettaglio.prototype.aliquota_cedolare;
+    /** @type {?} */
+    AffittoDettaglio.prototype.prima_scadenza_anni;
+    /** @type {?} */
+    AffittoDettaglio.prototype.data_inizio;
+    /** @type {?} */
+    AffittoDettaglio.prototype.importo_mensile;
 }
 
 /**
@@ -674,6 +800,14 @@ class SessionService {
         this.userData = new WsToken();
         this.connection = new Connection();
         this.cliente = new Cliente();
+        this.immobile = new ImmobileDettaglio();
+        this.immobile.dati_catastali = new DatiCatastaliDettaglio();
+        this.immobile.spese = new Array();
+        this.immobile.omi = new OmiDettaglio();
+        this.immobile.mutuo_dettaglio = new MutuoDettaglio();
+        this.immobile.affitto_dettaglio = new AffittoDettaglio();
+        this.immobile.tasse = new Array();
+        this.immobile.cointestatari = new Array();
     }
     /**
      * @param {?} cliente
@@ -837,6 +971,131 @@ if (false) {
      * @private
      */
     SessionService.prototype.immobiliService;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+// import { Platform, MenuController, Nav, NavController, AlertController, ToastController } from 'ionic-angular';
+class AlertService {
+    /**
+     * @param {?} alertController
+     * @param {?} sessionService
+     * @param {?} router
+     */
+    constructor(alertController, sessionService, router) {
+        this.alertController = alertController;
+        this.sessionService = sessionService;
+        this.router = router;
+    }
+    /**
+     * @param {?} alertMessage
+     * @return {?}
+     */
+    presentAlert(alertMessage) {
+        return __awaiter(this, void 0, void 0, function* () {
+            /** @type {?} */
+            const alert = this.alertController.create({
+                header: 'Conferma',
+                message: alertMessage,
+                buttons: ['OK']
+            });
+            alert.then((/**
+             * @param {?} _alert
+             * @return {?}
+             */
+            (_alert) => {
+                _alert.present();
+            }));
+        });
+    }
+    /**
+     * @param {?} alertMessage
+     * @return {?}
+     */
+    presentErrorAlert(alertMessage) {
+        return __awaiter(this, void 0, void 0, function* () {
+            /** @type {?} */
+            const alert = this.alertController.create({
+                header: 'Errore',
+                message: alertMessage,
+                buttons: ['CHIUDI']
+            });
+            alert.then((/**
+             * @param {?} _alert
+             * @return {?}
+             */
+            (_alert) => {
+                _alert.present();
+            }));
+        });
+    }
+    /**
+     * @return {?}
+     */
+    presentAlertLogout() {
+        return __awaiter(this, void 0, void 0, function* () {
+            /** @type {?} */
+            const alert = this.alertController.create({
+                header: 'Logout',
+                message: 'Sicuro di voler uscire?',
+                buttons: [
+                    {
+                        text: 'Cancel',
+                        role: 'cancel',
+                        cssClass: 'secondary',
+                        handler: (/**
+                         * @param {?} blah
+                         * @return {?}
+                         */
+                        (blah) => {
+                            console.log('Confirm Cancel: blah');
+                        })
+                    }, {
+                        text: 'Si',
+                        handler: (/**
+                         * @return {?}
+                         */
+                        () => {
+                            this.sessionService.clearUserData();
+                            this.router.navigate(['login']);
+                        })
+                    }
+                ]
+            });
+            alert.then((/**
+             * @param {?} _alert
+             * @return {?}
+             */
+            (_alert) => {
+                _alert.present();
+            }));
+        });
+    }
+}
+AlertService.decorators = [
+    { type: Injectable }
+];
+/** @nocollapse */
+AlertService.ctorParameters = () => [
+    { type: AlertController },
+    { type: SessionService },
+    { type: Router }
+];
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    AlertService.prototype.alertController;
+    /**
+     * @type {?}
+     * @private
+     */
+    AlertService.prototype.sessionService;
+    /** @type {?} */
+    AlertService.prototype.router;
 }
 
 /**
@@ -1827,35 +2086,6 @@ if (false) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-class AffittoDettaglio {
-}
-if (false) {
-    /** @type {?} */
-    AffittoDettaglio.prototype.proprieta_affitto_id;
-    /** @type {?} */
-    AffittoDettaglio.prototype.tipo_affittuario_id;
-    /** @type {?} */
-    AffittoDettaglio.prototype.descrizione_affittuario;
-    /** @type {?} */
-    AffittoDettaglio.prototype.spese_condominiali;
-    /** @type {?} */
-    AffittoDettaglio.prototype.importo_spese_condominiali;
-    /** @type {?} */
-    AffittoDettaglio.prototype.cedolare_secca;
-    /** @type {?} */
-    AffittoDettaglio.prototype.aliquota_cedolare;
-    /** @type {?} */
-    AffittoDettaglio.prototype.prima_scadenza_anni;
-    /** @type {?} */
-    AffittoDettaglio.prototype.data_inizio;
-    /** @type {?} */
-    AffittoDettaglio.prototype.importo_mensile;
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
 class CancellazioneImmobileRequest {
 }
 if (false) {
@@ -1884,116 +2114,6 @@ if (false) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-class DatiCatastaliDettaglio {
-}
-if (false) {
-    /** @type {?} */
-    DatiCatastaliDettaglio.prototype.proprieta_catasto_id;
-    /** @type {?} */
-    DatiCatastaliDettaglio.prototype.sezione;
-    /** @type {?} */
-    DatiCatastaliDettaglio.prototype.foglio;
-    /** @type {?} */
-    DatiCatastaliDettaglio.prototype.zona;
-    /** @type {?} */
-    DatiCatastaliDettaglio.prototype.micro_zona;
-    /** @type {?} */
-    DatiCatastaliDettaglio.prototype.particella;
-    /** @type {?} */
-    DatiCatastaliDettaglio.prototype.subalterno;
-    /** @type {?} */
-    DatiCatastaliDettaglio.prototype.categoria;
-    /** @type {?} */
-    DatiCatastaliDettaglio.prototype.classe;
-    /** @type {?} */
-    DatiCatastaliDettaglio.prototype.rendita;
-    /** @type {?} */
-    DatiCatastaliDettaglio.prototype.vani;
-    /** @type {?} */
-    DatiCatastaliDettaglio.prototype.superficie_interni;
-    /** @type {?} */
-    DatiCatastaliDettaglio.prototype.superficie_totale;
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-class ImmobileDettaglio {
-}
-if (false) {
-    /** @type {?} */
-    ImmobileDettaglio.prototype.proprieta_id;
-    /** @type {?} */
-    ImmobileDettaglio.prototype.tipologie_catastali_id;
-    /** @type {?} */
-    ImmobileDettaglio.prototype.codice_tipologia;
-    /** @type {?} */
-    ImmobileDettaglio.prototype.descrizione_tipologia;
-    /** @type {?} */
-    ImmobileDettaglio.prototype.data_aggiornamento;
-    /** @type {?} */
-    ImmobileDettaglio.prototype.valore_acquisto;
-    /** @type {?} */
-    ImmobileDettaglio.prototype.quota;
-    /** @type {?} */
-    ImmobileDettaglio.prototype.catastale_cod;
-    /** @type {?} */
-    ImmobileDettaglio.prototype.comune_zone_cod;
-    /** @type {?} */
-    ImmobileDettaglio.prototype.indirizzo;
-    /** @type {?} */
-    ImmobileDettaglio.prototype.civico;
-    /** @type {?} */
-    ImmobileDettaglio.prototype.citta;
-    /** @type {?} */
-    ImmobileDettaglio.prototype.cap;
-    /** @type {?} */
-    ImmobileDettaglio.prototype.provincia;
-    /** @type {?} */
-    ImmobileDettaglio.prototype.istat_cod;
-    /** @type {?} */
-    ImmobileDettaglio.prototype.latitudine;
-    /** @type {?} */
-    ImmobileDettaglio.prototype.longitudine;
-    /** @type {?} */
-    ImmobileDettaglio.prototype.prima_casa;
-    /** @type {?} */
-    ImmobileDettaglio.prototype.destinazione_uso_id;
-    /** @type {?} */
-    ImmobileDettaglio.prototype.descrizione_uso;
-    /** @type {?} */
-    ImmobileDettaglio.prototype.mutuo;
-    /** @type {?} */
-    ImmobileDettaglio.prototype.tasso;
-    /** @type {?} */
-    ImmobileDettaglio.prototype.affitto;
-    /** @type {?} */
-    ImmobileDettaglio.prototype.detrazione_interessi;
-    /** @type {?} */
-    ImmobileDettaglio.prototype.euribor_id;
-    /** @type {?} */
-    ImmobileDettaglio.prototype.descrizione_euribor;
-    /** @type {?} */
-    ImmobileDettaglio.prototype.cointestatari;
-    /** @type {?} */
-    ImmobileDettaglio.prototype.tasse;
-    /** @type {?} */
-    ImmobileDettaglio.prototype.spese;
-    /** @type {?} */
-    ImmobileDettaglio.prototype.affitto_dettaglio;
-    /** @type {?} */
-    ImmobileDettaglio.prototype.mutuo_dettaglio;
-    /** @type {?} */
-    ImmobileDettaglio.prototype.dati_catastali;
-    /** @type {?} */
-    ImmobileDettaglio.prototype.omi;
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
 class ImmobileDettaglioVM extends ImmobileDettaglio {
 }
 if (false) {
@@ -2010,56 +2130,6 @@ class InserimentoImmobileResponse {
 if (false) {
     /** @type {?} */
     InserimentoImmobileResponse.prototype.return_id;
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-class MutuoDettaglio {
-}
-if (false) {
-    /** @type {?} */
-    MutuoDettaglio.prototype.proprieta_mutuo_id;
-    /** @type {?} */
-    MutuoDettaglio.prototype.detrazione_interessi;
-    /** @type {?} */
-    MutuoDettaglio.prototype.tipo_tasso;
-    /** @type {?} */
-    MutuoDettaglio.prototype.euribor_id;
-    /** @type {?} */
-    MutuoDettaglio.prototype.descrizione_euribor;
-    /** @type {?} */
-    MutuoDettaglio.prototype.spread;
-    /** @type {?} */
-    MutuoDettaglio.prototype.rate_id;
-    /** @type {?} */
-    MutuoDettaglio.prototype.descrizione_rate;
-    /** @type {?} */
-    MutuoDettaglio.prototype.numero_rate;
-    /** @type {?} */
-    MutuoDettaglio.prototype.durata;
-    /** @type {?} */
-    MutuoDettaglio.prototype.data_inizio;
-    /** @type {?} */
-    MutuoDettaglio.prototype.importo_iniziale;
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-class OmiDettaglio {
-}
-if (false) {
-    /** @type {?} */
-    OmiDettaglio.prototype.valore_omi;
-    /** @type {?} */
-    OmiDettaglio.prototype.valore_pot;
-    /** @type {?} */
-    OmiDettaglio.prototype.affitto_pot;
-    /** @type {?} */
-    OmiDettaglio.prototype.ammortamento_decadenza;
 }
 
 /**

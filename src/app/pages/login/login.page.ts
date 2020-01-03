@@ -5,10 +5,8 @@ import { LoginRequest, WsToken } from 'broker-lib';
 
 import { Router } from '@angular/router';
 
-import { HomePage } from '../home/home.page';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-// mport { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
