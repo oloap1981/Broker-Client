@@ -46,7 +46,11 @@ export class BaseComponent implements OnInit {
     }
 
     public goToHome(): void {
-        this.goToPage('home');
+        this.goToPage('home-client');
+    }
+
+    public goToListaImmobili() {
+        this.goToPage('client-immobili');
     }
 
     public goToPage(pageName: string): void {

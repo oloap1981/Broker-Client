@@ -45,6 +45,11 @@ export class ClientHomePage extends BaseComponent implements OnInit {
     super.ngOnInit();
   }
 
+  ionViewDidEnter() {
+    this.initializeApp();
+    this.sessionService.setIntestazionePagina('Patrimonio');
+  }
+
   private initializeApp(): void {
     // ottengo il token
     this.sessionService.userDataObservable.pipe(
@@ -56,8 +61,8 @@ export class ClientHomePage extends BaseComponent implements OnInit {
         const cliente_id = this.sessionService.getCliente().cliente_id;
         if (cliente_id === 0 || cliente_id === undefined) {
           // non ho clienti selezionati
-          this.presentAlert("E' necessario selezionare un cliente");
-          this.goToPage('home');
+          this.presentAlert("Cliente mancante, necessario login");
+          this.goToPage('login');
         }
 
         this.clientiService.getBookValue(cliente_id).pipe(

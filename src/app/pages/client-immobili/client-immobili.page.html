@@ -1,38 +1,14 @@
-<div class="main-header client">
-    <div class="hamburger"> </div>
-    <div class="header-bar" style="padding-right: 0;">
-        <a href="#" class="client-area">Patrimonio</a>
-    </div>
-</div>
-
-
-
 <div class="main-body client">
-    <div class="left-menu left-side-element " style="display: none;">
-        <ion-buttons slot="start" class="logo left-side-element" no-padding no-margin> </ion-buttons>
-        <div class="base">
-            <ul>
-                <li>
-                    <div class="voice dashboard selected" routerLink="/dashboard" routerDirection="root">Dashboard</div>
-                </li>
-                <!-- <li>
-                    <div class="voice list" routerLink="/dashboard" routerDirection="root">Client list</div>
-                </li>
-                <li>
-                    <div class="voice report" routerLink="/dashboard" routerDirection="root">Report</div>
-                </li> -->
-            </ul>
-        </div>
-    </div>
     <div class="content-area">
-        <!-- <div class="area-spec" style="display: none;">
+        <div class="area-spec" style="display: none;">
             <div class="item immobili"><span class="badge">4</span></div>
-            <div class="item bv"><span class="bv_label">Book Value (&euro;)</span><span class="bv_value">450K</span></div>
-        </div> -->
-        <div class="content lista-immobili">
+            <div class="item bv"><span class="bv_label">Book Value (&euro;)</span><span class="bv_value">450K</span>
+            </div>
+        </div>
+        <div class="content lista-immobili  bottom-footer">
             <div class="list">
                 <ul class="lista-immobile">
-                    <li class="immobile" *ngFor="let immobileLista of immobiliCliente"
+                    <li class="immobile" *ngFor="let immobileLista of sessionService.getImmobiliCliente()"
                         (click)="apriSchedaImmobile(immobileLista.proprieta_id)">
                         <div class="indirizzo">{{immobileLista.indirizzo}},
                             {{immobileLista.civico}}<br>{{immobileLista.cap}} {{immobileLista.citta}}
@@ -52,6 +28,14 @@
                         </div>
                     </li>
                 </ul>
+            </div>
+        </div>
+        <div class="footer table">
+            <div class="row">
+                <div class="cell">
+                    <button class="button add">immobile</button>
+                    <button class="button report">report</button>
+                </div>
             </div>
         </div>
     </div>

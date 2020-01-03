@@ -13,7 +13,6 @@ import { Subject } from 'rxjs';
 export class ClientImmobiliPage extends BaseComponent implements OnInit {
 
   private unsubscribe$ = new Subject<void>();
-  public immobiliCliente: Array<Immobile>;
 
   constructor(
     public sessionService: SessionService,
@@ -24,6 +23,7 @@ export class ClientImmobiliPage extends BaseComponent implements OnInit {
     public iconeService: IconeService,
     public immobiliService: ImmobiliService) {
     super(sessionService, storeService, router, logErroriService, alertService, iconeService);
+
   }
 
   ngOnInit() {
@@ -32,6 +32,7 @@ export class ClientImmobiliPage extends BaseComponent implements OnInit {
 
   ionViewDidEnter() {
     this.initializeApp();
+    this.sessionService.setIntestazionePagina('Elenco Immobili');
   }
 
   private initializeApp() {
@@ -41,7 +42,6 @@ export class ClientImmobiliPage extends BaseComponent implements OnInit {
     ).subscribe(present => {
       if (present) {
         this.wsToken = this.sessionService.getUserData();
-        this.immobiliCliente = this.sessionService.getImmobiliCliente();
       } else {
         this.alertService.presentAlert('Token assente, necessario login');
         this.goToPage('login');
@@ -54,18 +54,6 @@ export class ClientImmobiliPage extends BaseComponent implements OnInit {
   public apriSchedaImmobile(immobile: number) {
     // this.router.navigate(['scheda-immobile'], { queryParams: { immobile_id: immobile } });
     this.goToPageParams('scheda-immobile', { queryParams: { immobile_id: immobile } });
-  }
-
-  public refreshImmobiliList() {
-    this.immobiliService.getImmobili(this.sessionService.getCliente().cliente_id + '').pipe(
-      takeUntil(this.unsubscribe$)
-    ).subscribe(r => {
-      if (r.Success) {
-        this.immobiliCliente = r.Data.elenco_immobili;
-      } else {
-        this.manageError(r);
-      }
-    }); // vedere il tipo
   }
 
   ionViewDidLeave() {

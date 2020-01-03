@@ -23,8 +23,8 @@ export class AppComponent implements OnInit {
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    public router: Router,
-    private sessionService: SessionService,
+    private router: Router,
+    public sessionService: SessionService,
     private alertService: AlertService
   ) {
   }
@@ -59,4 +59,11 @@ export class AppComponent implements OnInit {
     this.sessionService.loadUserData();
   }
 
+  public goBack(): void {
+    this.router.navigate([this.sessionService.getPaginaPrecedente()]);
+  }
+
+  public isLoginPage(): boolean {
+    return this.router.url === '/login';
+  }
 }
