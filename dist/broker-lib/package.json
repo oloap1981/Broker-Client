@@ -1,0 +1,21 @@
+{
+  "name": "broker-lib",
+  "version": "0.0.2",
+  "peerDependencies": {
+    "@angular/common": "^8.1.3",
+    "@angular/core": "^8.1.3"
+  },
+  "main": "bundles/broker-lib.umd.js",
+  "module": "fesm5/broker-lib.js",
+  "es2015": "fesm2015/broker-lib.js",
+  "esm5": "esm5/broker-lib.js",
+  "esm2015": "esm2015/broker-lib.js",
+  "fesm5": "fesm5/broker-lib.js",
+  "fesm2015": "fesm2015/broker-lib.js",
+  "typings": "broker-lib.d.ts",
+  "metadata": "broker-lib.metadata.json",
+  "sideEffects": false,
+  "dependencies": {
+    "tslib": "^1.9.0"
+  }
+}
