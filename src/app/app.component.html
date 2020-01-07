@@ -1,25 +1,25 @@
 <ion-app>
     <!-- HEADER COMUNE A TUTTE LE PAGINE -->
     <div class="main-header client" style="z-index: 1000" *ngIf="!isLoginPage()">
-        <div class="hamburger"> </div>
+        <button class="hamburger" (click)="show()"> </button>
         <div class="header-bar" style="padding-right: 0;">
             <span class="client-area">{{sessionService.getIntestazionePagina()}}</span>
         </div>
     </div>
     <!-- FINE HEADER COMUNE -->
     <ion-router-outlet animated="false"></ion-router-outlet>
-    <div class="left-menu left-side-element " style="display: none; z-index: 1001">
+    <div class="left-menu left-side-element"  *ngIf="showMe" style="z-index: 1001">
         <ion-buttons slot="start" class="logo left-side-element" no-padding no-margin> </ion-buttons>
         <div class="base">
             <ul>
                 <li>
-                    <div class="voice dashboard selected" routerLink="/dashboard" routerDirection="root">Dashboard</div>
+                    <div class="voice dashboard selected" routerLink="/client-home" routerDirection="root" (click)="show()">Dashboard</div>
                 </li>
                 <li>
-                    <div class="voice list" routerLink="/dashboard" routerDirection="root">Client list</div>
+                    <div class="voice list" routerLink="/client-immobili" routerDirection="root" (click)="show()">Client list</div>
                 </li>
                 <li>
-                    <div class="voice report" routerLink="/dashboard" routerDirection="root">Report</div>
+                    <div class="voice report" routerLink="/client-report-generale" routerDirection="root" (click)="show()">Report</div>
                 </li>
             </ul>
         </div>

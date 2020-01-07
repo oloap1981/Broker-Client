@@ -27,7 +27,21 @@ export class AppComponent implements OnInit {
     public sessionService: SessionService,
     private alertService: AlertService
   ) {
-  }
+}
+hideMe = true;
+showMe = false;
+show() {
+    if (this.showMe === false) {
+        this.showMe = true;
+    } else {
+        this.showMe = false;
+    }
+    console.log("show");
+}
+hide() {
+    this.hideMe = false;
+    console.log("hide");
+}
 
   ngOnInit(): void {
     this.initializeApp();
