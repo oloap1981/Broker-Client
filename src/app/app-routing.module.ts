@@ -20,7 +20,8 @@ const routes: Routes = [
     // { path: 'report-generale', loadChildren: () => import('./pages/report-generale/report-generale.module').then(m => m.ReportGeneralePageModule) },
     // { path: 'report-analisi', loadChildren: () => import('./pages/report-analisi/report-analisi.module').then(m => m.ReportAnalisiPageModule) },
     { path: 'ammortamento', loadChildren: () => import('./pages/ammortamento/ammortamento.module').then(m => m.AmmortamentoPageModule) },
-    { path: 'client-immobili', loadChildren: () => import('./pages/client-immobili/client-immobili.module').then(m => m.ClientImmobiliPageModule) }
+    { path: 'client-immobili', loadChildren: () => import('./pages/client-immobili/client-immobili.module').then(m => m.ClientImmobiliPageModule) },  { path: 'client-immobile', loadChildren: './pages/client-immobile/client-immobile.module#ClientImmobilePageModule' },
+
 ];
 
 @NgModule({
