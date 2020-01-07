@@ -261,15 +261,19 @@ export class WizardPage extends BaseComponent implements OnInit {
   }
 
   public caricaOmi(): void {
-    this.tipiOmi = this.dropdownService.getTipiOmi("");
+    this.tipiOmi = new Array<DdlItem>();
+    // this.tipiOmi = this.dropdownService.getTipiOmi("");
   }
 
   ngOnInit() {
     super.ngOnInit();
 
-    this.tipologieTasse = this.dropdownService.getTipologieTasse();
-    this.tipiAffittuario = this.dropdownService.getTipiAffittuari();
-    this.euribor = this.dropdownService.getEuribor();
+    this.tipologieTasse = new Array<DdlItem>();
+    this.tipiAffittuario = new Array<DdlItem>();
+    this.euribor = new Array<DdlItem>();
+    // this.tipologieTasse = this.dropdownService.getTipologieTasse();
+    // this.tipiAffittuario = this.dropdownService.getTipiAffittuari();
+    // this.euribor = this.dropdownService.getEuribor();
 
     this.cointestatarioSelezionato.nominativo = this.sessionService.getCliente().cognome + ' ' + this.sessionService.getCliente().nome;
     this.cointestatarioSelezionato.quota = 100;
