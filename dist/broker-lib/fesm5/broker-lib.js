@@ -61,7 +61,7 @@ var ConstantsService = /** @class */ (function () {
         this.getDdlAffittuari = 'get_ddl_tipo_affittuari';
         this.getDdlTasse = 'get_ddl_tasse';
         this.getDdlOmi = 'get_ddl_omi';
-        this.getDdlCategoriaCatastale = 'get_ddl_categoria_catastale';
+        this.getDdlTipologiaCatastale = 'get_ddl_tipologia_catastale';
     }
     ConstantsService.decorators = [
         { type: Injectable }
@@ -158,7 +158,7 @@ if (false) {
     /** @type {?} */
     ConstantsService.prototype.getDdlOmi;
     /** @type {?} */
-    ConstantsService.prototype.getDdlCategoriaCatastale;
+    ConstantsService.prototype.getDdlTipologiaCatastale;
 }
 
 /**
@@ -707,6 +707,28 @@ if (false) {
  */
 var ImmobileDettaglio = /** @class */ (function () {
     function ImmobileDettaglio() {
+        this.proprieta_id = 0;
+        this.codice_fiscale = "";
+        this.codice_tipologia = "";
+        this.descrizione_tipologia = "";
+        this.data_aggiornamento = 0;
+        this.valore_acquisto = 0;
+        this.quota = 0;
+        this.catastale_cod = "";
+        this.comune_zone_cod = "";
+        this.indirizzo = "";
+        this.civico = "";
+        this.citta = "";
+        this.cap = "";
+        this.provincia = "";
+        this.istat_cod = "";
+        this.latitudine = "";
+        this.longitudine = "";
+        this.prima_casa = false;
+        this.destinazione_uso_id = 0;
+        this.descrizione_uso = "";
+        this.mutuo = false;
+        this.affitto = false;
     }
     return ImmobileDettaglio;
 }());
@@ -715,6 +737,8 @@ if (false) {
     ImmobileDettaglio.prototype.proprieta_id;
     /** @type {?} */
     ImmobileDettaglio.prototype.tipologie_catastali_id;
+    /** @type {?} */
+    ImmobileDettaglio.prototype.codice_fiscale;
     /** @type {?} */
     ImmobileDettaglio.prototype.codice_tipologia;
     /** @type {?} */
@@ -754,15 +778,7 @@ if (false) {
     /** @type {?} */
     ImmobileDettaglio.prototype.mutuo;
     /** @type {?} */
-    ImmobileDettaglio.prototype.tasso;
-    /** @type {?} */
     ImmobileDettaglio.prototype.affitto;
-    /** @type {?} */
-    ImmobileDettaglio.prototype.detrazione_interessi;
-    /** @type {?} */
-    ImmobileDettaglio.prototype.euribor_id;
-    /** @type {?} */
-    ImmobileDettaglio.prototype.descrizione_euribor;
     /** @type {?} */
     ImmobileDettaglio.prototype.cointestatari;
     /** @type {?} */
@@ -803,6 +819,19 @@ if (false) {
  */
 var DatiCatastaliDettaglio = /** @class */ (function () {
     function DatiCatastaliDettaglio() {
+        this.proprieta_catasto_id = 0;
+        this.sezione = '';
+        this.foglio = '';
+        this.zona = '';
+        this.micro_zona = '';
+        this.particella = '';
+        this.subalterno = '';
+        this.categoria = '';
+        this.classe = '';
+        this.rendita = 0;
+        this.vani = '';
+        this.superficie_interni = 0;
+        this.superficie_totale = 0;
     }
     return DatiCatastaliDettaglio;
 }());
@@ -841,6 +870,10 @@ if (false) {
  */
 var OmiDettaglio = /** @class */ (function () {
     function OmiDettaglio() {
+        this.valore_omi = 0;
+        this.valore_pot = 0;
+        this.affitto_pot = 0;
+        this.ammortamento_decadenza = 0;
     }
     return OmiDettaglio;
 }());
@@ -861,6 +894,18 @@ if (false) {
  */
 var MutuoDettaglio = /** @class */ (function () {
     function MutuoDettaglio() {
+        this.proprieta_mutuo_id = 0;
+        this.detrazione_interessi = '';
+        this.tipo_tasso = '';
+        this.euribor_id = 0;
+        this.descrizione_euribor = '';
+        this.spread = 0;
+        this.rate_id = 0;
+        this.descrizione_rate = '';
+        this.numero_rate = 0;
+        this.durata = 0;
+        this.data_inizio = '';
+        this.importo_iniziale = 0;
     }
     return MutuoDettaglio;
 }());
@@ -897,6 +942,15 @@ if (false) {
  */
 var AffittoDettaglio = /** @class */ (function () {
     function AffittoDettaglio() {
+        this.proprieta_affitto_id = 0;
+        this.descrizione_affittuario = '';
+        this.spese_condominiali = false;
+        this.importo_spese_condominiali = 0;
+        this.cedolare_secca = false;
+        this.aliquota_cedolare = 0;
+        this.prima_scadenza_anni = 0;
+        this.data_inizio = '';
+        this.importo_mensile = 0;
     }
     return AffittoDettaglio;
 }());
@@ -931,7 +985,6 @@ var SessionService = /** @class */ (function () {
     function SessionService(storeService, immobiliService) {
         this.storeService = storeService;
         this.immobiliService = immobiliService;
-        this.immobile = undefined;
         this.elencoImmobiliSubject = new Subject();
         this.elencoImmobiliObs = this.elencoImmobiliSubject.asObservable();
         this.userDataSubject = new Subject();
@@ -1596,44 +1649,52 @@ if (false) {
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var DropdownService = /** @class */ (function () {
+    // private tipologieTasse: Array<DdlItem> = [
+    //     { codice: 0, descrizione: "" },
+    //     { codice: 1, descrizione: "tasse1" },
+    //     { codice: 2, descrizione: "tasse2" },
+    //     { codice: 3, descrizione: "tasse3" },
+    // ];
+    // private tipiAffittuario: Array<DdlItem> = [
+    //     { codice: 0, descrizione: "" },
+    //     { codice: 1, descrizione: "tipoAffittuario1" },
+    //     { codice: 2, descrizione: "tipoAffittuario2" },
+    //     { codice: 3, descrizione: "tipoAffittuario3" },
+    // ];
+    // private euribor: Array<DdlItem> = [
+    //     { codice: 0, descrizione: "" },
+    //     { codice: 1, descrizione: "euribor1" },
+    //     { codice: 2, descrizione: "euribor2" },
+    //     { codice: 3, descrizione: "euribor3" },
+    // ];
+    // private tipiOmi: Array<DdlItem> = [
+    //     { codice: 0, descrizione: "" },
+    //     { codice: 1, descrizione: "omi1" },
+    //     { codice: 2, descrizione: "omi2" },
+    //     { codice: 3, descrizione: "omi3" },
+    //     { codice: 4, descrizione: "omi4" },
+    //     { codice: 5, descrizione: "omi5" }
+    // ];
     function DropdownService(httpService, constants) {
         this.httpService = httpService;
         this.constants = constants;
-        this.tipologieTasse = [
-            { codice: 0, descrizione: "" },
-            { codice: 1, descrizione: "tasse1" },
-            { codice: 2, descrizione: "tasse2" },
-            { codice: 3, descrizione: "tasse3" },
-        ];
-        this.tipiAffittuario = [
-            { codice: 0, descrizione: "" },
-            { codice: 1, descrizione: "tipoAffittuario1" },
-            { codice: 2, descrizione: "tipoAffittuario2" },
-            { codice: 3, descrizione: "tipoAffittuario3" },
-        ];
-        this.euribor = [
-            { codice: 0, descrizione: "" },
-            { codice: 1, descrizione: "euribor1" },
-            { codice: 2, descrizione: "euribor2" },
-            { codice: 3, descrizione: "euribor3" },
-        ];
-        this.tipiOmi = [
-            { codice: 0, descrizione: "" },
-            { codice: 1, descrizione: "omi1" },
-            { codice: 2, descrizione: "omi2" },
-            { codice: 3, descrizione: "omi3" },
-            { codice: 4, descrizione: "omi4" },
-            { codice: 5, descrizione: "omi5" }
-        ];
     }
     /**
+     * @param {?} primacasa
+     * @param {?} residente
+     * @param {?} affittata
      * @return {?}
      */
     DropdownService.prototype.getTipologieTasse = /**
+     * @param {?} primacasa
+     * @param {?} residente
+     * @param {?} affittata
      * @return {?}
      */
-    function () {
-        return this.tipologieTasse;
+    function (primacasa, residente, affittata) {
+        return this.getDropdown(this.constants.getDdlAffittuari, this.constants.pathSeparator + this.getBooleanAsString(primacasa)
+            + this.constants.pathSeparator + this.getBooleanAsString(residente)
+            + this.constants.pathSeparator + this.getBooleanAsString(affittata));
     };
     /**
      * @return {?}
@@ -1642,7 +1703,7 @@ var DropdownService = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        return this.tipiAffittuario;
+        return this.getDropdown(this.constants.getDdlAffittuari, '');
     };
     /**
      * @return {?}
@@ -1651,7 +1712,7 @@ var DropdownService = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        return this.euribor;
+        return this.getDropdown(this.constants.getDdlEuribor, '');
     };
     /**
      * @param {?} idComuneIstat
@@ -1662,30 +1723,44 @@ var DropdownService = /** @class */ (function () {
      * @return {?}
      */
     function (idComuneIstat) {
-        return this.tipiOmi;
+        return this.getDropdown(this.constants.getDdlOmi, this.constants.pathSeparator + idComuneIstat);
+    };
+    /**
+     * @return {?}
+     */
+    DropdownService.prototype.getTipologieCatastali = /**
+     * @return {?}
+     */
+    function () {
+        return this.getDropdown(this.constants.getDdlTipologiaCatastale, '');
     };
     /**
      * @param {?} Tipoddl
      * @param {?} Filtro
-     * @param {?} Ordina
-     * @param {?} Componi
-     * @param {?} PrimoVuoto
-     * @param {?} PrimoTutti
      * @return {?}
      */
     DropdownService.prototype.getDropdown = /**
      * @param {?} Tipoddl
      * @param {?} Filtro
-     * @param {?} Ordina
-     * @param {?} Componi
-     * @param {?} PrimoVuoto
-     * @param {?} PrimoTutti
      * @return {?}
      */
-    function (Tipoddl, Filtro, Ordina, Componi, PrimoVuoto, PrimoTutti) {
+    function (Tipoddl, Filtro) {
         /** @type {?} */
-        var path = '/' + Tipoddl + '/' + Filtro + '/' + Ordina + '/' + Componi + '/' + PrimoVuoto + '/' + PrimoTutti;
-        return this.httpService.get(this.constants.getDropdownServiceName + path);
+        var path = this.constants.pathSeparator + Tipoddl + Filtro;
+        return this.httpService.get(path);
+    };
+    /**
+     * @private
+     * @param {?} input
+     * @return {?}
+     */
+    DropdownService.prototype.getBooleanAsString = /**
+     * @private
+     * @param {?} input
+     * @return {?}
+     */
+    function (input) {
+        return (input ? 'true' : 'false');
     };
     DropdownService.decorators = [
         { type: Injectable }
@@ -1698,26 +1773,6 @@ var DropdownService = /** @class */ (function () {
     return DropdownService;
 }());
 if (false) {
-    /**
-     * @type {?}
-     * @private
-     */
-    DropdownService.prototype.tipologieTasse;
-    /**
-     * @type {?}
-     * @private
-     */
-    DropdownService.prototype.tipiAffittuario;
-    /**
-     * @type {?}
-     * @private
-     */
-    DropdownService.prototype.euribor;
-    /**
-     * @type {?}
-     * @private
-     */
-    DropdownService.prototype.tipiOmi;
     /**
      * @type {?}
      * @private
@@ -2531,6 +2586,10 @@ if (false) {
  */
 var CointestatarioDettaglio = /** @class */ (function () {
     function CointestatarioDettaglio() {
+        this.proprieta_possesso_id = 0;
+        this.nominativo = '';
+        this.codice_fiscale = '';
+        this.quota = 0;
     }
     return CointestatarioDettaglio;
 }());
@@ -2581,6 +2640,9 @@ if (false) {
  */
 var SpesaDettaglio = /** @class */ (function () {
     function SpesaDettaglio() {
+        this.proprieta_spese_id = 0;
+        this.descrizione_spesa = '';
+        this.importo_annuale = 0;
     }
     return SpesaDettaglio;
 }());
@@ -2601,6 +2663,9 @@ if (false) {
  */
 var TassaDettaglio = /** @class */ (function () {
     function TassaDettaglio() {
+        this.proprieta_tasse_id = 0;
+        this.descrizione_tassa = '';
+        this.importo_annuale = 0;
     }
     return TassaDettaglio;
 }());

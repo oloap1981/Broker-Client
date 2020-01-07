@@ -8,9 +8,10 @@ import { OmiDettaglio } from './omiDettaglio';
 export declare class ImmobileDettaglio {
     proprieta_id: number;
     tipologie_catastali_id: number;
+    codice_fiscale: string;
     codice_tipologia: string;
     descrizione_tipologia: string;
-    data_aggiornamento: string;
+    data_aggiornamento: number;
     valore_acquisto: number;
     quota: number;
     catastale_cod: string;
@@ -27,11 +28,7 @@ export declare class ImmobileDettaglio {
     destinazione_uso_id: number;
     descrizione_uso: string;
     mutuo: boolean;
-    tasso: string;
     affitto: boolean;
-    detrazione_interessi: boolean;
-    euribor_id: number;
-    descrizione_euribor: string;
     cointestatari: Array<CointestatarioDettaglio>;
     tasse: Array<TassaDettaglio>;
     spese: Array<SpesaDettaglio>;

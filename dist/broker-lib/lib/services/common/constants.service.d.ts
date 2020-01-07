@@ -43,5 +43,5 @@ export declare class ConstantsService {
     readonly getDdlAffittuari: string;
     readonly getDdlTasse: string;
     readonly getDdlOmi: string;
-    readonly getDdlCategoriaCatastale: string;
+    readonly getDdlTipologiaCatastale: string;
 }

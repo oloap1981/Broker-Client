@@ -61,7 +61,7 @@ class ConstantsService {
         this.getDdlAffittuari = 'get_ddl_tipo_affittuari';
         this.getDdlTasse = 'get_ddl_tasse';
         this.getDdlOmi = 'get_ddl_omi';
-        this.getDdlCategoriaCatastale = 'get_ddl_categoria_catastale';
+        this.getDdlTipologiaCatastale = 'get_ddl_tipologia_catastale';
     }
 }
 ConstantsService.decorators = [
@@ -157,7 +157,7 @@ if (false) {
     /** @type {?} */
     ConstantsService.prototype.getDdlOmi;
     /** @type {?} */
-    ConstantsService.prototype.getDdlCategoriaCatastale;
+    ConstantsService.prototype.getDdlTipologiaCatastale;
 }
 
 /**
@@ -581,12 +581,38 @@ if (false) {
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class ImmobileDettaglio {
+    constructor() {
+        this.proprieta_id = 0;
+        this.codice_fiscale = "";
+        this.codice_tipologia = "";
+        this.descrizione_tipologia = "";
+        this.data_aggiornamento = 0;
+        this.valore_acquisto = 0;
+        this.quota = 0;
+        this.catastale_cod = "";
+        this.comune_zone_cod = "";
+        this.indirizzo = "";
+        this.civico = "";
+        this.citta = "";
+        this.cap = "";
+        this.provincia = "";
+        this.istat_cod = "";
+        this.latitudine = "";
+        this.longitudine = "";
+        this.prima_casa = false;
+        this.destinazione_uso_id = 0;
+        this.descrizione_uso = "";
+        this.mutuo = false;
+        this.affitto = false;
+    }
 }
 if (false) {
     /** @type {?} */
     ImmobileDettaglio.prototype.proprieta_id;
     /** @type {?} */
     ImmobileDettaglio.prototype.tipologie_catastali_id;
+    /** @type {?} */
+    ImmobileDettaglio.prototype.codice_fiscale;
     /** @type {?} */
     ImmobileDettaglio.prototype.codice_tipologia;
     /** @type {?} */
@@ -626,15 +652,7 @@ if (false) {
     /** @type {?} */
     ImmobileDettaglio.prototype.mutuo;
     /** @type {?} */
-    ImmobileDettaglio.prototype.tasso;
-    /** @type {?} */
     ImmobileDettaglio.prototype.affitto;
-    /** @type {?} */
-    ImmobileDettaglio.prototype.detrazione_interessi;
-    /** @type {?} */
-    ImmobileDettaglio.prototype.euribor_id;
-    /** @type {?} */
-    ImmobileDettaglio.prototype.descrizione_euribor;
     /** @type {?} */
     ImmobileDettaglio.prototype.cointestatari;
     /** @type {?} */
@@ -671,6 +689,21 @@ if (false) {
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class DatiCatastaliDettaglio {
+    constructor() {
+        this.proprieta_catasto_id = 0;
+        this.sezione = '';
+        this.foglio = '';
+        this.zona = '';
+        this.micro_zona = '';
+        this.particella = '';
+        this.subalterno = '';
+        this.categoria = '';
+        this.classe = '';
+        this.rendita = 0;
+        this.vani = '';
+        this.superficie_interni = 0;
+        this.superficie_totale = 0;
+    }
 }
 if (false) {
     /** @type {?} */
@@ -706,6 +739,12 @@ if (false) {
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class OmiDettaglio {
+    constructor() {
+        this.valore_omi = 0;
+        this.valore_pot = 0;
+        this.affitto_pot = 0;
+        this.ammortamento_decadenza = 0;
+    }
 }
 if (false) {
     /** @type {?} */
@@ -723,6 +762,20 @@ if (false) {
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class MutuoDettaglio {
+    constructor() {
+        this.proprieta_mutuo_id = 0;
+        this.detrazione_interessi = '';
+        this.tipo_tasso = '';
+        this.euribor_id = 0;
+        this.descrizione_euribor = '';
+        this.spread = 0;
+        this.rate_id = 0;
+        this.descrizione_rate = '';
+        this.numero_rate = 0;
+        this.durata = 0;
+        this.data_inizio = '';
+        this.importo_iniziale = 0;
+    }
 }
 if (false) {
     /** @type {?} */
@@ -756,6 +809,17 @@ if (false) {
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class AffittoDettaglio {
+    constructor() {
+        this.proprieta_affitto_id = 0;
+        this.descrizione_affittuario = '';
+        this.spese_condominiali = false;
+        this.importo_spese_condominiali = 0;
+        this.cedolare_secca = false;
+        this.aliquota_cedolare = 0;
+        this.prima_scadenza_anni = 0;
+        this.data_inizio = '';
+        this.importo_mensile = 0;
+    }
 }
 if (false) {
     /** @type {?} */
@@ -792,7 +856,6 @@ class SessionService {
     constructor(storeService, immobiliService) {
         this.storeService = storeService;
         this.immobiliService = immobiliService;
-        this.immobile = undefined;
         this.elencoImmobiliSubject = new Subject();
         this.elencoImmobiliObs = this.elencoImmobiliSubject.asObservable();
         this.userDataSubject = new Subject();
@@ -1318,6 +1381,32 @@ if (false) {
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class DropdownService {
+    // private tipologieTasse: Array<DdlItem> = [
+    //     { codice: 0, descrizione: "" },
+    //     { codice: 1, descrizione: "tasse1" },
+    //     { codice: 2, descrizione: "tasse2" },
+    //     { codice: 3, descrizione: "tasse3" },
+    // ];
+    // private tipiAffittuario: Array<DdlItem> = [
+    //     { codice: 0, descrizione: "" },
+    //     { codice: 1, descrizione: "tipoAffittuario1" },
+    //     { codice: 2, descrizione: "tipoAffittuario2" },
+    //     { codice: 3, descrizione: "tipoAffittuario3" },
+    // ];
+    // private euribor: Array<DdlItem> = [
+    //     { codice: 0, descrizione: "" },
+    //     { codice: 1, descrizione: "euribor1" },
+    //     { codice: 2, descrizione: "euribor2" },
+    //     { codice: 3, descrizione: "euribor3" },
+    // ];
+    // private tipiOmi: Array<DdlItem> = [
+    //     { codice: 0, descrizione: "" },
+    //     { codice: 1, descrizione: "omi1" },
+    //     { codice: 2, descrizione: "omi2" },
+    //     { codice: 3, descrizione: "omi3" },
+    //     { codice: 4, descrizione: "omi4" },
+    //     { codice: 5, descrizione: "omi5" }
+    // ];
     /**
      * @param {?} httpService
      * @param {?} constants
@@ -1325,71 +1414,60 @@ class DropdownService {
     constructor(httpService, constants) {
         this.httpService = httpService;
         this.constants = constants;
-        this.tipologieTasse = [
-            { codice: 0, descrizione: "" },
-            { codice: 1, descrizione: "tasse1" },
-            { codice: 2, descrizione: "tasse2" },
-            { codice: 3, descrizione: "tasse3" },
-        ];
-        this.tipiAffittuario = [
-            { codice: 0, descrizione: "" },
-            { codice: 1, descrizione: "tipoAffittuario1" },
-            { codice: 2, descrizione: "tipoAffittuario2" },
-            { codice: 3, descrizione: "tipoAffittuario3" },
-        ];
-        this.euribor = [
-            { codice: 0, descrizione: "" },
-            { codice: 1, descrizione: "euribor1" },
-            { codice: 2, descrizione: "euribor2" },
-            { codice: 3, descrizione: "euribor3" },
-        ];
-        this.tipiOmi = [
-            { codice: 0, descrizione: "" },
-            { codice: 1, descrizione: "omi1" },
-            { codice: 2, descrizione: "omi2" },
-            { codice: 3, descrizione: "omi3" },
-            { codice: 4, descrizione: "omi4" },
-            { codice: 5, descrizione: "omi5" }
-        ];
     }
     /**
+     * @param {?} primacasa
+     * @param {?} residente
+     * @param {?} affittata
      * @return {?}
      */
-    getTipologieTasse() {
-        return this.tipologieTasse;
+    getTipologieTasse(primacasa, residente, affittata) {
+        return this.getDropdown(this.constants.getDdlAffittuari, this.constants.pathSeparator + this.getBooleanAsString(primacasa)
+            + this.constants.pathSeparator + this.getBooleanAsString(residente)
+            + this.constants.pathSeparator + this.getBooleanAsString(affittata));
     }
     /**
      * @return {?}
      */
     getTipiAffittuari() {
-        return this.tipiAffittuario;
+        return this.getDropdown(this.constants.getDdlAffittuari, '');
     }
     /**
      * @return {?}
      */
     getEuribor() {
-        return this.euribor;
+        return this.getDropdown(this.constants.getDdlEuribor, '');
     }
     /**
      * @param {?} idComuneIstat
      * @return {?}
      */
     getTipiOmi(idComuneIstat) {
-        return this.tipiOmi;
+        return this.getDropdown(this.constants.getDdlOmi, this.constants.pathSeparator + idComuneIstat);
+    }
+    /**
+     * @return {?}
+     */
+    getTipologieCatastali() {
+        return this.getDropdown(this.constants.getDdlTipologiaCatastale, '');
     }
     /**
      * @param {?} Tipoddl
      * @param {?} Filtro
-     * @param {?} Ordina
-     * @param {?} Componi
-     * @param {?} PrimoVuoto
-     * @param {?} PrimoTutti
      * @return {?}
      */
-    getDropdown(Tipoddl, Filtro, Ordina, Componi, PrimoVuoto, PrimoTutti) {
+    getDropdown(Tipoddl, Filtro) {
         /** @type {?} */
-        const path = '/' + Tipoddl + '/' + Filtro + '/' + Ordina + '/' + Componi + '/' + PrimoVuoto + '/' + PrimoTutti;
-        return this.httpService.get(this.constants.getDropdownServiceName + path);
+        const path = this.constants.pathSeparator + Tipoddl + Filtro;
+        return this.httpService.get(path);
+    }
+    /**
+     * @private
+     * @param {?} input
+     * @return {?}
+     */
+    getBooleanAsString(input) {
+        return (input ? 'true' : 'false');
     }
 }
 DropdownService.decorators = [
@@ -1401,26 +1479,6 @@ DropdownService.ctorParameters = () => [
     { type: ConstantsService }
 ];
 if (false) {
-    /**
-     * @type {?}
-     * @private
-     */
-    DropdownService.prototype.tipologieTasse;
-    /**
-     * @type {?}
-     * @private
-     */
-    DropdownService.prototype.tipiAffittuario;
-    /**
-     * @type {?}
-     * @private
-     */
-    DropdownService.prototype.euribor;
-    /**
-     * @type {?}
-     * @private
-     */
-    DropdownService.prototype.tipiOmi;
     /**
      * @type {?}
      * @private
@@ -2138,6 +2196,12 @@ if (false) {
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class CointestatarioDettaglio {
+    constructor() {
+        this.proprieta_possesso_id = 0;
+        this.nominativo = '';
+        this.codice_fiscale = '';
+        this.quota = 0;
+    }
 }
 if (false) {
     /** @type {?} */
@@ -2177,6 +2241,11 @@ if (false) {
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class SpesaDettaglio {
+    constructor() {
+        this.proprieta_spese_id = 0;
+        this.descrizione_spesa = '';
+        this.importo_annuale = 0;
+    }
 }
 if (false) {
     /** @type {?} */
@@ -2194,6 +2263,11 @@ if (false) {
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class TassaDettaglio {
+    constructor() {
+        this.proprieta_tasse_id = 0;
+        this.descrizione_tassa = '';
+        this.importo_annuale = 0;
+    }
 }
 if (false) {
     /** @type {?} */
