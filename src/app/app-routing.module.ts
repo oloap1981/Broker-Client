@@ -23,6 +23,8 @@ const routes: Routes = [
     { path: 'ammortamento', loadChildren: () => import('./pages/ammortamento/ammortamento.module').then(m => m.AmmortamentoPageModule) },
     { path: 'client-immobile', loadChildren: () => import('./pages/client-immobile/client-immobile.module').then(m => m.ClientImmobilePageModule) },
     { path: 'client-report-generale', loadChildren: () => import('./pages/client-report-generale/client-report-generale.module').then(m => m.ClientReportGeneralePageModule) },
+    { path: 'client-report-generale-attivi', loadChildren: () => import('./pages/client-report-generale-attivi/client-report-generale-attivi.module').then(m => m.ClientReportGeneraleAttiviPageModule) },
+    { path: 'client-report-generale-passivi', loadChildren: () => import('./pages/client-report-generale-passivi/client-report-generale-passivi.module').then(m => m.ClientReportGeneralePassiviPageModule) },
     { path: 'client-report-analisi', loadChildren: () => import('./pages/client-report-analisi/client-report-analisi.module').then(m => m.ClientReportAnalisiPageModule) },
 
 
