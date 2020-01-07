@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { importType } from '@angular/compiler/src/output/output_ast';
 
 const routes: Routes = [
     { path: '', loadChildren: () => import('./pages/client-home/client-home.module').then(m => m.ClientHomePageModule) },
@@ -20,7 +21,7 @@ const routes: Routes = [
     // { path: 'report-generale', loadChildren: () => import('./pages/report-generale/report-generale.module').then(m => m.ReportGeneralePageModule) },
     // { path: 'report-analisi', loadChildren: () => import('./pages/report-analisi/report-analisi.module').then(m => m.ReportAnalisiPageModule) },
     { path: 'ammortamento', loadChildren: () => import('./pages/ammortamento/ammortamento.module').then(m => m.AmmortamentoPageModule) },
-    { path: 'client-immobili', loadChildren: () => import('./pages/client-immobili/client-immobili.module').then(m => m.ClientImmobiliPageModule) },  { path: 'client-immobile', loadChildren: './pages/client-immobile/client-immobile.module#ClientImmobilePageModule' },
+    { path: 'client-immobile', loadChildren: () => import('./pages/client-immobile/client-immobile.module').then(m => m.ClientImmobilePageModule) },
 
 ];
 

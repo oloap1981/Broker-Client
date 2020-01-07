@@ -53,7 +53,7 @@ export class ClientImmobiliPage extends BaseComponent implements OnInit {
 
   public apriSchedaImmobile(immobile: number) {
     // this.router.navigate(['scheda-immobile'], { queryParams: { immobile_id: immobile } });
-    this.goToPageParams('scheda-immobile', { queryParams: { immobile_id: immobile } });
+    this.goToPageParams('client-immobile', { queryParams: { immobile_id: immobile } });
   }
 
   ionViewDidLeave() {

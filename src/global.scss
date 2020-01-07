@@ -1176,6 +1176,9 @@ input:checked + .slider:before {
             }
             &.tipologia {
                 width: 15%;
+                &.item {
+                    width: 60px;
+                }
                 &.magazzino {
                     background-repeat: no-repeat;
                     background-position: center;
@@ -1988,6 +1991,69 @@ input:checked + .slider:before {
                 width: 100%;
                 margin: 4px 0;
                 top: 0;
+            }
+        }
+        &.tipologia {
+            background-repeat: no-repeat;
+            background-position: center;
+            display: inline-block;
+            width: 88px;
+            &.magazzino {
+                background-image: url('/assets/img/icon-magazzino-big@2x.png') ;
+            }
+            &.negozio {
+                background-image: url('/assets/img/icon-negozio-big@2x.png') ;
+            }
+            &.garage {
+                background-image: url('/assets/img/icon-garage-big@2x.png') ;
+            }
+            &.casa {
+                background-image: url('/assets/img/icon-casa-big@2x.png') ;
+            }
+            &.villa {
+                background-image: url('/assets/img/icon-villa-big@2x.png') ;
+            }
+            &.agricolo {
+                background-image: url('/assets/img/icon-agricolo-big@2x.png') ;
+            }
+            &.ufficio {
+                background-image: url('/assets/img/icon-ufficio-big@2x.png') ;
+            }
+            &.albergo {
+                background-image: url('/assets/img/icon-albergo-big@2x.png') ;
+            }
+            &.ospedale {
+                background-image: url('/assets/img/icon-ospedale-big@2x.png') ;
+            }
+            &.scuola {
+                background-image: url('/assets/img/icon-scuola-big@2x.png') ;
+            }
+            &.museo {
+                background-image: url('/assets/img/icon-museo-big@2x.png') ;
+            }
+            &.chiesa {
+                background-image: url('/assets/img/icon-chiesa-big@2x.png') ;
+            }
+            &.sport {
+                background-image: url('/assets/img/icon-sport-big@2x.png') ;
+            }
+            &.fabbrica {
+                background-image: url('/assets/img/icon-fabbrica-big@2x.png') ;
+            }
+            &.teatro {
+                background-image: url('/assets/img/icon-teatro-big@2x.png') ;
+            }
+            &.banca {
+                background-image: url('/assets/img/icon-banca-big@2x.png') ;
+            }
+            &.ponte {
+                background-image: url('/assets/img/icon-ponte-big@2x.png');
+            }
+            &.stazione {
+                background-image: url('/assets/img/icon-stazione-big@2x.png');
+            }
+            &.cantiere {
+                background-image: url('/assets/img/icon-cantiere-big@2x.png');
             }
         }
         &.path {
