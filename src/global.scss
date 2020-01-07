@@ -146,6 +146,15 @@ ul {
         }
     }
 }
+
+
+.negative {
+    color: red;
+    //font-weight: 500;
+}
+.positive {
+    //font-weight: 500;
+}
 .form-item {
     padding: 10px 5px 0 5px;
     &.single {
@@ -402,6 +411,7 @@ input:checked + .slider:before {
     }
     &.light {
         background-color: transparent;
+        color:  $highlight-text-color;
         /*padding: 0;
         margin: 0;*/
     }
@@ -1525,6 +1535,13 @@ input:checked + .slider:before {
     text-align: center;
     font-size: .85em;
     
+    .negative {
+        color: red;
+        font-weight: 500;
+    }
+    .positive {
+        //font-weight: 500;
+    }
     .table-cell {
         padding: 10px 0;
         margin: 0 20px;
@@ -2177,7 +2194,7 @@ input:checked + .slider:before {
         &.lista-immobili {
             top: 0;
         }
-        &.lista-documentali {
+        &.lista-documentali, &.report {
             top: 35px;
         }
         .scheda {
