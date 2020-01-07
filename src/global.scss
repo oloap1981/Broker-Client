@@ -445,6 +445,7 @@ input:checked + .slider:before {
     &.documentale {
         background-image: url('/assets/img/icon-documentale@2x.png');
     }
+    
     &.forward {
         background-image: url('/assets/img/icon-forward@2x.png');
         background-position: right 12px center;
@@ -1945,6 +1946,9 @@ input:checked + .slider:before {
         background-position: left top;
         z-index: 10;
     }
+    .button {
+        margin-right: 10px;
+    }
     .item {
         border-bottom: solid 1px $grey-1;
         border-right:solid 1px $border-right;
@@ -1992,6 +1996,10 @@ input:checked + .slider:before {
                 margin: 4px 0;
                 top: 0;
             }
+        }
+        &.indirizzo {
+            font-size: .8em;
+            padding-right: 50px;
         }
         &.tipologia {
             background-repeat: no-repeat;
@@ -2456,6 +2464,11 @@ input:checked + .slider:before {
     .item-footer {
         margin-top: 30px;
         text-align: center;
+    }
+    &.client {
+        width: 300px;
+        margin-left: -150px;
+        top: 40%;
     }
 }
 
