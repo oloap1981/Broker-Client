@@ -357,9 +357,9 @@ export class ClientReportAnalisiPage extends BaseComponent implements OnInit {
                 ]
             },
             options: {
-                aspectRatio: 3,
+                aspectRatio: 1.8,
                 title: {
-                    display: true,
+                    display: false,
                     text: 'Analisi'
                 }
             }
