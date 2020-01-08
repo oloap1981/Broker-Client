@@ -5,7 +5,7 @@
             <div class="item bv"><span class="bv_label">Book Value (&euro;)</span><span class="bv_value">450K</span>
             </div>
         </div>
-        <div class="content lista-immobili  bottom-footer">
+        <div class="content lista-immobili bottom-footer">
             <div class="list">
                 <ul class="lista-immobile">
                     <li class="immobile" *ngFor="let immobileLista of sessionService.getImmobiliCliente()"
@@ -33,8 +33,8 @@
         <div class="footer table">
             <div class="row">
                 <div class="cell">
-                    <button class="button add">immobile</button>
-                    <button class="button report">report</button>
+                    <button class="button add" (click)="goToWizard()">immobile</button>
+                    <button class="button report" (click)="goToWizard()">report</button>
                 </div>
             </div>
         </div>

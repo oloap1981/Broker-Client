@@ -642,17 +642,6 @@ input:checked + .slider:before {
             right: $default-right-area-width;
         }
     }
-    &.client {
-        position: absolute;
-        top: $default-size;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: none;
-        .content-area {
-            right: 0;
-        }
-    }
     &.wizard {
         position: absolute;
         top: $default-size;
@@ -701,6 +690,17 @@ input:checked + .slider:before {
                     font-size: .9em;
                 }
             }
+        }
+    }
+    &.client {
+        position: absolute;
+        top: $default-size;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: none;
+        .content-area {
+            right: 0;
         }
     }
 }
@@ -1421,6 +1421,7 @@ input:checked + .slider:before {
                         line-height: 2em;
                         text-align: center;
                         width: 31px;
+                        height: 29px;
                         font-size: .8em;
                         background-color: $highlight-text-color;
                     }
@@ -2378,6 +2379,21 @@ input:checked + .slider:before {
                 padding: 15px 10px;
             }
         }
+    }
+    &.wizard {
+        .scheda {
+            position: relative;
+            width: auto;
+            margin-left: inherit;
+            left: inherit;
+            right: inherit;
+        }
+        .choice {
+            margin: 10px 0 !important;
+        }
+        h3 {
+            margin-top: 0;
+        } 
     }
     .footer {
         background-color:#fff;

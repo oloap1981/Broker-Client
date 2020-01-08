@@ -42,6 +42,9 @@ export class ClientImmobilePage extends BaseComponent implements OnInit {
         this.immobile.dati_catastali = new DatiCatastaliDettaglio();
     }
 
+    public goToWizard(): void {
+        this.goToPage("wizard");
+    }
     ngOnInit() {
         super.ngOnInit();
     }

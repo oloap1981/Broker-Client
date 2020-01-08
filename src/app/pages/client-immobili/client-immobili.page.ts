@@ -56,6 +56,13 @@ export class ClientImmobiliPage extends BaseComponent implements OnInit {
     this.goToPageParams('client-immobile', { queryParams: { immobile_id: immobile } });
   }
 
+
+    public goToWizard(): void {
+        this.sessionService.clearImmobileDettaglio();
+        this.goToPage('client-wizard');
+    }
+
+
   ionViewDidLeave() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();

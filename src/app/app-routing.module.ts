@@ -26,9 +26,7 @@ const routes: Routes = [
     { path: 'client-report-generale-attivi', loadChildren: () => import('./pages/client-report-generale-attivi/client-report-generale-attivi.module').then(m => m.ClientReportGeneraleAttiviPageModule) },
     { path: 'client-report-generale-passivi', loadChildren: () => import('./pages/client-report-generale-passivi/client-report-generale-passivi.module').then(m => m.ClientReportGeneralePassiviPageModule) },
     { path: 'client-report-analisi', loadChildren: () => import('./pages/client-report-analisi/client-report-analisi.module').then(m => m.ClientReportAnalisiPageModule) },
-
-
-
+    { path: 'client-wizard', loadChildren: () => import('./pages/client-wizard/client-wizard.module').then(m => m.ClientWizardPageModule) },
 ];
 
 @NgModule({

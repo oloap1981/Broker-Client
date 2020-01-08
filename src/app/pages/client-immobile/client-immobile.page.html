@@ -3,9 +3,9 @@
         <div class="area-spec">
             <div [ngClass]="getIconaClasseImmobileItem(immobile.codice_tipologia)"></div>
             <div class="item indirizzo">{{immobile.indirizzo + ' ' + immobile.civico + ', ' + immobile.citta}}</div>
-            <button class="button documentale only-icon" routerLink="/client-documentale">&nbsp;</button>
+            
         </div>
-        <div class="content ">
+        <div class="content bottom-footer">
             <div class="scheda">
                 <div class="scheda-content">
                     <div class="scheda-table">
@@ -59,6 +59,14 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer table">
+            <div class="row">
+                <div class="cell">
+                    <button class="button documentale" routerLink="/client-documentale">Doc</button>
+                    <button class="button edit" (click)="goToWizard()">Modifica</button>
                 </div>
             </div>
         </div>
