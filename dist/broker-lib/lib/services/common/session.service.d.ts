@@ -30,6 +30,7 @@ export declare class SessionService {
     getUserData(): WsToken;
     loadUserData(): void;
     getCliente(): Cliente;
+    clearCliente(): void;
     getImmobiliCliente(): Array<Immobile>;
     setImmobileDettaglio(immobileDettaglio: ImmobileDettaglio): void;
     getImmobileDettaglio(): ImmobileDettaglio;

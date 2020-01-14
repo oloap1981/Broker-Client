@@ -1138,6 +1138,7 @@
     var AffittoDettaglio = /** @class */ (function () {
         function AffittoDettaglio() {
             this.proprieta_affitto_id = 0;
+            this.tipo_affittuario_id = 0;
             this.descrizione_affittuario = '';
             this.spese_condominiali = false;
             this.importo_spese_condominiali = 0;
@@ -1335,6 +1336,16 @@
          */
         function () {
             return this.cliente;
+        };
+        /**
+         * @return {?}
+         */
+        SessionService.prototype.clearCliente = /**
+         * @return {?}
+         */
+        function () {
+            this.cliente = new Cliente();
+            this.immobiliCliente = new Array();
         };
         /**
          * @return {?}
@@ -1844,32 +1855,6 @@
      * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
     var DropdownService = /** @class */ (function () {
-        // private tipologieTasse: Array<DdlItem> = [
-        //     { codice: 0, descrizione: "" },
-        //     { codice: 1, descrizione: "tasse1" },
-        //     { codice: 2, descrizione: "tasse2" },
-        //     { codice: 3, descrizione: "tasse3" },
-        // ];
-        // private tipiAffittuario: Array<DdlItem> = [
-        //     { codice: 0, descrizione: "" },
-        //     { codice: 1, descrizione: "tipoAffittuario1" },
-        //     { codice: 2, descrizione: "tipoAffittuario2" },
-        //     { codice: 3, descrizione: "tipoAffittuario3" },
-        // ];
-        // private euribor: Array<DdlItem> = [
-        //     { codice: 0, descrizione: "" },
-        //     { codice: 1, descrizione: "euribor1" },
-        //     { codice: 2, descrizione: "euribor2" },
-        //     { codice: 3, descrizione: "euribor3" },
-        // ];
-        // private tipiOmi: Array<DdlItem> = [
-        //     { codice: 0, descrizione: "" },
-        //     { codice: 1, descrizione: "omi1" },
-        //     { codice: 2, descrizione: "omi2" },
-        //     { codice: 3, descrizione: "omi3" },
-        //     { codice: 4, descrizione: "omi4" },
-        //     { codice: 5, descrizione: "omi5" }
-        // ];
         function DropdownService(httpService, constants) {
             this.httpService = httpService;
             this.constants = constants;
@@ -1887,7 +1872,7 @@
          * @return {?}
          */
         function (primacasa, residente, affittata) {
-            return this.getDropdown(this.constants.getDdlAffittuari, this.constants.pathSeparator + this.getBooleanAsString(primacasa)
+            return this.getDropdown(this.constants.getDdlTasse, this.constants.pathSeparator + this.getBooleanAsString(primacasa)
                 + this.constants.pathSeparator + this.getBooleanAsString(residente)
                 + this.constants.pathSeparator + this.getBooleanAsString(affittata));
         };
@@ -1941,7 +1926,7 @@
          */
         function (Tipoddl, Filtro) {
             /** @type {?} */
-            var path = this.constants.pathSeparator + Tipoddl + Filtro;
+            var path = Tipoddl + Filtro;
             return this.httpService.get(path);
         };
         /**

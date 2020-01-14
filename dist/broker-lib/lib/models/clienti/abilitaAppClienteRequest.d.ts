@@ -1,4 +1,4 @@
 export declare class AbilitaAppClienteRequest {
-    cliente_id: string;
+    cliente_id: number;
     password: string;
 }
