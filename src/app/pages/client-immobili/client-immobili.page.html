@@ -15,14 +15,14 @@
                             ({{immobileLista.provincia}})</div>
                         <div class="tipologia table">
                             <div class="row">
-                                <div class="cell casa">
+                                <div [ngClass]="getIconaClasseImmobileCell(immobileLista.codice_tipologia)">
                                 </div>
                             </div>
                         </div>
                         <div class="quota table">
                             <div class="row">
                                 <div class="cell">
-                                    27<small>%</small>
+                                    {{immobileLista.quota}}<small>%</small>
                                 </div>
                             </div>
                         </div>

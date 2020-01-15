@@ -1,7 +1,10 @@
 <div class="main-body client">
     <div class="content-area">
         <div class="area-spec">
-            <div class="item path"><button class="button back only-icon">&nbsp;</button><span class="tipologia casa">&nbsp;</span> Viale nino bixio</div>
+            <div class="item path"><button class="button back only-icon"
+                    (click)="goToPage('client-report-generale')">&nbsp;</button><span
+                    [ngClass]="getIconaClasseImmobileTipologia(reportGenerale.codice_tipologia)">&nbsp;</span>{{reportGenerale.indirizzo + ' ' + reportGenerale.civico + ', ' + reportGenerale.citta}}
+            </div>
         </div>
         <div class="content report">
             <div class="scheda">
@@ -9,14 +12,24 @@
                     <div class="scheda-table">
                         <div class="scheda-row full-width">
                             <div class="item">
-                                <h3 class="item-title">Passivi <a href="#" class="button download only-icon">&nbsp;</a></h3>
-                                <ul class="item-list">
-                                    <li><span>Affitto mensile</span><span>1k &euro;</span></li>
-                                    <li><span>Affittuario</span><span>Persona fisica</span></li>
-                                    <li><span>Cedolare secca</span><span>Si</span></li>
-                                    <li><span>Telefono</span><span>6.3k &euro;</span></li>
-                                    <li><span>Scadenza</span><span>224</span></li>
-                                    <li><span>Spese condominiali<br><small>se non comprese</small></span><span>6.3k &euro;</span></li>
+                                <h3 class="item-title">Attivi <a href="#" class="button download only-icon">&nbsp;</a>
+                                </h3>
+                                <ul class="item-list" *ngIf="reportGenerale.attivo">
+                                    <li><span>Affittuario</span><span>{{reportGenerale.attivo.descrizione_affittuario}}</span>
+                                    </li>
+                                    <li><span>Cedolare
+                                            secca</span><span>{{(reportGenerale.attivo.cedolare_secca ? 'SI' : 'NO')}}</span>
+                                    </li>
+                                    <li *ngIf="reportGenerale.attivo.cedolare_secca"><span>Aliquota
+                                            Cedolare</span><span>{{reportGenerale.attivo.aliquota_cedolare}}k
+                                            &euro;</span></li>
+                                    <li><span>Prima Scadenza
+                                            Anni</span><span>{{reportGenerale.attivo.prima_scadenza_anni}}</span></li>
+                                    <li><span>Data
+                                            Inizio</span><span>{{reportGenerale.attivo.data_inizio | raDateFormat_gg_mm_aaaa}}</span>
+                                    </li>
+                                    <li><span>Importo Mensile</span><span>{{reportGenerale.attivo.importo_mensile}}k
+                                            &euro;</span></li>
                                 </ul>
                             </div>
                         </div>

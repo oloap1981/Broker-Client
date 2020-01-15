@@ -3,7 +3,7 @@
         <div class="area-spec">
             <div [ngClass]="getIconaClasseImmobileItem(immobile.codice_tipologia)"></div>
             <div class="item indirizzo">{{immobile.indirizzo + ' ' + immobile.civico + ', ' + immobile.citta}}</div>
-            
+
         </div>
         <div class="content bottom-footer">
             <div class="scheda">
@@ -11,7 +11,9 @@
                     <div class="scheda-table">
                         <div class="scheda-row full-width">
                             <div class="item">
-                                <h3 class="item-title">Proprietà: {{immobile.quota}} %<button class="button view only-icon" (click)="openModal('custom-modal-1')">&nbsp;</button></h3>
+                                <h3 class="item-title">Proprietà: {{immobile.quota}} %<button
+                                        class="button view only-icon"
+                                        (click)="openModal('custom-modal-1')">&nbsp;</button></h3>
                                 <ul class="item-list">
                                     <li><span>Book Value</span><span>{{immobile.valore_acquisto}}</span></li>
                                     <li><span>Valore catastale</span><span>{{immobile.valore_acquisto}}</span></li>
@@ -24,12 +26,13 @@
                         </div>
                         <div class="scheda-row full-width">
                             <div class="item">
-                                <h3 class="item-title">Mutuo: <button class="button view only-icon" *ngIf="immobile.mutuo" (click)="apriPianoAmmortamento()">&nbsp;</button>
+                                <h3 class="item-title">Mutuo: <button class="button view only-icon"
+                                        *ngIf="immobile.mutuo" (click)="apriPianoAmmortamento()">&nbsp;</button>
                                 </h3>
                                 <ul class="item-list" *ngIf="immobile.mutuo">
                                     <li><span>Data</span><span>{{immobile.mutuo_dettaglio.data_inizio | raDateFormat_gg_mm_aaaa}}</span>
                                     </li>
-                        
+
                                     <li><span>Durata</span><span>{{immobile.mutuo_dettaglio.durata}}</span></li>
                                     <li><span>Tasso</span><span>{{immobile.mutuo_dettaglio.tipo_tasso}}</span></li>
                                 </ul>
@@ -66,12 +69,13 @@
             <div class="row">
                 <div class="cell">
                     <button class="button documentale" routerLink="/client-documentale">Doc</button>
-                    <button class="button edit" (click)="goToWizard()">Modifica</button>
+                    <button class="button edit" (click)="goToWizardEdit()">Modifica</button>
                 </div>
             </div>
         </div>
     </div>
-</div><app-quoteproprieta-modal id="custom-modal-1" class="modal-area">
+</div>
+<app-quoteproprieta-modal id="custom-modal-1" class="modal-area">
     <div class="scheda modal client">
         <div class="scheda-content">
             <div class="scheda-table">

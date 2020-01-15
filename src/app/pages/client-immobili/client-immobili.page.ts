@@ -32,7 +32,7 @@ export class ClientImmobiliPage extends BaseComponent implements OnInit {
 
   ionViewDidEnter() {
     this.initializeApp();
-    this.sessionService.setIntestazionePagina('Elenco Immobili');
+    this.sessionService.setIntestazionePagina('ELENCO IMMOBILI');
   }
 
   private initializeApp() {
@@ -42,13 +42,21 @@ export class ClientImmobiliPage extends BaseComponent implements OnInit {
     ).subscribe(present => {
       if (present) {
         this.wsToken = this.sessionService.getUserData();
+        this.wsToken = this.sessionService.getUserData();
+        if (this.wsToken !== undefined
+          && this.wsToken !== null
+          && this.wsToken.token_value !== ''
+          && this.wsToken.utente !== undefined) {
+          console.log('Utente in possesso di token');
+
+        } else {
+          this.goToPage('login');
+        }
       } else {
-        this.alertService.presentAlert('Token assente, necessario login');
         this.goToPage('login');
       }
     });
     this.sessionService.loadUserData();
-
   }
 
   public apriSchedaImmobile(immobile: number) {
@@ -57,10 +65,10 @@ export class ClientImmobiliPage extends BaseComponent implements OnInit {
   }
 
 
-    public goToWizard(): void {
-        this.sessionService.clearImmobileDettaglio();
-        this.goToPage('client-wizard');
-    }
+  public goToWizard(): void {
+    this.sessionService.clearImmobileDettaglio();
+    this.goToPage('client-wizard');
+  }
 
 
   ionViewDidLeave() {

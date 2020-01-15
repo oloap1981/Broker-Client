@@ -27,21 +27,21 @@ export class AppComponent implements OnInit {
     public sessionService: SessionService,
     private alertService: AlertService
   ) {
-}
-hideMe = true;
-showMe = false;
-show() {
+  }
+  hideMe = true;
+  showMe = false;
+  show() {
     if (this.showMe === false) {
-        this.showMe = true;
+      this.showMe = true;
     } else {
-        this.showMe = false;
+      this.showMe = false;
     }
     console.log("show");
-}
-hide() {
+  }
+  hide() {
     this.hideMe = false;
     console.log("hide");
-}
+  }
 
   ngOnInit(): void {
     this.initializeApp();
@@ -66,7 +66,6 @@ hide() {
       if (present) {
         this.wsToken = this.sessionService.getUserData();
       } else {
-        this.alertService.presentAlert('Token assente, necessario login');
         this.router.navigate(['login']);
       }
     });

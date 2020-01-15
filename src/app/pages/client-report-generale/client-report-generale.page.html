@@ -10,39 +10,23 @@
             <div class="scheda">
                 <div class="scheda-content">
                     <div class="scheda-table">
-                        <div class="scheda-row full-width">
+                        <div class="scheda-row full-width" *ngFor="let immobile of situazioneImmobili">
                             <div class="item">
-                                <h3 class="item-title"><small>Nino bixio 12, Milano</small></h3>
+                                <h3 class="item-title">
+                                    <small>{{immobile.indirizzo + ' ' + immobile.civico + ', ' + immobile.citta}}</small>
+                                </h3>
                                 <ul class="item-list">
-                                    <li><span>Possesso</span><span>100%</span></li>
-                                    <li><span>Categoria</span><span>A/4</span></li>
-                                    <li><span>Passivi</span><span>6.3k &euro; <img src="/assets/img/icon-view-blue-mini@2x.png" style="margin-left: 10px"></span></li>
-                                    <li><span>Attivi</span><span>6.3k &euro; <img src="/assets/img/icon-view-blue-mini@2x.png" style="margin-left: 10px"></span></li>
-                                    <li><b><span>Totale</span><span>6.3k &euro;</span></b></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="scheda-row full-width">
-                            <div class="item">
-                                <h3 class="item-title"><small>Nino bixio 12, Milano</small></h3>
-                                <ul class="item-list">
-                                    <li><span>Possesso</span><span>100%</span></li>
-                                    <li><span>Categoria</span><span>A/4</span></li>
-                                    <li><span>Passivi</span><span>6.3k &euro; <img src="/assets/img/icon-view-blue-mini@2x.png" style="margin-left: 10px"></span></li>
-                                    <li><span>Attivi</span><span>6.3k &euro; <img src="/assets/img/icon-view-blue-mini@2x.png" style="margin-left: 10px"></span></li>
-                                    <li><b><span>Totale</span><span>6.3k &euro;</span></b></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="scheda-row full-width">
-                            <div class="item">
-                                <h3 class="item-title"><small>Nino bixio 12, Milano</small></h3>
-                                <ul class="item-list">
-                                    <li><span>Possesso</span><span>100%</span></li>
-                                    <li><span>Categoria</span><span>A/4</span></li>
-                                    <li><span>Passivi</span><span>6.3k &euro; <img src="/assets/img/icon-view-blue-mini@2x.png" style="margin-left: 10px"></span></li>
-                                    <li><span>Attivi</span><span>6.3k &euro; <img src="/assets/img/icon-view-blue-mini@2x.png" style="margin-left: 10px"></span></li>
-                                    <li><b><span>Totale</span><span class="negative">6.3k &euro;</span></b></li>
+                                    <li><span>Possesso</span><span>{{immobile.quota}}%</span></li>
+                                    <li><span>Categoria</span><span>{{immobile.codice_tipologia}}</span></li>
+                                    <li><span>Passivi</span><span>{{getTotalePassiviImmobile(immobile) | k_money}}
+                                            &euro; <img src="/assets/img/icon-view-blue-mini@2x.png"
+                                                style="margin-left: 10px"
+                                                (click)="caricaPassiviImmobile(immobile)"></span></li>
+                                    <li><span>Attivi</span><span>{{getTotaleAttiviImmobile(immobile) | k_money}} &euro;
+                                            <img src="/assets/img/icon-view-blue-mini@2x.png" style="margin-left: 10px"
+                                                (click)="caricaAttiviImmobile(immobile)"></span></li>
+                                    <li><b><span>Totale</span><span>{{getTotaleImmobile(immobile) | k_money}}
+                                                &euro;</span></b></li>
                                 </ul>
                             </div>
                         </div>

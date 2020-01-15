@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BaseComponent } from 'src/app/component/base.component';
-import { SessionService, StoreService, LogErroriService, AlertService, ClientiService, LoginService, IconeService, BookValue } from 'broker-lib';
+import { SessionService, StoreService, LogErroriService, AlertService, ClientiService, LoginService, IconeService, BookValue, Cliente } from 'broker-lib';
 import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
@@ -47,7 +47,7 @@ export class ClientHomePage extends BaseComponent implements OnInit {
 
   ionViewDidEnter() {
     this.initializeApp();
-    this.sessionService.setIntestazionePagina('Patrimonio');
+    this.sessionService.setIntestazionePagina('PATRIMONIO');
   }
 
   private initializeApp(): void {
@@ -57,37 +57,50 @@ export class ClientHomePage extends BaseComponent implements OnInit {
     ).subscribe(present => {
       if (present) {
         this.wsToken = this.sessionService.getUserData();
+        if (this.wsToken !== undefined
+          && this.wsToken !== null
+          && this.wsToken.token_value !== ''
+          && this.wsToken.utente !== undefined) {
+          const utente = this.wsToken.utente;
+          if (utente.utente_id !== undefined && utente.utente_id !== 0) {
 
-        const cliente_id = this.sessionService.getCliente().cliente_id;
-        if (cliente_id === 0 || cliente_id === undefined) {
-          // non ho clienti selezionati
-          this.presentAlert("Cliente mancante, necessario login");
+            this.clientiService.getBookValue(utente.utente_id).pipe(
+              takeUntil(this.unsubscribe$)
+            ).subscribe(r => {
+              if (r.Success) {
+                if (r.Data.elencoTipologieCatastaliA) {
+                  this.patrimoniA = r.Data.elencoTipologieCatastaliA;
+                  this.calcolaTotalePatrimoniA();
+                }
+                if (r.Data.elencoTipologieCatastaliC) {
+                  this.patrimoniA = r.Data.elencoTipologieCatastaliC;
+                  this.calcolaTotalePatrimoniC();
+                }
+                if (r.Data.elencoTipologieCatastaliT) {
+                  this.patrimoniA = r.Data.elencoTipologieCatastaliT;
+                  this.calcolaTotalePatrimoniT();
+                }
+              } else {
+                this.manageError(r);
+              }
+            });
+
+            // nella app clienti vado subito a prendere i dati del cliente che si logga
+            const cliente = new Cliente();
+            cliente.cliente_id = utente.utente_id;
+            cliente.codice_fiscale = utente.codice_fiscale;
+            cliente.cognome = utente.cognome;
+            cliente.nome = utente.nome;
+            cliente.email = utente.email;
+            this.sessionService.setCliente(cliente);
+
+          } else {
+            this.goToPage('login');
+          }
+        } else {
           this.goToPage('login');
         }
-
-        this.clientiService.getBookValue(cliente_id).pipe(
-          takeUntil(this.unsubscribe$)
-        ).subscribe(r => {
-          if (r.Success) {
-            if (r.Data.elencoTipologieCatastaliA) {
-              this.patrimoniA = r.Data.elencoTipologieCatastaliA;
-              this.calcolaTotalePatrimoniA();
-            }
-            if (r.Data.elencoTipologieCatastaliC) {
-              this.patrimoniA = r.Data.elencoTipologieCatastaliC;
-              this.calcolaTotalePatrimoniC();
-            }
-            if (r.Data.elencoTipologieCatastaliT) {
-              this.patrimoniA = r.Data.elencoTipologieCatastaliT;
-              this.calcolaTotalePatrimoniT();
-            }
-          } else {
-            this.manageError(r);
-          }
-        });
-
       } else {
-        this.alertService.presentAlert('Token assente, necessario login');
         this.goToPage('login');
       }
     });

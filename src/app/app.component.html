@@ -8,18 +8,21 @@
     </div>
     <!-- FINE HEADER COMUNE -->
     <ion-router-outlet animated="false"></ion-router-outlet>
-    <div class="left-menu left-side-element"  *ngIf="showMe" style="z-index: 1001">
+    <div class="left-menu left-side-element" *ngIf="showMe" style="z-index: 1001">
         <ion-buttons slot="start" class="logo left-side-element" no-padding no-margin> </ion-buttons>
         <div class="base">
             <ul>
                 <li>
-                    <div class="voice dashboard selected" routerLink="/client-home" routerDirection="root" (click)="show()">Dashboard</div>
+                    <div class="voice dashboard selected" routerLink="/client-home" routerDirection="root"
+                        (click)="show()">Dashboard</div>
                 </li>
                 <li>
-                    <div class="voice list" routerLink="/client-immobili" routerDirection="root" (click)="show()">Client list</div>
+                    <div class="voice list" routerLink="/client-immobili" routerDirection="root" (click)="show()">Client
+                        list</div>
                 </li>
                 <li>
-                    <div class="voice report" routerLink="/client-report-generale" routerDirection="root" (click)="show()">Report</div>
+                    <div class="voice report" routerLink="/client-report-generale" routerDirection="root"
+                        (click)="show()">Report</div>
                 </li>
             </ul>
         </div>

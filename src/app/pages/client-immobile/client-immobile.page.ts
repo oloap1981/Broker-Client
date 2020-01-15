@@ -51,8 +51,7 @@ export class ClientImmobilePage extends BaseComponent implements OnInit {
 
     ionViewDidEnter() {
         this.initializeApp();
-        super.ngOnInit();
-
+        this.sessionService.setIntestazionePagina('DETTAGLIO IMMOBILE');
     }
 
     private initializeApp() {
@@ -63,37 +62,38 @@ export class ClientImmobilePage extends BaseComponent implements OnInit {
             if (present) {
                 this.wsToken = this.sessionService.getUserData();
 
-                if (this.sessionService.getImmobileDettaglio() !== null
-                    && this.sessionService.getImmobileDettaglio().proprieta_id !== 0
-                    && this.sessionService.getImmobileDettaglio().proprieta_id !== null
-                    && this.sessionService.getImmobileDettaglio().proprieta_id !== undefined) {
-                    this.immobile = this.sessionService.getImmobileDettaglio();
-                    this.sessionService.setImmobileDettaglio(this.immobile);
-                } else {
-                    this.route.queryParams.pipe(
-                        takeUntil(this.unsubscribe$)
-                    ).subscribe(params => {
+                this.wsToken = this.sessionService.getUserData();
+                if (this.wsToken !== undefined
+                    && this.wsToken !== null
+                    && this.wsToken.token_value !== ''
+                    && this.wsToken.utente !== undefined) {
 
-                        this.immobile_id = params.immobile_id;
-                        this.immobiliService.getImmobile(this.immobile_id).pipe(
+                    if (this.sessionService.getImmobileDettaglio() !== null
+                        && this.sessionService.getImmobileDettaglio().proprieta_id !== 0
+                        && this.sessionService.getImmobileDettaglio().proprieta_id !== null
+                        && this.sessionService.getImmobileDettaglio().proprieta_id !== undefined) {
+                        this.immobile = this.sessionService.getImmobileDettaglio();
+                        this.sessionService.setImmobileDettaglio(this.immobile);
+                    } else {
+                        this.route.queryParams.pipe(
                             takeUntil(this.unsubscribe$)
-                        ).subscribe(s => {
-                            if (s.Success) {
-                                this.immobile = s.Data;
-                                this.sessionService.setImmobileDettaglio(this.immobile);
-                            }
-                        });
-                    });
-                }
-                const client_id = this.sessionService.getCliente().cliente_id;
-                if (client_id === 0 || client_id === undefined) {
-                    // non ho clienti selezionati
-                    this.presentAlert("E' necessario selezionare un cliente");
-                    this.goToPage('home');
-                }
+                        ).subscribe(params => {
 
+                            this.immobile_id = params.immobile_id;
+                            this.immobiliService.getImmobile(this.immobile_id).pipe(
+                                takeUntil(this.unsubscribe$)
+                            ).subscribe(s => {
+                                if (s.Success) {
+                                    this.immobile = s.Data;
+                                    this.sessionService.setImmobileDettaglio(this.immobile);
+                                }
+                            });
+                        });
+                    }
+                } else {
+                    this.goToPage('login');
+                }
             } else {
-                this.alertService.presentAlert('Token assente, necessario login');
                 this.goToPage('login');
             }
         });

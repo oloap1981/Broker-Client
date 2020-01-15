@@ -1,26 +1,4 @@
-<div class="main-header client">
-    <div class="hamburger"> </div>
-    <div class="header-bar" style="padding-right: 0;">
-        <a href="#" class="client-area">Patrimonio</a>
-    </div>
-</div>
 <div class="main-body client">
-    <div class="left-menu left-side-element " style="display: none;">
-        <ion-buttons slot="start" class="logo left-side-element" no-padding no-margin> </ion-buttons>
-        <div class="base">
-            <ul>
-                <li>
-                    <div class="voice dashboard selected" routerLink="/dashboard" routerDirection="root">Dashboard</div>
-                </li>
-                <li>
-                    <div class="voice list" routerLink="/client-immobili" routerDirection="root">Immobili</div>
-                </li>
-                <!-- <li>
-                    <div class="voice report" routerLink="/dashboard" routerDirection="root">Report</div>
-                </li> -->
-            </ul>
-        </div>
-    </div>
     <div class="content-area">
         <div class="area-spec">
             <div class="item immobili"><span class="badge">4</span></div>
@@ -37,11 +15,11 @@
                         </div>-->
                         <div class="scheda-row full-width">
                             <div class="item">
-                                <div class="item-title">Abitazioni <a href="#" class="button view only-icon">&nbsp;</a>
-                                </div>
+                                <div class="item-title">Abitazioni <span>{{totalePatrimoniA}} K</span></div>
                                 <ul class="item-list half-height">
                                     <li *ngFor="let patrimonio of patrimoniA">
-                                        <span>{{patrimonio.codice_catastale}}</span><span>{{patrimonio.book_value}}</span>
+                                        <span>{{patrimonio.codice_catastale}}</span><span>{{patrimonio.book_value}}
+                                            K</span>
                                     </li>
                                     <li *ngIf="patrimoniA.length == 0">--</li>
                                 </ul>
@@ -49,11 +27,11 @@
                         </div>
                         <div class="scheda-row full-width">
                             <div class="item">
-                                <div class="item-title">Commerciali <a href="#" class="button view only-icon">&nbsp;</a>
-                                </div>
+                                <div class="item-title">Commerciali <span>{{totalePatrimoniC}} K</span></div>
                                 <ul class="item-list half-height">
                                     <li *ngFor="let patrimonio of patrimoniC">
-                                        <span>{{patrimonio.codice_catastale}}</span><span>{{patrimonio.book_value}}</span>
+                                        <span>{{patrimonio.codice_catastale}}</span><span>{{patrimonio.book_value}}
+                                            K</span>
                                     </li>
                                     <li *ngIf="patrimoniA.length == 0">--</li>
                                 </ul>
@@ -61,11 +39,11 @@
                         </div>
                         <div class="scheda-row full-width">
                             <div class="item">
-                                <div class="item-title">Terreni <a href="#" class="button view only-icon">&nbsp;</a>
-                                </div>
+                                <div class="item-title">Terreni <span>{{totalePatrimoniT}} K</span></div>
                                 <ul class="item-list half-height">
                                     <li *ngFor="let patrimonio of patrimoniT">
-                                        <span>{{patrimonio.codice_catastale}}</span><span>{{patrimonio.book_value}}</span>
+                                        <span>{{patrimonio.codice_catastale}}</span><span>{{patrimonio.book_value}}
+                                            K</span>
                                     </li>
                                     <li *ngIf="patrimoniA.length == 0">--</li>
                                 </ul>

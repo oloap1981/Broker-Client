@@ -7,9 +7,9 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-client-report-analisi',
-  templateUrl: './client-report-analisi.page.html',
-  styleUrls: ['./client-report-analisi.page.scss'],
+    selector: 'app-client-report-analisi',
+    templateUrl: './client-report-analisi.page.html',
+    styleUrls: ['./client-report-analisi.page.scss'],
 })
 export class ClientReportAnalisiPage extends BaseComponent implements OnInit {
 
@@ -27,7 +27,8 @@ export class ClientReportAnalisiPage extends BaseComponent implements OnInit {
     public tipologiaChart: any;
     public affittuariChart: any;
 
-    constructor(public sessionService: SessionService,
+    constructor(
+        public sessionService: SessionService,
         public storeService: StoreService,
         public router: Router,
         public logErroriService: LogErroriService,
@@ -46,7 +47,7 @@ export class ClientReportAnalisiPage extends BaseComponent implements OnInit {
 
     ionViewDidEnter() {
         this.initializeApp();
-        super.ngOnInit();
+        this.sessionService.setIntestazionePagina('REPORT ANALISI');
     }
 
     private initializeApp() {
@@ -57,33 +58,38 @@ export class ClientReportAnalisiPage extends BaseComponent implements OnInit {
             if (present) {
                 this.wsToken = this.sessionService.getUserData();
 
-                const cliente_id = this.sessionService.getCliente().cliente_id;
-                if (cliente_id === 0 || cliente_id === undefined) {
-                    // non ho clienti selezionati
-                    this.presentAlert("E' necessario selezionare un cliente");
-                    this.goToPage('home');
-                }
+                if (this.wsToken !== undefined
+                    && this.wsToken !== null
+                    && this.wsToken.token_value !== ''
+                    && this.wsToken.utente !== undefined) {
 
-                this.reportService.getGrafici(cliente_id).pipe(
-                    takeUntil(this.unsubscribe$)
-                ).subscribe(r => {
-                    if (r.Success) {
-                        const datiGraficiAndamentoAnnuale = r.Data.andamento_annuale;
-                        this.createLinesChart(datiGraficiAndamentoAnnuale);
-                        const datiGraficiIndicatori = r.Data.indicatori;
-                        this.createIndicatoriChart(datiGraficiIndicatori);
-                        const datiGraficiConcentrazione = r.Data.concentrazione;
-                        this.createConcentrazioneChart(datiGraficiConcentrazione);
-                        const datiGraficiTipologia = r.Data.tipologia;
-                        this.createTipologiaChart(datiGraficiTipologia);
-                        const datiGraficiAffittuari = r.Data.affittuari;
-                        this.createAffittuariChart(datiGraficiAffittuari);
+                    const utente = this.wsToken.utente;
+                    if (utente.utente_id !== undefined && utente.utente_id !== 0) {
+                        this.reportService.getGrafici(utente.utente_id).pipe(
+                            takeUntil(this.unsubscribe$)
+                        ).subscribe(r => {
+                            if (r.Success) {
+                                const datiGraficiAndamentoAnnuale = r.Data.andamento_annuale;
+                                this.createLinesChart(datiGraficiAndamentoAnnuale);
+                                const datiGraficiIndicatori = r.Data.indicatori;
+                                this.createIndicatoriChart(datiGraficiIndicatori);
+                                const datiGraficiConcentrazione = r.Data.concentrazione;
+                                this.createConcentrazioneChart(datiGraficiConcentrazione);
+                                const datiGraficiTipologia = r.Data.tipologia;
+                                this.createTipologiaChart(datiGraficiTipologia);
+                                const datiGraficiAffittuari = r.Data.affittuari;
+                                this.createAffittuariChart(datiGraficiAffittuari);
+                            } else {
+                                this.manageError(r);
+                            }
+                        });
                     } else {
-                        this.manageError(r);
+                        this.goToPage('login');
                     }
-                });
+                } else {
+                    this.goToPage('login');
+                }
             } else {
-                this.alertService.presentAlert('Token assente, necessario login');
                 this.goToPage('login');
             }
         });
@@ -338,20 +344,20 @@ export class ClientReportAnalisiPage extends BaseComponent implements OnInit {
         const passivi = this.getAndamentoAnnualePassivo(data);
 
         this.linesChart = new Chart(this.linesCanvas.nativeElement, {
-            type: 'line',
+            type: 'bar',
             data: {
                 labels: analisiLabels,
                 datasets: [
                     {
                         data: attivi,
                         label: 'attivi',
-                        borderColor: "#3e95cd",
+                        backgroundColor: "#3e95cd",
                         fill: false
                     },
                     {
                         data: passivi,
                         label: 'passivi',
-                        borderColor: "#8e5ea2",
+                        backgroundColor: "#8e5ea2",
                         fill: false
                     },
                 ]

@@ -45,15 +45,6 @@ export class LoginPage implements OnInit {
         // per il momento si ipotizza che se Success=true allora ci si è loggati
         this.sessionService.setUserData(data);
 
-        // nella app clienti vado subito a prendere i dati del cliente che si logga
-        const cliente = new Cliente();
-        cliente.cliente_id = data.utente.utente_id;
-        cliente.codice_fiscale = data.utente.codice_fiscale;
-        cliente.cognome = data.utente.cognome;
-        cliente.nome = data.utente.nome;
-        cliente.email = data.utente.email;
-        this.sessionService.setCliente(cliente);
-
         this.router.navigate(['client-home']);
         // this.router.navigate(['home']);
       } else {

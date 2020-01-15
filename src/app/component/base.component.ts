@@ -3,7 +3,6 @@ import { WsToken, LogErroriService, ErrorMessage, Cliente, AlertService, IconeSe
 import { StoreService, SessionService } from 'broker-lib';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { LoadingController } from '@ionic/angular';
 
 @Component({
     selector: 'app-base',
@@ -29,7 +28,8 @@ export class BaseComponent implements OnInit {
     }
 
     public getUtenteEmail(): string {
-        if (this.wsToken !== undefined) {
+        console.log("TOKEN: " + this.wsToken);
+        if (this.wsToken !== undefined && this.wsToken !== null) {
             return this.wsToken.utente.email;
         } else {
             return 'email utente';
@@ -37,6 +37,7 @@ export class BaseComponent implements OnInit {
     }
 
     public getToken(): string {
+
         if (this.wsToken !== undefined) {
             return this.wsToken.token_value;
         } else {
@@ -45,12 +46,22 @@ export class BaseComponent implements OnInit {
         }
     }
 
-    public goToHome(): void {
-        this.goToPage('home-client');
+    public apriSchedaImmobile(immobile: number) {
+        this.sessionService.setImmobileDettaglio(null);
+        this.goToPageParams('client-immobile', { queryParams: { immobile_id: immobile } });
     }
 
-    public goToListaImmobili() {
-        this.goToPage('client-immobili');
+    public goToWizardNew(): void {
+        this.sessionService.clearImmobileDettaglio();
+        this.goToPage('client-wizard');
+    }
+
+    public goToWizardEdit(): void {
+        this.goToPage('client-wizard');
+    }
+
+    public goToHome(): void {
+        this.goToPage('client-home');
     }
 
     public goToPage(pageName: string): void {
@@ -90,7 +101,6 @@ export class BaseComponent implements OnInit {
         switch (code) {
             case "005":
                 {
-                    this.alertService.presentErrorAlert("Token Scaduto, necessario Login");
                     this.router.navigate(['login']);
                     break;
                 }
@@ -110,7 +120,8 @@ export class BaseComponent implements OnInit {
         return 'item tipologia ' + this.getIconaClasseImmobile(tipologia);
     }
 
-    public goToProfiloUtente(): void {
-        this.goToPage('profilo-utente');
+    public getIconaClasseImmobileTipologia(tipologia: string): string {
+        return 'tipologia ' + this.getIconaClasseImmobile(tipologia);
     }
+
 }

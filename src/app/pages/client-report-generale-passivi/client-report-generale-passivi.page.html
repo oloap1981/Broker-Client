@@ -1,7 +1,10 @@
 <div class="main-body client">
     <div class="content-area">
         <div class="area-spec">
-            <div class="item path"><button class="button back only-icon">&nbsp;</button><span class="tipologia casa">&nbsp;</span> Viale nino bixio</div>
+            <div class="item path"><button class="button back only-icon"
+                    (click)="goToPage('client-report-generale')">&nbsp;</button><span
+                    [ngClass]="getIconaClasseImmobileTipologia(reportGenerale.codice_tipologia)">&nbsp;</span>{{reportGenerale.indirizzo + ' ' + reportGenerale.civico + ', ' + reportGenerale.citta}}
+            </div>
         </div>
         <div class="content report">
             <div class="scheda">
@@ -9,16 +12,12 @@
                     <div class="scheda-table">
                         <div class="scheda-row full-width">
                             <div class="item">
-                                <h3 class="item-title">Passivi <a href="#" class="button download only-icon">&nbsp;</a></h3>
+                                <h3 class="item-title">Passivi <a href="#" class="button download only-icon">&nbsp;</a>
+                                </h3>
                                 <ul class="item-list">
-                                    <li><span>Spese condominiali</span><span>2k &euro;</span></li>
-                                    <li><span>Mutuo</span><span>--</span></li>
-                                    <li><span>Acqua</span><span>6.3k &euro;</span></li>
-                                    <li><span>Luce</span><span>6.3k &euro;</span></li>
-                                    <li><span>Gas</span><span>6.3k &euro;</span></li>
-                                    <li><span>Telefono</span><span>6.3k &euro;</span></li>
-                                    <li><span>Altro</span><span>6.3k &euro;</span></li>
-                                    <li><b><span>Totale</span><span>6.3k &euro;</span></b></li>
+                                    <li *ngFor="let passivo of reportGenerale.passivi">
+                                        <span>{{passivo.descrizione_passivo}}</span><span>{{passivo.importo_annuale | k_money}}
+                                            &euro;</span></li>
                                 </ul>
                             </div>
                         </div>
