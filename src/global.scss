@@ -690,6 +690,7 @@ input:checked + .slider:before {
                     padding: 20px 0;
                     font-size: .9em;
                 }
+                
             }
         }
     }
@@ -702,6 +703,11 @@ input:checked + .slider:before {
         background: none;
         .content-area {
             right: 0;
+        }
+        .item-list.form {
+            &.auto-height {
+                overflow: visible;
+            }
         }
     }
 }
@@ -987,7 +993,9 @@ input:checked + .slider:before {
                     }
                     &.orange {
                         background: #FF5700;
-
+                    }
+                    &.blue {
+                        background: #104D77;
                     }
                 }
             }
@@ -1154,7 +1162,7 @@ input:checked + .slider:before {
         z-index: 10;
         display: table;
         width: 100%;
-        
+        height: 100%;
         position: relative;
         &.single-column {
             .item {
@@ -1456,6 +1464,14 @@ input:checked + .slider:before {
                     span {
                         &:last-of-type {
                             float: right;
+                        }
+                    }
+                    a {
+                        span{
+                            &:last-of-type {
+                                color: black;
+                                float: none;
+                            }
                         }
                     }
                 }
@@ -2509,4 +2525,15 @@ input:checked + .slider:before {
 canvas {
     width:100% !important; 
     height:100% !important;
+}
+
+.igx-calendar__header {
+    background: #104D77 !important;
+    color: #fff !important;
+}
+
+.igx-button--flat {
+    background: transparent;
+    color: #104D77 !important;
+    border-radius: 4px;
 }

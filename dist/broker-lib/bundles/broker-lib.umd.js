@@ -221,6 +221,7 @@
             this.getPianoAmmortamentoServiceName = 'getPiano';
             // clienti
             this.getClientiServiceName = 'getclienti';
+            this.getClienteServiceName = 'getcliente';
             this.putClientiServiceName = 'putcliente';
             this.abilitaAppClienteServiceName = 'appcliente';
             this.bookValueServiceName = 'getbookvalue';
@@ -231,6 +232,11 @@
             this.pdfReportServiceName = 'getpdfreport';
             this.postErroreServiceName = 'writeLog';
             this.getDropdownServiceName = 'get_dropdown';
+            // documenti
+            this.getCartelle = 'getcartelle';
+            this.getDocumento = 'getdocumento';
+            this.putCartelle = 'putcartelle';
+            this.putDocumento = 'putdocumento';
             // tipologia icone immobili
             this.tipologiaImmobileVilla = 'villa';
             this.tipologiaImmobileCasa = 'casa';
@@ -257,6 +263,7 @@
             this.getDdlTasse = 'get_ddl_tasse';
             this.getDdlOmi = 'get_ddl_omi';
             this.getDdlTipologiaCatastale = 'get_ddl_tipologia_catastale';
+            this.getDdlComuni = 'get_ddl_comuni';
         }
         ConstantsService.decorators = [
             { type: core.Injectable }
@@ -289,6 +296,8 @@
         /** @type {?} */
         ConstantsService.prototype.getClientiServiceName;
         /** @type {?} */
+        ConstantsService.prototype.getClienteServiceName;
+        /** @type {?} */
         ConstantsService.prototype.putClientiServiceName;
         /** @type {?} */
         ConstantsService.prototype.abilitaAppClienteServiceName;
@@ -306,6 +315,14 @@
         ConstantsService.prototype.postErroreServiceName;
         /** @type {?} */
         ConstantsService.prototype.getDropdownServiceName;
+        /** @type {?} */
+        ConstantsService.prototype.getCartelle;
+        /** @type {?} */
+        ConstantsService.prototype.getDocumento;
+        /** @type {?} */
+        ConstantsService.prototype.putCartelle;
+        /** @type {?} */
+        ConstantsService.prototype.putDocumento;
         /** @type {?} */
         ConstantsService.prototype.tipologiaImmobileVilla;
         /** @type {?} */
@@ -354,6 +371,8 @@
         ConstantsService.prototype.getDdlOmi;
         /** @type {?} */
         ConstantsService.prototype.getDdlTipologiaCatastale;
+        /** @type {?} */
+        ConstantsService.prototype.getDdlComuni;
     }
 
     /**
@@ -571,6 +590,8 @@
         WsToken.prototype.tipo_utente;
         /** @type {?} */
         WsToken.prototype.utente;
+        /** @type {?} */
+        WsToken.prototype.cliente;
     }
 
     /**
@@ -581,6 +602,7 @@
         function StoreService(storage) {
             this.storage = storage;
             this.USERKEY = "user";
+            this.CLIENTEKEY = "client";
             this.wsToken = null;
         }
         /**
@@ -592,6 +614,7 @@
         function () {
             this.storage.clear();
             this.wsToken = null;
+            this.cliente = null;
         };
         /**
          * @param {?} ws_token
@@ -606,6 +629,31 @@
             this.wsToken = ws_token;
             if (ws_token != null) {
                 this.storage.set(this.USERKEY, ws_token).then((/**
+                 * @param {?} val
+                 * @return {?}
+                 */
+                function (val) {
+                    console.log(val);
+                }));
+            }
+            else {
+                return -1;
+            }
+            return 1;
+        };
+        /**
+         * @param {?} cliente
+         * @return {?}
+         */
+        StoreService.prototype.setClientData = /**
+         * @param {?} cliente
+         * @return {?}
+         */
+        function (cliente) {
+            console.log("setUserData");
+            this.cliente = cliente;
+            if (cliente != null) {
+                this.storage.set(this.CLIENTEKEY, cliente).then((/**
                  * @param {?} val
                  * @return {?}
                  */
@@ -659,6 +707,47 @@
                 }
             }));
         };
+        /**
+         * @return {?}
+         */
+        StoreService.prototype.getClientePromise = /**
+         * @return {?}
+         */
+        function () {
+            var _this = this;
+            return new Promise((/**
+             * @param {?} resolve
+             * @return {?}
+             */
+            function (resolve) {
+                if (_this.cliente == null) {
+                    // store service prima inizializzaione
+                    _this.storage.get(_this.CLIENTEKEY).then((/**
+                     * @param {?} val
+                     * @return {?}
+                     */
+                    function (val) {
+                        // recuperato token dal database
+                        console.log(val);
+                        if (val != null) {
+                            resolve(val);
+                        }
+                        else {
+                            console.log("necessario login");
+                            _this.setClientData(null);
+                            _this.cliente = null;
+                            // devo andare alla pagina del login
+                            resolve(null);
+                        }
+                    }));
+                }
+                else {
+                    // store service già inizializzato
+                    // come al punto precedente servirebbe controllare il token ed eventualmente fare di nuovo il login;
+                    resolve(_this.cliente);
+                }
+            }));
+        };
         StoreService.decorators = [
             { type: core.Injectable }
         ];
@@ -678,7 +767,17 @@
          * @type {?}
          * @private
          */
+        StoreService.prototype.CLIENTEKEY;
+        /**
+         * @type {?}
+         * @private
+         */
         StoreService.prototype.wsToken;
+        /**
+         * @type {?}
+         * @private
+         */
+        StoreService.prototype.cliente;
         /**
          * @type {?}
          * @private
@@ -892,6 +991,10 @@
         Cliente.prototype.book_value;
         /** @type {?} */
         Cliente.prototype.data_aggiornamento;
+        /** @type {?} */
+        Cliente.prototype.omi_value_min;
+        /** @type {?} */
+        Cliente.prototype.omi_value_max;
         /** @type {?} */
         Cliente.prototype.stato_cliente;
     }
@@ -1186,6 +1289,7 @@
             this.userDataSubject = new rxjs.Subject();
             this.userDataObservable = this.userDataSubject.asObservable();
             this.userData = new WsToken();
+            this.clientData = new Cliente();
             this.connection = new Connection();
             this.cliente = new Cliente();
             this.immobiliCliente = new Array();
@@ -1286,6 +1390,27 @@
             this.userData = userData;
             if (userData != null) {
                 this.storeService.setUserData(userData);
+                if (userData.cliente !== undefined && userData.cliente !== null) {
+                    this.setCliente(userData.cliente);
+                }
+            }
+            else {
+                return -1;
+            }
+            return 1;
+        };
+        /**
+         * @param {?} client
+         * @return {?}
+         */
+        SessionService.prototype.setClientData = /**
+         * @param {?} client
+         * @return {?}
+         */
+        function (client) {
+            this.clientData = client;
+            if (client != null) {
+                this.storeService.setClientData(client);
             }
             else {
                 return -1;
@@ -1434,6 +1559,11 @@
          * @private
          */
         SessionService.prototype.userData;
+        /**
+         * @type {?}
+         * @private
+         */
+        SessionService.prototype.clientData;
         /**
          * @type {?}
          * @private
@@ -1731,6 +1861,27 @@
             return this.httpService.get(this.constants.getClientiServiceName);
         };
         /**
+         * Chiamata per ottenere il singolo cliente passando il suo id come parametro
+         *
+         * @param  tokenValue Token di autenticazione ottenuto dalla login
+         * @returns contenente l'oggetto Data che a sua volta contiene l'elenco degli oggetti Cliente
+         */
+        /**
+         * Chiamata per ottenere il singolo cliente passando il suo id come parametro
+         *
+         * @param {?} idcliente
+         * @return {?} contenente l'oggetto Data che a sua volta contiene l'elenco degli oggetti Cliente
+         */
+        ClientiService.prototype.getCliente = /**
+         * Chiamata per ottenere il singolo cliente passando il suo id come parametro
+         *
+         * @param {?} idcliente
+         * @return {?} contenente l'oggetto Data che a sua volta contiene l'elenco degli oggetti Cliente
+         */
+        function (idcliente) {
+            return this.httpService.get(this.constants.getClienteServiceName + this.constants.pathSeparator + idcliente);
+        };
+        /**
          * Chiamata per inserire un nuovo cliente
          *
          * @param  cliente
@@ -1913,6 +2064,17 @@
          */
         function () {
             return this.getDropdown(this.constants.getDdlTipologiaCatastale, '');
+        };
+        /**
+         * @param {?} nomeComune
+         * @return {?}
+         */
+        DropdownService.prototype.getComuni = /**
+         * @param {?} nomeComune
+         * @return {?}
+         */
+        function (nomeComune) {
+            return this.getDropdown(this.constants.getDdlComuni, this.constants.pathSeparator + nomeComune);
         };
         /**
          * @param {?} Tipoddl
@@ -2385,6 +2547,87 @@
          * @private
          */
         ReportService.prototype.constants;
+    }
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
+    var DocumentiService = /** @class */ (function () {
+        function DocumentiService(httpService, constants) {
+            this.httpService = httpService;
+            this.constants = constants;
+        }
+        /**
+         * @param {?} idcliente
+         * @param {?} idcartella
+         * @return {?}
+         */
+        DocumentiService.prototype.getCartelle = /**
+         * @param {?} idcliente
+         * @param {?} idcartella
+         * @return {?}
+         */
+        function (idcliente, idcartella) {
+            return this.httpService.get(this.constants.getCartelle
+                + this.constants.pathSeparator + idcliente
+                + this.constants.pathSeparator + idcartella);
+        };
+        /**
+         * @param {?} iddocumento
+         * @return {?}
+         */
+        DocumentiService.prototype.getDocumento = /**
+         * @param {?} iddocumento
+         * @return {?}
+         */
+        function (iddocumento) {
+            return this.httpService.get(this.constants.getDocumento
+                + this.constants.pathSeparator + iddocumento);
+        };
+        /**
+         * @param {?} cartella
+         * @return {?}
+         */
+        DocumentiService.prototype.putCartelle = /**
+         * @param {?} cartella
+         * @return {?}
+         */
+        function (cartella) {
+            return this.httpService.post(this.constants.putCartelle, cartella);
+        };
+        /**
+         * @param {?} documento
+         * @return {?}
+         */
+        DocumentiService.prototype.putDocumento = /**
+         * @param {?} documento
+         * @return {?}
+         */
+        function (documento) {
+            return this.httpService.post(this.constants.putDocumento, documento);
+        };
+        DocumentiService.decorators = [
+            { type: core.Injectable }
+        ];
+        /** @nocollapse */
+        DocumentiService.ctorParameters = function () { return [
+            { type: BrokerHttpService },
+            { type: ConstantsService }
+        ]; };
+        return DocumentiService;
+    }());
+    if (false) {
+        /**
+         * @type {?}
+         * @private
+         */
+        DocumentiService.prototype.httpService;
+        /**
+         * @type {?}
+         * @private
+         */
+        DocumentiService.prototype.constants;
     }
 
     /**
@@ -2906,6 +3149,48 @@
      * @fileoverview added by tsickle
      * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
+    var Cartella = /** @class */ (function () {
+        function Cartella() {
+        }
+        return Cartella;
+    }());
+    if (false) {
+        /** @type {?} */
+        Cartella.prototype.doc_cartella_id;
+        /** @type {?} */
+        Cartella.prototype.cartella_desc;
+        /** @type {?} */
+        Cartella.prototype.doc_cartella_padre_id;
+        /** @type {?} */
+        Cartella.prototype.cliente_id;
+    }
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
+    var Documento = /** @class */ (function () {
+        function Documento() {
+        }
+        return Documento;
+    }());
+    if (false) {
+        /** @type {?} */
+        Documento.prototype.doc_file_id;
+        /** @type {?} */
+        Documento.prototype.nome_file;
+        /** @type {?} */
+        Documento.prototype.descrizione;
+        /** @type {?} */
+        Documento.prototype.file;
+        /** @type {?} */
+        Documento.prototype.note;
+    }
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
     var LoginRequest = /** @class */ (function () {
         function LoginRequest() {
         }
@@ -3000,6 +3285,22 @@
         DdlItem.prototype.descrizione;
     }
 
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
+    var DdlItemSearch = /** @class */ (function () {
+        function DdlItemSearch() {
+        }
+        return DdlItemSearch;
+    }());
+    if (false) {
+        /** @type {?} */
+        DdlItemSearch.prototype.id;
+        /** @type {?} */
+        DdlItemSearch.prototype.description;
+    }
+
     exports.AbilitaAppClienteRequest = AbilitaAppClienteRequest;
     exports.AffittoDettaglio = AffittoDettaglio;
     exports.AlertService = AlertService;
@@ -3008,12 +3309,16 @@
     exports.BrokerLibModule = BrokerLibModule;
     exports.CambioPasswordRequest = CambioPasswordRequest;
     exports.CancellazioneImmobileRequest = CancellazioneImmobileRequest;
+    exports.Cartella = Cartella;
     exports.Cliente = Cliente;
     exports.ClientiService = ClientiService;
     exports.CointestatarioDettaglio = CointestatarioDettaglio;
     exports.Connection = Connection;
     exports.DatiCatastaliDettaglio = DatiCatastaliDettaglio;
     exports.DdlItem = DdlItem;
+    exports.DdlItemSearch = DdlItemSearch;
+    exports.DocumentiService = DocumentiService;
+    exports.Documento = Documento;
     exports.DropdownService = DropdownService;
     exports.ErrorHandlerService = ErrorHandlerService;
     exports.ErrorMessage = ErrorMessage;

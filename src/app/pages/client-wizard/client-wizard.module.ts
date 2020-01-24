@@ -11,6 +11,7 @@ import { IgxDatePickerModule } from 'igniteui-angular';
 import { MyDatePickerModule } from 'src/app/component/datepicker/mydatepicker.module';
 import { OnlyDigitsDirective } from 'src/app/directive/onlydigits.directive';
 import { PipesModule } from 'src/app/pipes/pipes.module';
+import { NgxSelectModule } from 'ngx-select-ex';
 
 const routes: Routes = [
   {
@@ -20,17 +21,18 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    imports: [
-        CommonModule,
-        FormsModule,
-        IonicModule,
-        RouterModule.forChild(routes),
-        IgxDatePickerModule,
-        MyDatePickerModule,
-        PipesModule
-    ],
-    declarations: [ClientWizardPage,
-        OnlyDigitsDirective],
-    providers: [AlertService]
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonicModule,
+    RouterModule.forChild(routes),
+    IgxDatePickerModule,
+    MyDatePickerModule,
+    PipesModule,
+    NgxSelectModule
+  ],
+  declarations: [ClientWizardPage,
+    OnlyDigitsDirective],
+  providers: [AlertService]
 })
-export class ClientWizardPageModule {}
+export class ClientWizardPageModule { }

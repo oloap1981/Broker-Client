@@ -7,5 +7,7 @@ export declare class Cliente {
     numero_proprieta: number;
     book_value: number;
     data_aggiornamento: string;
+    omi_value_min: number;
+    omi_value_max: number;
     stato_cliente: string;
 }

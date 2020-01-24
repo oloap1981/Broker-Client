@@ -24,6 +24,7 @@ export class LoginPage implements OnInit {
     private loginService: LoginService,
     private storeService: StoreService,
     private router: Router,
+    private clientiService: ClientiService,
     private alertService: AlertService,
     private sessionService: SessionService) { }
 
@@ -42,10 +43,19 @@ export class LoginPage implements OnInit {
       if (r.Success) {
         // ho avuto risposta positiva. Non è detto che sia loggato pero'
         const data: WsToken = r.Data;
-        // per il momento si ipotizza che se Success=true allora ci si è loggati
         this.sessionService.setUserData(data);
+        // per il momento si ipotizza che se Success=true allora ci si è loggati
 
-        this.router.navigate(['client-home']);
+        this.clientiService.getCliente(data.utente.utente_id).subscribe(p => {
+          if (p.Success) {
+            const cliente: Cliente = p.Data;
+            data.cliente = cliente;
+            this.sessionService.setUserData(data);
+            this.router.navigate(['client-home']);
+          } else {
+            this.alertService.presentErrorAlert('Problema durante il recupero del cliente dalla sessione: ' + p.ErrorMessage.msg_testo);
+          }
+        });
         // this.router.navigate(['home']);
       } else {
         this.alertService.presentErrorAlert('Problema durante il login: ' + r.ErrorMessage.msg_testo);

@@ -49,6 +49,9 @@ export class ClientWizardPage extends BaseComponent implements OnInit {
 
     public isNewImmobile: boolean;
 
+    public ddlComuniOptions: Array<DdlItem>;
+    public ddlComuneSelected: DdlItem;
+
     constructor(
         private immobiliService: ImmobiliService,
         public router: Router,
@@ -84,6 +87,9 @@ export class ClientWizardPage extends BaseComponent implements OnInit {
         this.headP2 = "";
 
         this.isNewImmobile = true;
+
+        this.ddlComuniOptions = new Array<DdlItem>();
+        this.ddlComuneSelected = new DdlItem();
     }
 
     ngOnInit() {
@@ -296,11 +302,14 @@ export class ClientWizardPage extends BaseComponent implements OnInit {
 
     public salvaImmobile(): void {
         // tolgo quello che non serve
+
         if (!this.immobile.affitto) {
             delete this.immobile.affitto_dettaglio;
         }
         if (!this.immobile.mutuo) {
             delete this.immobile.mutuo_dettaglio;
+        } else {
+            this.immobile.mutuo_dettaglio.data_inizio = this.dataInizioMutuo.getDay() + '/' + (this.dataInizioMutuo.getMonth() + 1) + '/' + this.dataInizioMutuo.getFullYear();
         }
         if (this.immobile.tasse && this.immobile.tasse.length === 0) {
             delete this.immobile.tasse;
@@ -450,7 +459,7 @@ export class ClientWizardPage extends BaseComponent implements OnInit {
     }
 
     public caricaOmi(): void {
-        this.dropdownService.getTipiOmi(this.immobile.istat_cod).pipe(
+        this.dropdownService.getTipiOmi(this.immobile.catastale_cod).pipe(
             takeUntil(this.unsubscribe$)
         ).subscribe(r => {
             if (r.Success) {
@@ -519,6 +528,37 @@ export class ClientWizardPage extends BaseComponent implements OnInit {
         // !(this.immobile.comune_zone_cod === undefined || this.immobile.comune_zone_cod === '' || this.immobile.comune_zone_cod === '0');
 
         return goOn;
+    }
+
+    public comuneSearchChange($event: any) {
+        const input = $event as string;
+        if (input.length === 3) {
+            // eseguo la ricerca
+            this.dropdownService.getComuni(input).subscribe(r => {
+                if (r.Success) {
+                    // this.ddlComuniOptions = new Array<DdlItem>();
+                    this.ddlComuniOptions.splice(0, this.ddlComuniOptions.length); // svuoto dal vecchio contenuto
+                    // aggiorna la lista del dropdown
+                    for (const entry of r.Data.elenco_filtrato) {
+                        this.ddlComuniOptions.push(entry as DdlItem);
+                    }
+                    console.log('numero elementi: ' + this.ddlComuniOptions.length);
+                } else {
+                    this.manageError(r);
+                }
+            });
+        }
+        return $event;
+    }
+
+    public comuneSelected($event: any) {
+        console.log('comune selezionato ' + JSON.stringify($event));
+        if ($event[0] !== undefined) {
+            const codiceComuneSelezionato = $event[0].value;
+            console.log('codice comune selezionato ' + codiceComuneSelezionato);
+            this.immobile.catastale_cod = codiceComuneSelezionato;
+            this.caricaOmi();
+        }
     }
 
     ionViewDidLeave() {

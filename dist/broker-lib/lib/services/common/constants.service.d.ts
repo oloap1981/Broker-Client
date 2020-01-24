@@ -11,6 +11,7 @@ export declare class ConstantsService {
     readonly getCatastoServiceName: string;
     readonly getPianoAmmortamentoServiceName: string;
     readonly getClientiServiceName: string;
+    readonly getClienteServiceName: string;
     readonly putClientiServiceName: string;
     readonly abilitaAppClienteServiceName: string;
     readonly bookValueServiceName: string;
@@ -20,6 +21,10 @@ export declare class ConstantsService {
     readonly pdfReportServiceName: string;
     readonly postErroreServiceName: string;
     readonly getDropdownServiceName: string;
+    readonly getCartelle: string;
+    readonly getDocumento: string;
+    readonly putCartelle: string;
+    readonly putDocumento: string;
     readonly tipologiaImmobileVilla: string;
     readonly tipologiaImmobileCasa: string;
     readonly tipologiaImmobileAgricolo: string;
@@ -44,4 +49,5 @@ export declare class ConstantsService {
     readonly getDdlTasse: string;
     readonly getDdlOmi: string;
     readonly getDdlTipologiaCatastale: string;
+    readonly getDdlComuni: string;
 }

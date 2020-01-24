@@ -11,6 +11,7 @@ export declare class DropdownService {
     getEuribor(): Observable<Http.HttpResponse>;
     getTipiOmi(idComuneIstat: string): Observable<Http.HttpResponse>;
     getTipologieCatastali(): Observable<Http.HttpResponse>;
+    getComuni(nomeComune: string): Observable<Http.HttpResponse>;
     getDropdown(Tipoddl: string, Filtro: string): Observable<Http.HttpResponse>;
     private getBooleanAsString;
 }

@@ -14,6 +14,7 @@ export declare class SessionService {
     private elencoImmobiliSubject;
     elencoImmobiliObs: import("rxjs").Observable<boolean>;
     private userData;
+    private clientData;
     private connection;
     private userDataSubject;
     userDataObservable: import("rxjs").Observable<boolean>;
@@ -27,6 +28,7 @@ export declare class SessionService {
     setCliente(cliente: Cliente): void;
     clearUserData(): void;
     setUserData(userData: WsToken): number;
+    setClientData(client: Cliente): number;
     getUserData(): WsToken;
     loadUserData(): void;
     getCliente(): Cliente;

@@ -84,16 +84,6 @@ export class ClientHomePage extends BaseComponent implements OnInit {
                 this.manageError(r);
               }
             });
-
-            // nella app clienti vado subito a prendere i dati del cliente che si logga
-            const cliente = new Cliente();
-            cliente.cliente_id = utente.utente_id;
-            cliente.codice_fiscale = utente.codice_fiscale;
-            cliente.cognome = utente.cognome;
-            cliente.nome = utente.nome;
-            cliente.email = utente.email;
-            this.sessionService.setCliente(cliente);
-
           } else {
             this.goToPage('login');
           }
@@ -128,6 +118,10 @@ export class ClientHomePage extends BaseComponent implements OnInit {
     for (const pat of this.patrimoniT) {
       this.totalePatrimoniA += +pat.book_value;
     }
+  }
+
+  public getBookValueCliente(): number {
+    return (this.wsToken ? this.wsToken.cliente.book_value : 0);
   }
 
   ionViewDidLeave() {

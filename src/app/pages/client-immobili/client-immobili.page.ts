@@ -42,13 +42,13 @@ export class ClientImmobiliPage extends BaseComponent implements OnInit {
     ).subscribe(present => {
       if (present) {
         this.wsToken = this.sessionService.getUserData();
-        this.wsToken = this.sessionService.getUserData();
         if (this.wsToken !== undefined
           && this.wsToken !== null
           && this.wsToken.token_value !== ''
           && this.wsToken.utente !== undefined) {
           console.log('Utente in possesso di token');
 
+          this.sessionService.setCliente(this.wsToken.cliente);
         } else {
           this.goToPage('login');
         }

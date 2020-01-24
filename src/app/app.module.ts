@@ -25,6 +25,8 @@ import { ClientHomePageModule } from './pages/client-home/client-home.module';
 import { ClientHomePage } from './pages/client-home/client-home.page';
 import { AppRoutingModule } from './app-routing.module';
 
+import { NgxSelectModule } from 'ngx-select-ex';
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [
@@ -39,7 +41,8 @@ import { AppRoutingModule } from './app-routing.module';
     BrowserAnimationsModule,
     HttpClientModule,
     PipesModule,
-    ClientHomePageModule
+    ClientHomePageModule,
+    NgxSelectModule
   ],
   providers: [
     // ErrorHandlerService,
@@ -61,7 +64,8 @@ import { AppRoutingModule } from './app-routing.module';
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   exports: [
-    PipesModule
+    PipesModule,
+    NgxSelectModule
   ],
   bootstrap: [AppComponent]
 })

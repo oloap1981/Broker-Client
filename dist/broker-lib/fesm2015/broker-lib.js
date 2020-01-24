@@ -26,6 +26,7 @@ class ConstantsService {
         this.getPianoAmmortamentoServiceName = 'getPiano';
         // clienti
         this.getClientiServiceName = 'getclienti';
+        this.getClienteServiceName = 'getcliente';
         this.putClientiServiceName = 'putcliente';
         this.abilitaAppClienteServiceName = 'appcliente';
         this.bookValueServiceName = 'getbookvalue';
@@ -36,6 +37,11 @@ class ConstantsService {
         this.pdfReportServiceName = 'getpdfreport';
         this.postErroreServiceName = 'writeLog';
         this.getDropdownServiceName = 'get_dropdown';
+        // documenti
+        this.getCartelle = 'getcartelle';
+        this.getDocumento = 'getdocumento';
+        this.putCartelle = 'putcartelle';
+        this.putDocumento = 'putdocumento';
         // tipologia icone immobili
         this.tipologiaImmobileVilla = 'villa';
         this.tipologiaImmobileCasa = 'casa';
@@ -62,6 +68,7 @@ class ConstantsService {
         this.getDdlTasse = 'get_ddl_tasse';
         this.getDdlOmi = 'get_ddl_omi';
         this.getDdlTipologiaCatastale = 'get_ddl_tipologia_catastale';
+        this.getDdlComuni = 'get_ddl_comuni';
     }
 }
 ConstantsService.decorators = [
@@ -93,6 +100,8 @@ if (false) {
     /** @type {?} */
     ConstantsService.prototype.getClientiServiceName;
     /** @type {?} */
+    ConstantsService.prototype.getClienteServiceName;
+    /** @type {?} */
     ConstantsService.prototype.putClientiServiceName;
     /** @type {?} */
     ConstantsService.prototype.abilitaAppClienteServiceName;
@@ -110,6 +119,14 @@ if (false) {
     ConstantsService.prototype.postErroreServiceName;
     /** @type {?} */
     ConstantsService.prototype.getDropdownServiceName;
+    /** @type {?} */
+    ConstantsService.prototype.getCartelle;
+    /** @type {?} */
+    ConstantsService.prototype.getDocumento;
+    /** @type {?} */
+    ConstantsService.prototype.putCartelle;
+    /** @type {?} */
+    ConstantsService.prototype.putDocumento;
     /** @type {?} */
     ConstantsService.prototype.tipologiaImmobileVilla;
     /** @type {?} */
@@ -158,6 +175,8 @@ if (false) {
     ConstantsService.prototype.getDdlOmi;
     /** @type {?} */
     ConstantsService.prototype.getDdlTipologiaCatastale;
+    /** @type {?} */
+    ConstantsService.prototype.getDdlComuni;
 }
 
 /**
@@ -339,6 +358,8 @@ if (false) {
     WsToken.prototype.tipo_utente;
     /** @type {?} */
     WsToken.prototype.utente;
+    /** @type {?} */
+    WsToken.prototype.cliente;
 }
 
 /**
@@ -352,6 +373,7 @@ class StoreService {
     constructor(storage) {
         this.storage = storage;
         this.USERKEY = "user";
+        this.CLIENTEKEY = "client";
         this.wsToken = null;
     }
     /**
@@ -360,6 +382,7 @@ class StoreService {
     clearUserData() {
         this.storage.clear();
         this.wsToken = null;
+        this.cliente = null;
     }
     /**
      * @param {?} ws_token
@@ -370,6 +393,27 @@ class StoreService {
         this.wsToken = ws_token;
         if (ws_token != null) {
             this.storage.set(this.USERKEY, ws_token).then((/**
+             * @param {?} val
+             * @return {?}
+             */
+            (val) => {
+                console.log(val);
+            }));
+        }
+        else {
+            return -1;
+        }
+        return 1;
+    }
+    /**
+     * @param {?} cliente
+     * @return {?}
+     */
+    setClientData(cliente) {
+        console.log("setUserData");
+        this.cliente = cliente;
+        if (cliente != null) {
+            this.storage.set(this.CLIENTEKEY, cliente).then((/**
              * @param {?} val
              * @return {?}
              */
@@ -419,6 +463,43 @@ class StoreService {
             }
         }));
     }
+    /**
+     * @return {?}
+     */
+    getClientePromise() {
+        return new Promise((/**
+         * @param {?} resolve
+         * @return {?}
+         */
+        resolve => {
+            if (this.cliente == null) {
+                // store service prima inizializzaione
+                this.storage.get(this.CLIENTEKEY).then((/**
+                 * @param {?} val
+                 * @return {?}
+                 */
+                (val) => {
+                    // recuperato token dal database
+                    console.log(val);
+                    if (val != null) {
+                        resolve(val);
+                    }
+                    else {
+                        console.log("necessario login");
+                        this.setClientData(null);
+                        this.cliente = null;
+                        // devo andare alla pagina del login
+                        resolve(null);
+                    }
+                }));
+            }
+            else {
+                // store service già inizializzato
+                // come al punto precedente servirebbe controllare il token ed eventualmente fare di nuovo il login;
+                resolve(this.cliente);
+            }
+        }));
+    }
 }
 StoreService.decorators = [
     { type: Injectable }
@@ -437,7 +518,17 @@ if (false) {
      * @type {?}
      * @private
      */
+    StoreService.prototype.CLIENTEKEY;
+    /**
+     * @type {?}
+     * @private
+     */
     StoreService.prototype.wsToken;
+    /**
+     * @type {?}
+     * @private
+     */
+    StoreService.prototype.cliente;
     /**
      * @type {?}
      * @private
@@ -572,6 +663,10 @@ if (false) {
     Cliente.prototype.book_value;
     /** @type {?} */
     Cliente.prototype.data_aggiornamento;
+    /** @type {?} */
+    Cliente.prototype.omi_value_min;
+    /** @type {?} */
+    Cliente.prototype.omi_value_max;
     /** @type {?} */
     Cliente.prototype.stato_cliente;
 }
@@ -862,6 +957,7 @@ class SessionService {
         this.userDataSubject = new Subject();
         this.userDataObservable = this.userDataSubject.asObservable();
         this.userData = new WsToken();
+        this.clientData = new Cliente();
         this.connection = new Connection();
         this.cliente = new Cliente();
         this.immobiliCliente = new Array();
@@ -936,6 +1032,23 @@ class SessionService {
         this.userData = userData;
         if (userData != null) {
             this.storeService.setUserData(userData);
+            if (userData.cliente !== undefined && userData.cliente !== null) {
+                this.setCliente(userData.cliente);
+            }
+        }
+        else {
+            return -1;
+        }
+        return 1;
+    }
+    /**
+     * @param {?} client
+     * @return {?}
+     */
+    setClientData(client) {
+        this.clientData = client;
+        if (client != null) {
+            this.storeService.setClientData(client);
         }
         else {
             return -1;
@@ -1050,6 +1163,11 @@ if (false) {
      * @private
      */
     SessionService.prototype.userData;
+    /**
+     * @type {?}
+     * @private
+     */
+    SessionService.prototype.clientData;
     /**
      * @type {?}
      * @private
@@ -1324,6 +1442,15 @@ class ClientiService {
         return this.httpService.get(this.constants.getClientiServiceName);
     }
     /**
+     * Chiamata per ottenere il singolo cliente passando il suo id come parametro
+     *
+     * @param {?} idcliente
+     * @return {?} contenente l'oggetto Data che a sua volta contiene l'elenco degli oggetti Cliente
+     */
+    getCliente(idcliente) {
+        return this.httpService.get(this.constants.getClienteServiceName + this.constants.pathSeparator + idcliente);
+    }
+    /**
      * Chiamata per inserire un nuovo cliente
      *
      * @param {?} cliente
@@ -1432,6 +1559,13 @@ class DropdownService {
      */
     getTipologieCatastali() {
         return this.getDropdown(this.constants.getDdlTipologiaCatastale, '');
+    }
+    /**
+     * @param {?} nomeComune
+     * @return {?}
+     */
+    getComuni(nomeComune) {
+        return this.getDropdown(this.constants.getDdlComuni, this.constants.pathSeparator + nomeComune);
     }
     /**
      * @param {?} Tipoddl
@@ -1849,6 +1983,73 @@ if (false) {
      * @private
      */
     ReportService.prototype.constants;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class DocumentiService {
+    /**
+     * @param {?} httpService
+     * @param {?} constants
+     */
+    constructor(httpService, constants) {
+        this.httpService = httpService;
+        this.constants = constants;
+    }
+    /**
+     * @param {?} idcliente
+     * @param {?} idcartella
+     * @return {?}
+     */
+    getCartelle(idcliente, idcartella) {
+        return this.httpService.get(this.constants.getCartelle
+            + this.constants.pathSeparator + idcliente
+            + this.constants.pathSeparator + idcartella);
+    }
+    /**
+     * @param {?} iddocumento
+     * @return {?}
+     */
+    getDocumento(iddocumento) {
+        return this.httpService.get(this.constants.getDocumento
+            + this.constants.pathSeparator + iddocumento);
+    }
+    /**
+     * @param {?} cartella
+     * @return {?}
+     */
+    putCartelle(cartella) {
+        return this.httpService.post(this.constants.putCartelle, cartella);
+    }
+    /**
+     * @param {?} documento
+     * @return {?}
+     */
+    putDocumento(documento) {
+        return this.httpService.post(this.constants.putDocumento, documento);
+    }
+}
+DocumentiService.decorators = [
+    { type: Injectable }
+];
+/** @nocollapse */
+DocumentiService.ctorParameters = () => [
+    { type: BrokerHttpService },
+    { type: ConstantsService }
+];
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    DocumentiService.prototype.httpService;
+    /**
+     * @type {?}
+     * @private
+     */
+    DocumentiService.prototype.constants;
 }
 
 /**
@@ -2302,6 +2503,42 @@ if (false) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+class Cartella {
+}
+if (false) {
+    /** @type {?} */
+    Cartella.prototype.doc_cartella_id;
+    /** @type {?} */
+    Cartella.prototype.cartella_desc;
+    /** @type {?} */
+    Cartella.prototype.doc_cartella_padre_id;
+    /** @type {?} */
+    Cartella.prototype.cliente_id;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class Documento {
+}
+if (false) {
+    /** @type {?} */
+    Documento.prototype.doc_file_id;
+    /** @type {?} */
+    Documento.prototype.nome_file;
+    /** @type {?} */
+    Documento.prototype.descrizione;
+    /** @type {?} */
+    Documento.prototype.file;
+    /** @type {?} */
+    Documento.prototype.note;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 class LoginRequest {
 }
 if (false) {
@@ -2385,11 +2622,24 @@ if (false) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+class DdlItemSearch {
+}
+if (false) {
+    /** @type {?} */
+    DdlItemSearch.prototype.id;
+    /** @type {?} */
+    DdlItemSearch.prototype.description;
+}
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-export { AbilitaAppClienteRequest, AffittoDettaglio, AlertService, AnnoPianoAmmortamento, BookValue, BrokerLibModule, CambioPasswordRequest, CancellazioneImmobileRequest, Cliente, ClientiService, CointestatarioDettaglio, Connection, DatiCatastaliDettaglio, DdlItem, DropdownService, ErrorHandlerService, ErrorMessage, Grafici, GraficiAffittuario, GraficiAndamentoAnnuale, GraficiConcentrazione, GraficiIndicatore, IconeService, Immobile, ImmobileDettaglio, ImmobileDettaglioVM, ImmobiliService, InserimentoClienteRequest, InserimentoClienteResponse, InserimentoImmobileResponse, LogErroriService, LoginRequest, LoginService, MutuoDettaglio, OmiDettaglio, PianoAmmortamento, ReportGenerale, ReportGeneraleAttivo, ReportGeneraleOggettoColonna, ReportGeneralePassivo, ReportService, SessionService, SpesaDettaglio, StoreService, TassaDettaglio, Utente, WsLogErrore, WsToken, ConstantsService as ɵa, BrokerHttpService as ɵb };
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+export { AbilitaAppClienteRequest, AffittoDettaglio, AlertService, AnnoPianoAmmortamento, BookValue, BrokerLibModule, CambioPasswordRequest, CancellazioneImmobileRequest, Cartella, Cliente, ClientiService, CointestatarioDettaglio, Connection, DatiCatastaliDettaglio, DdlItem, DdlItemSearch, DocumentiService, Documento, DropdownService, ErrorHandlerService, ErrorMessage, Grafici, GraficiAffittuario, GraficiAndamentoAnnuale, GraficiConcentrazione, GraficiIndicatore, IconeService, Immobile, ImmobileDettaglio, ImmobileDettaglioVM, ImmobiliService, InserimentoClienteRequest, InserimentoClienteResponse, InserimentoImmobileResponse, LogErroriService, LoginRequest, LoginService, MutuoDettaglio, OmiDettaglio, PianoAmmortamento, ReportGenerale, ReportGeneraleAttivo, ReportGeneraleOggettoColonna, ReportGeneralePassivo, ReportService, SessionService, SpesaDettaglio, StoreService, TassaDettaglio, Utente, WsLogErrore, WsToken, ConstantsService as ɵa, BrokerHttpService as ɵb };
 //# sourceMappingURL=broker-lib.js.map

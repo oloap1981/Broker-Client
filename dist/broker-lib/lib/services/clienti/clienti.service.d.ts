@@ -22,6 +22,13 @@ export declare class ClientiService {
      */
     getClienti(): Observable<Http.HttpResponse>;
     /**
+     * Chiamata per ottenere il singolo cliente passando il suo id come parametro
+     *
+     * @param  tokenValue Token di autenticazione ottenuto dalla login
+     * @returns contenente l'oggetto Data che a sua volta contiene l'elenco degli oggetti Cliente
+     */
+    getCliente(idcliente: number): Observable<Http.HttpResponse>;
+    /**
      * Chiamata per inserire un nuovo cliente
      *
      * @param  cliente
