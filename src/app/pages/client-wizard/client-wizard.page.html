@@ -489,12 +489,13 @@
                 </div>
             </div>
         </div>
-        <div class="footer table">
+        <!--<div class="footer table">
             <div class="row">
                 <div class="cell">
                     <div class="scheda-table single-column">
                         <div class="item">
                             <div class="item-list" id="wizard-start" *ngIf="wizardStart">
+                                <button class="button light back left" style="display: hidden" >indietro</button>
                                 <button class="button forward right" (click)="goToDestinazione()">avanti</button>
                             </div>
                             <div class="item-list" id="wizard-destinazione" *ngIf="wizardDestinazione">
@@ -523,6 +524,38 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>-->
+        <div class="footer table">
+            <div class="row">
+                <div class="cell" id="wizard-start" *ngIf="wizardStart">
+                    <button class="button light back left" style="display: none" >indietro</button>
+                    <button class="button forward right" (click)="goToDestinazione()">avanti</button>
+                </div>
+                <div class="cell" id="wizard-destinazione" *ngIf="wizardDestinazione">
+                    <button class="button light back left" (click)="goToStart()">indietro</button>
+                </div>
+                <div class="cell" id="wizard-dati-destinazione" *ngIf="wizardDatiDestinazione">
+                    <button class="button light back left" (click)="goToDestinazione()">indietro</button>
+                    <button class="button forward right" (click)="goToDati()">avanti</button>
+                </div>
+                <div class="cell" id="wizard-dati" *ngIf="wizardDati">
+                    <button class="button light back left"
+                        (click)="goToDatiDestinazione()">indietro</button>
+                    <button class="button forward right" (click)="goToCatastali()">avanti</button>
+                </div>
+                <div class="cell" id="wizard-catastali" *ngIf="wizardCatastali">
+                    <button class="button light back left" (click)="goToDatiBack()">indietro</button>
+                    <button class="button forward right" (click)="goToCointestatari()">avanti</button>
+                </div>
+                <div class="cell" id="wizard-cointestatari" *ngIf="wizardCointestatari">
+                    <button class="button light back left" (click)="goToCatastali()">indietro</button>
+                    <button class="button forward right" (click)="goToTassazione()">avanti</button>
+                </div>
+                <div class="cell" id="wizard-tassazione" *ngIf="wizardTassazione">
+                    <button class="button light back left" (click)="goToCointestatari()">indietro</button>
+                    <button class="button forward right" (click)="salvaImmobile()">salva</button>
                 </div>
             </div>
         </div>

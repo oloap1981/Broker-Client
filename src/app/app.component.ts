@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Platform } from '@ionic/angular';
+import { Platform, AlertController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
@@ -8,6 +8,8 @@ import { SessionService, StoreService, LogErroriService, AlertService, IconeServ
 
 import { Router } from '@angular/router';
 import { ClientHomePage } from './pages/client-home/client-home.page';
+import { ClickOutsideModule } from 'ng-click-outside';
+
 
 @Component({
   selector: 'app-root',
@@ -25,7 +27,8 @@ export class AppComponent implements OnInit {
     private statusBar: StatusBar,
     private router: Router,
     public sessionService: SessionService,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private alertController: AlertController
   ) {
   }
   hideMe = true;
@@ -42,6 +45,12 @@ export class AppComponent implements OnInit {
     this.hideMe = false;
     console.log("hide");
   }
+
+
+    onClickedOutside(e: Event) {
+        console.log('Clicked outside:', e);
+        this.show();
+    }
 
   ngOnInit(): void {
     this.initializeApp();
@@ -79,4 +88,30 @@ export class AppComponent implements OnInit {
   public isLoginPage(): boolean {
     return this.router.url === '/login';
   }
+
+    public async presentAlertLogout() {
+        const alert = this.alertController.create({
+            header: 'Logout',
+            message: 'Sicuro di voler uscire?',
+            buttons: [
+                {
+                    text: 'Cancel',
+                    role: 'cancel',
+                    cssClass: 'secondary',
+                    handler: (blah) => {
+                        console.log('Confirm Cancel: blah');
+                    }
+                }, {
+                    text: 'Si',
+                    handler: () => {
+                        this.sessionService.clearUserData();
+                        this.router.navigate(['login']);
+                    }
+                }
+            ]
+        });
+        alert.then((_alert: any) => {
+            _alert.present();
+        });
+    }
 }

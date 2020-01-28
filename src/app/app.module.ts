@@ -26,6 +26,7 @@ import { ClientHomePage } from './pages/client-home/client-home.page';
 import { AppRoutingModule } from './app-routing.module';
 
 import { NgxSelectModule } from 'ngx-select-ex';
+import { ClickOutsideModule } from 'ng-click-outside';
 
 @NgModule({
   declarations: [AppComponent],
@@ -42,7 +43,8 @@ import { NgxSelectModule } from 'ngx-select-ex';
     HttpClientModule,
     PipesModule,
     ClientHomePageModule,
-    NgxSelectModule
+    NgxSelectModule,
+    ClickOutsideModule
   ],
   providers: [
     // ErrorHandlerService,
