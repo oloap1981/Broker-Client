@@ -171,6 +171,16 @@
                                                     <span class="checkmark"></span>
                                                 </label>
                                             </div>
+                                            <div class="form-item single"
+                                                *ngIf="immobile.mutuo_dettaglio.tipo_tasso == 'F'">
+                                                <label>Tasso</label>
+                                                <div class="type">
+                                                    <input type="text" digitsonly numericType="number" maxlength="6"
+                                                        placeholder=""
+                                                        [(ngModel)]="immobile.mutuo_dettaglio.tasso_fisso"
+                                                        [disabled]="!immobile.mutuo"><span>%</span>
+                                                </div>
+                                            </div>
                                             <div class="form-item left">
                                                 <label>Euribor</label>
                                                 <div class="type">
@@ -530,7 +540,7 @@
         <div class="footer table">
             <div class="row">
                 <div class="cell" id="wizard-start" *ngIf="wizardStart">
-                    <button class="button light back left" style="display: none" >indietro</button>
+                    <button class="button light back left" style="display: none">indietro</button>
                     <button class="button forward right" (click)="goToDestinazione()">avanti</button>
                 </div>
                 <div class="cell" id="wizard-destinazione" *ngIf="wizardDestinazione">
@@ -541,8 +551,7 @@
                     <button class="button forward right" (click)="goToDati()">avanti</button>
                 </div>
                 <div class="cell" id="wizard-dati" *ngIf="wizardDati">
-                    <button class="button light back left"
-                        (click)="goToDatiDestinazione()">indietro</button>
+                    <button class="button light back left" (click)="goToDatiDestinazione()">indietro</button>
                     <button class="button forward right" (click)="goToCatastali()">avanti</button>
                 </div>
                 <div class="cell" id="wizard-catastali" *ngIf="wizardCatastali">

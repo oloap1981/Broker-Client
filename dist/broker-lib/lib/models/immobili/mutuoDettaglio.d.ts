@@ -9,6 +9,7 @@ export declare class MutuoDettaglio {
     descrizione_rate: string;
     numero_rate: number;
     durata: number;
-    data_inizio: string;
+    data_inizio: number;
     importo_iniziale: number;
+    tasso_fisso: number;
 }

@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 class ConstantsService {
     constructor() {
         this.baseAppUrl = 'http://89.31.75.45:443/Spring-JPA-Security';
+        // public readonly baseAppUrl: string = 'http://test.readvice.it:443/Spring-JPA-Security';
         this.tokenHeaderKey = 'Authorization';
         this.pathSeparator = '/';
         this.loginServiceName = 'login';
@@ -868,8 +869,9 @@ class MutuoDettaglio {
         this.descrizione_rate = '';
         this.numero_rate = 0;
         this.durata = 0;
-        this.data_inizio = '';
+        this.data_inizio = 0;
         this.importo_iniziale = 0;
+        this.tasso_fisso = 0;
     }
 }
 if (false) {
@@ -897,6 +899,8 @@ if (false) {
     MutuoDettaglio.prototype.data_inizio;
     /** @type {?} */
     MutuoDettaglio.prototype.importo_iniziale;
+    /** @type {?} */
+    MutuoDettaglio.prototype.tasso_fisso;
 }
 
 /**
