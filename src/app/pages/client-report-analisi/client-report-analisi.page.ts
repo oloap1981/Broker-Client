@@ -1,13 +1,14 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
 import { Chart } from 'chart.js';
-import { SessionService, StoreService, LogErroriService, AlertService, ClientiService, LoginService, ReportService, Cliente, IconeService } from 'broker-lib';
+import { SessionService, StoreService, LogErroriService, AlertService, ClientiService, LoginService, ReportService, IconeService } from 'broker-lib';
 import { Router } from '@angular/router';
 import { BaseComponent } from 'src/app/component/base.component';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { LogoutCommunicationService } from 'src/app/services/logoutCommunication/logoutcommunication.service';
 
 @Component({
-    selector: 'app-client-report-analisi',
+    selector: 'app-report-analisi',
     templateUrl: './client-report-analisi.page.html',
     styleUrls: ['./client-report-analisi.page.scss'],
 })
@@ -27,6 +28,12 @@ export class ClientReportAnalisiPage extends BaseComponent implements OnInit {
     public tipologiaChart: any;
     public affittuariChart: any;
 
+    public showAndamento = true;
+    public showIndicatori = true;
+    public showConcentrazione = true;
+    public showTipologia = true;
+    public showAffittuari = true;
+
     constructor(
         public sessionService: SessionService,
         public storeService: StoreService,
@@ -36,9 +43,11 @@ export class ClientReportAnalisiPage extends BaseComponent implements OnInit {
         public clientiService: ClientiService,
         public loginService: LoginService,
         public reportService: ReportService,
-        public iconeService: IconeService
+        public iconeService: IconeService,
+        public ngZone: NgZone,
+        public logoutComm: LogoutCommunicationService
     ) {
-        super(sessionService, storeService, router, logErroriService, alertService, iconeService);
+        super(sessionService, storeService, router, logErroriService, alertService, iconeService, ngZone);
     }
 
     ngOnInit() {
@@ -51,49 +60,84 @@ export class ClientReportAnalisiPage extends BaseComponent implements OnInit {
     }
 
     private initializeApp() {
-        // ottengo il token
-        this.sessionService.userDataObservable.pipe(
+
+        this.logoutComm.logoutObservable.pipe(
             takeUntil(this.unsubscribe$)
-        ).subscribe(present => {
-            if (present) {
-                this.wsToken = this.sessionService.getUserData();
-
-                if (this.wsToken !== undefined
-                    && this.wsToken !== null
-                    && this.wsToken.token_value !== ''
-                    && this.wsToken.utente !== undefined) {
-
-                    const utente = this.wsToken.utente;
-                    if (utente.utente_id !== undefined && utente.utente_id !== 0) {
-                        this.reportService.getGrafici(utente.utente_id).pipe(
-                            takeUntil(this.unsubscribe$)
-                        ).subscribe(r => {
-                            if (r.Success) {
-                                const datiGraficiAndamentoAnnuale = r.Data.andamento_annuale;
-                                this.createLinesChart(datiGraficiAndamentoAnnuale);
-                                const datiGraficiIndicatori = r.Data.indicatori;
-                                this.createIndicatoriChart(datiGraficiIndicatori);
-                                const datiGraficiConcentrazione = r.Data.concentrazione;
-                                this.createConcentrazioneChart(datiGraficiConcentrazione);
-                                const datiGraficiTipologia = r.Data.tipologia;
-                                this.createTipologiaChart(datiGraficiTipologia);
-                                const datiGraficiAffittuari = r.Data.affittuari;
-                                this.createAffittuariChart(datiGraficiAffittuari);
-                            } else {
-                                this.manageError(r);
-                            }
-                        });
-                    } else {
-                        this.goToPage('login');
-                    }
-                } else {
-                    this.goToPage('login');
-                }
-            } else {
-                this.goToPage('login');
-            }
+        ).subscribe(r => {
+            this.unsubscribe$.next();
+            this.unsubscribe$.complete();
+            this.ngZone.run(() => this.router.navigate(['login'])).then();
         });
-        this.sessionService.loadUserData();
+
+        if (this.sessionService.existsSessionData()) {
+            this.wsToken = this.sessionService.getUserData();
+            this.loadPageData();
+        } else {
+            this.sessionService.userDataObservable.pipe(
+                takeUntil(this.unsubscribe$)
+            ).subscribe(present => {
+                if (present) {
+                    this.wsToken = this.sessionService.getUserData();
+                    this.loadPageData();
+                } else {
+                    this.logout();
+                }
+            });
+            this.sessionService.loadUserData();
+        }
+    }
+
+    private loadPageData(): void {
+
+        if (this.wsToken !== undefined
+            && this.wsToken !== null
+            && this.wsToken.token_value !== ''
+            && this.wsToken.utente !== undefined) {
+            const utente = this.wsToken.utente;
+            if (utente.utente_id !== undefined && utente.utente_id !== 0) {
+
+                this.reportService.getGrafici(utente.utente_id).pipe(
+                    takeUntil(this.unsubscribe$)
+                ).subscribe(r => {
+                    if (r.Success) {
+                        const datiGraficiAndamentoAnnuale = r.Data.andamento_annuale;
+                        this.showAndamento = !(datiGraficiAndamentoAnnuale.length === 0);
+                        this.createLinesChart(datiGraficiAndamentoAnnuale);
+
+                        const datiGraficiIndicatori = r.Data.indicatori;
+                        this.showIndicatori = !(datiGraficiIndicatori.length === 0);
+                        this.createIndicatoriChart(datiGraficiIndicatori);
+
+                        const datiGraficiConcentrazione = r.Data.concentrazione;
+                        this.showConcentrazione = !(datiGraficiConcentrazione.length === 0);
+                        this.createConcentrazioneChart(datiGraficiConcentrazione);
+
+                        const datiGraficiTipologia = r.Data.tipologia;
+                        this.showTipologia = !(datiGraficiTipologia.length === 0);
+                        this.createTipologiaChart(datiGraficiTipologia);
+
+                        const datiGraficiAffittuari = r.Data.affittuari;
+                        this.showAffittuari = !(datiGraficiAffittuari.length === 0);
+                        this.createAffittuariChart(datiGraficiAffittuari);
+                    } else {
+                        this.manageError(r);
+                    }
+                },
+                    (error) => {
+                        this.manageHttpError(error);
+                    });
+            } else {
+                this.logout();
+            }
+        } else {
+            this.logout();
+        }
+
+    }
+
+    private logout(): void {
+        this.sessionService.clearUserData();
+        this.logoutComm.comunicateLogout();
     }
 
     /*
@@ -324,14 +368,15 @@ export class ClientReportAnalisiPage extends BaseComponent implements OnInit {
         return inputArray;
     }
     private shadeRGBAColor(color: string, percent: number) { // percentuale con numeri da 0 a 100
+        const normalizedPercent = percent * (3 / 4); // uso i 3/4 della scala per evitare che si parta dal bianco.
         const f = color.split(",");
         const t = 255;
         const R = parseInt(f[0].slice(5), 10);
         const G = parseInt(f[1], 10);
         const B = parseInt(f[2], 10);
-        return "rgba(" + (Math.round((t - R) * (percent / 100)) + R) + ","
-            + (Math.round((t - G) * (percent / 100)) + G) + ","
-            + (Math.round((t - B) * (percent / 100)) + B) + ",1)";
+        return "rgba(" + (Math.round((t - R) * (normalizedPercent / 100)) + R) + ","
+            + (Math.round((t - G) * (normalizedPercent / 100)) + G) + ","
+            + (Math.round((t - B) * (normalizedPercent / 100)) + B) + ",0.7)"; // lascio un pochino di trasparenza per far vedere anche le linee e le percentuali sullo sfondo
     }
 
     /*
@@ -344,28 +389,30 @@ export class ClientReportAnalisiPage extends BaseComponent implements OnInit {
         const passivi = this.getAndamentoAnnualePassivo(data);
 
         this.linesChart = new Chart(this.linesCanvas.nativeElement, {
-            type: 'bar',
+            type: 'line',
             data: {
                 labels: analisiLabels,
                 datasets: [
                     {
                         data: attivi,
                         label: 'attivi',
-                        backgroundColor: "#3e95cd",
-                        fill: false
+                        borderColor: "#0073bf",
+                        fill: false,
+                        lineTension: 0
                     },
                     {
                         data: passivi,
                         label: 'passivi',
-                        backgroundColor: "#8e5ea2",
-                        fill: false
+                        borderColor: "#f70046",
+                        fill: false,
+                        lineTension: 0
                     },
                 ]
             },
             options: {
-                aspectRatio: 1.8,
+                aspectRatio: 3,
                 title: {
-                    display: false,
+                    display: true,
                     text: 'Analisi'
                 }
             }
@@ -420,7 +467,20 @@ export class ClientReportAnalisiPage extends BaseComponent implements OnInit {
     }
 
     public goToReportGenerale(): void {
-        this.goToPage('client-report-generale');
+        this.goToPage('report-generale');
+    }
+
+    public generatePdfReport(): void {
+        this.reportService.getPdfReport(this.sessionService.getCliente().cliente_id).subscribe(r => {
+            if (r.Success) {
+                this.alertService.presentAlert('Riepilogo PDF inviato correttamente');
+            } else {
+                this.manageError(r);
+            }
+        },
+            (error) => {
+                this.manageHttpError(error);
+            });
     }
 
     ionViewDidLeave() {

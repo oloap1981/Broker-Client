@@ -26,10 +26,12 @@ export declare class SessionService {
     setIntestazionePagina(intestazione: string): void;
     getIntestazionePagina(): string;
     setCliente(cliente: Cliente): void;
+    caricaImmobili(idCliente: string): void;
     clearUserData(): void;
     setUserData(userData: WsToken): number;
     setClientData(client: Cliente): number;
     getUserData(): WsToken;
+    existsSessionData(): boolean;
     loadUserData(): void;
     getCliente(): Cliente;
     clearCliente(): void;

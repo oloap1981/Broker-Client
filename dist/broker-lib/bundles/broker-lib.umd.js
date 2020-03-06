@@ -1,8 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/common/http'), require('@ionic/angular'), require('@ionic/Storage'), require('rxjs'), require('@angular/router')) :
-    typeof define === 'function' && define.amd ? define('broker-lib', ['exports', '@angular/core', '@angular/common/http', '@ionic/angular', '@ionic/Storage', 'rxjs', '@angular/router'], factory) :
-    (global = global || self, factory(global['broker-lib'] = {}, global.ng.core, global.ng.common.http, global.angular, global.Storage, global.rxjs, global.ng.router));
-}(this, (function (exports, core, http, angular, Storage, rxjs, router) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/common/http'), require('rxjs/operators'), require('@ionic/angular'), require('@ionic/Storage'), require('rxjs'), require('@angular/router')) :
+    typeof define === 'function' && define.amd ? define('broker-lib', ['exports', '@angular/core', '@angular/common/http', 'rxjs/operators', '@ionic/angular', '@ionic/Storage', 'rxjs', '@angular/router'], factory) :
+    (global = global || self, factory(global['broker-lib'] = {}, global.ng.core, global.ng.common.http, global.rxjs.operators, global.angular, global.Storage, global.rxjs, global.ng.router));
+}(this, (function (exports, core, http, operators, angular, Storage, rxjs, router) { 'use strict';
 
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation. All rights reserved.
@@ -219,7 +219,7 @@
             this.putImmobileServiceName = 'putimmobile';
             this.delImmobileServiceName = 'delimmobile';
             this.getCatastoServiceName = 'getcatasto';
-            this.getPianoAmmortamentoServiceName = 'getPiano';
+            this.getPianoAmmortamentoServiceName = 'getpiano';
             // clienti
             this.getClientiServiceName = 'getclienti';
             this.getClienteServiceName = 'getcliente';
@@ -258,6 +258,7 @@
             this.tipologiaImmobilePonte = 'ponte';
             this.tipologiaImmobileStazione = 'stazione';
             this.tipologiaImmobileCantiere = 'cantiere';
+            this.tipologiaImmobileTerreno = 'terreno';
             // dropdown
             this.getDdlEuribor = 'get_ddl_tipo_euribor';
             this.getDdlAffittuari = 'get_ddl_tipo_affittuari';
@@ -265,6 +266,8 @@
             this.getDdlOmi = 'get_ddl_omi';
             this.getDdlTipologiaCatastale = 'get_ddl_tipologia_catastale';
             this.getDdlComuni = 'get_ddl_comuni';
+            // vari
+            this.httpTimeout = 5000; // per il momento il timeout è impostato a 5 secondi per le chiamate get e post
         }
         ConstantsService.decorators = [
             { type: core.Injectable }
@@ -363,6 +366,8 @@
         /** @type {?} */
         ConstantsService.prototype.tipologiaImmobileCantiere;
         /** @type {?} */
+        ConstantsService.prototype.tipologiaImmobileTerreno;
+        /** @type {?} */
         ConstantsService.prototype.getDdlEuribor;
         /** @type {?} */
         ConstantsService.prototype.getDdlAffittuari;
@@ -374,6 +379,8 @@
         ConstantsService.prototype.getDdlTipologiaCatastale;
         /** @type {?} */
         ConstantsService.prototype.getDdlComuni;
+        /** @type {?} */
+        ConstantsService.prototype.httpTimeout;
     }
 
     /**
@@ -396,7 +403,7 @@
          * @return {?}
          */
         function (path) {
-            return this.http.get(this.constants.baseAppUrl + "/" + path);
+            return this.http.get(this.constants.baseAppUrl + "/" + path).pipe(operators.timeout(this.constants.httpTimeout));
         };
         /**
          * @param {?} path
@@ -408,7 +415,7 @@
          */
         function (path) {
             console.log("HttpService get " + path);
-            return this.httpClientLogin.get(this.constants.baseAppUrl + "/" + path);
+            return this.httpClientLogin.get(this.constants.baseAppUrl + "/" + path).pipe(operators.timeout(this.constants.httpTimeout));
         };
         /**
          * @param {?} path
@@ -421,7 +428,7 @@
          * @return {?}
          */
         function (path, body) {
-            return this.http.post(this.constants.baseAppUrl + "/" + path, body);
+            return this.http.post(this.constants.baseAppUrl + "/" + path, body).pipe(operators.timeout(this.constants.httpTimeout));
         };
         /**
          * @param {?} path
@@ -435,7 +442,7 @@
          */
         function (path, body) {
             console.log("HttpService post " + path);
-            return this.httpClientLogin.post(this.constants.baseAppUrl + "/" + path, body);
+            return this.httpClientLogin.post(this.constants.baseAppUrl + "/" + path, body).pipe(operators.timeout(this.constants.httpTimeout));
         };
         BrokerHttpService.decorators = [
             { type: core.Injectable }
@@ -1012,6 +1019,8 @@
             this.descrizione_tipologia = "";
             this.data_aggiornamento = 0;
             this.valore_acquisto = 0;
+            this.valore_catastale = 0;
+            this.valore_commerciale = 0;
             this.quota = 0;
             this.catastale_cod = "";
             this.comune_zone_cod = "";
@@ -1046,6 +1055,10 @@
         ImmobileDettaglio.prototype.data_aggiornamento;
         /** @type {?} */
         ImmobileDettaglio.prototype.valore_acquisto;
+        /** @type {?} */
+        ImmobileDettaglio.prototype.valore_catastale;
+        /** @type {?} */
+        ImmobileDettaglio.prototype.valore_commerciale;
         /** @type {?} */
         ImmobileDettaglio.prototype.quota;
         /** @type {?} */
@@ -1252,7 +1265,7 @@
             this.cedolare_secca = false;
             this.aliquota_cedolare = 0;
             this.prima_scadenza_anni = 0;
-            this.data_inizio = '';
+            this.data_inizio = 0;
             this.importo_mensile = 0;
         }
         return AffittoDettaglio;
@@ -1357,9 +1370,20 @@
          * @return {?}
          */
         function (cliente) {
-            var _this = this;
             this.cliente = cliente;
-            this.immobiliService.getImmobili(this.cliente.cliente_id + '').subscribe((/**
+            this.caricaImmobili(this.cliente.cliente_id + '');
+        };
+        /**
+         * @param {?} idCliente
+         * @return {?}
+         */
+        SessionService.prototype.caricaImmobili = /**
+         * @param {?} idCliente
+         * @return {?}
+         */
+        function (idCliente) {
+            var _this = this;
+            this.immobiliService.getImmobili(idCliente).subscribe((/**
              * @param {?} r
              * @return {?}
              */
@@ -1380,6 +1404,7 @@
          */
         function () {
             this.storeService.clearUserData();
+            this.cliente = new Cliente();
             this.userData = new WsToken();
         };
         /**
@@ -1433,12 +1458,21 @@
         /**
          * @return {?}
          */
+        SessionService.prototype.existsSessionData = /**
+         * @return {?}
+         */
+        function () {
+            return (this.userData !== null && this.userData !== undefined && JSON.stringify(this.userData) !== '{}' && this.userData.token_value !== '');
+        };
+        /**
+         * @return {?}
+         */
         SessionService.prototype.loadUserData = /**
          * @return {?}
          */
         function () {
             var _this = this;
-            if (this.userData !== null && this.userData !== undefined && this.userData.token_value === '') {
+            if (this.userData !== null && this.userData !== undefined && JSON.stringify(this.userData) !== '{}' && this.userData.token_value !== '') {
                 this.userDataSubject.next(true);
             }
             else {
@@ -2155,6 +2189,9 @@
                 "A/6",
                 "D/10"
             ];
+            this.tipologiaTerreno = [
+                "T/1"
+            ];
             this.tipologiaUfficio = [
                 "A/10",
                 "C/3",
@@ -2236,6 +2273,9 @@
          * @return {?}
          */
         function (tipologia) {
+            if (this.tipologiaTerreno.includes(tipologia)) {
+                return this.constants.tipologiaImmobileTerreno;
+            }
             if (this.tipologiaAgricolo.includes(tipologia)) {
                 return this.constants.tipologiaImmobileAgricolo;
             }
@@ -2320,6 +2360,11 @@
          * @private
          */
         IconeService.prototype.tipologiaAgricolo;
+        /**
+         * @type {?}
+         * @private
+         */
+        IconeService.prototype.tipologiaTerreno;
         /**
          * @type {?}
          * @private
@@ -2818,6 +2863,8 @@
         ReportGenerale.prototype.passivi;
         /** @type {?} */
         ReportGenerale.prototype.attivo;
+        /** @type {?} */
+        ReportGenerale.prototype.detrazione_interessi_attivo;
     }
 
     /**

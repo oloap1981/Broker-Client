@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { WsToken, LogErroriService, ErrorMessage, Cliente, AlertService, IconeService } from 'broker-lib';
+import { Component, OnInit, NgZone } from '@angular/core';
+import { WsToken, LogErroriService, ErrorMessage, AlertService, IconeService } from 'broker-lib';
 import { StoreService, SessionService } from 'broker-lib';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { Subject, TimeoutError } from 'rxjs';
 
 @Component({
     selector: 'app-base',
@@ -16,13 +16,17 @@ export class BaseComponent implements OnInit {
     private wsTokenSubject: Subject<boolean> = new Subject<boolean>();
     public wsTokenObservable = this.wsTokenSubject.asObservable();
 
+    private logoutSubject: Subject<boolean> = new Subject<boolean>();
+    public logoutObservable = this.logoutSubject.asObservable();
+
     constructor(
         public sessionService: SessionService,
         public storeService: StoreService,
         public router: Router,
         public logErroriService: LogErroriService,
         public alertService: AlertService,
-        public iconeService: IconeService) { }
+        public iconeService: IconeService,
+        public ngZone: NgZone) { }
 
     ngOnInit(): void {
     }
@@ -65,11 +69,12 @@ export class BaseComponent implements OnInit {
     }
 
     public goToPage(pageName: string): void {
-        this.router.navigate([pageName]);
+        this.ngZone.run(() => this.router.navigate([pageName])).then();
     }
 
     public goToPageParams(pageName: string, params: any): void {
-        this.router.navigate([pageName], params);
+        this.ngZone.run(() => this.router.navigate([pageName], params)).then();
+        // this.router.navigate([pageName], params);
     }
 
     public logError(code: number, text: string): void {
@@ -99,11 +104,11 @@ export class BaseComponent implements OnInit {
         const techdata = response.ErrorMessage.msg_techdata;
 
         switch (code) {
-            case "005":
-                {
-                    this.router.navigate(['login']);
-                    break;
-                }
+            case "005": {
+                this.alertService.presentErrorAlert("Token Scaduto, necessario Login");
+                this.router.navigate(['login']);
+                break;
+            }
         }
     }
 
@@ -120,8 +125,34 @@ export class BaseComponent implements OnInit {
         return 'item tipologia ' + this.getIconaClasseImmobile(tipologia);
     }
 
-    public getIconaClasseImmobileTipologia(tipologia: string): string {
-        return 'tipologia ' + this.getIconaClasseImmobile(tipologia);
+    public getClasseStatoCliente(stato: string): string {
+        let statusColor = 'red';
+        switch (stato) {
+            case 'R':
+                statusColor = 'red';
+                break;
+            case 'P':
+                statusColor = 'blue';
+                break;
+            case 'A':
+                statusColor = 'green';
+                break;
+        }
+        return 'status ' + statusColor;
     }
 
+    public goToProfiloUtente(): void {
+        this.goToPage('profilo-utente');
+    }
+
+    public manageHttpError(error: any) {
+        console.log("Si è verificato un errore di comunicazione:");
+        console.log(error);
+        if (error instanceof TimeoutError) {
+            this.alertService.presentErrorAlert("Timeout scaduto");
+        } else {
+            console.log("Si è verificato un errore di comunicazione:");
+            console.log(error);
+        }
+    }
 }

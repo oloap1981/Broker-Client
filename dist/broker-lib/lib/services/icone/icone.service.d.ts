@@ -4,6 +4,7 @@ export declare class IconeService {
     private tipologiaVilla;
     private tipologiaCasa;
     private tipologiaAgricolo;
+    private tipologiaTerreno;
     private tipologiaUfficio;
     private tipologiaAlbergo;
     private tipologiaOspedale;

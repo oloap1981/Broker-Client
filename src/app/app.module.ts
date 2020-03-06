@@ -27,6 +27,8 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { NgxSelectModule } from 'ngx-select-ex';
 import { ClickOutsideModule } from 'ng-click-outside';
+import { LogoutCommunicationService } from './services/logoutCommunication/logoutcommunication.service';
+import { CurrencyPipe } from '@angular/common';
 
 @NgModule({
   declarations: [AppComponent],
@@ -57,6 +59,8 @@ import { ClickOutsideModule } from 'ng-click-outside';
     ReportService,
     SplashScreen,
     AlertService,
+    CurrencyPipe,
+    LogoutCommunicationService,
     HTTP,
     {
       provide: HTTP_INTERCEPTORS,

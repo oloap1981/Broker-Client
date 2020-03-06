@@ -1,12 +1,17 @@
 // import { ImmobileDettaglio } from './../../../../projects/broker-lib/src/lib/models/immobili/immobileDettaglio';
-import { ImmobileDettaglio, LogErroriService, StoreService, AlertService, CointestatarioDettaglio, Immobile, IconeService, MutuoDettaglio, AffittoDettaglio, TassaDettaglio, SpesaDettaglio, DatiCatastaliDettaglio } from 'broker-lib';
+import { ImmobileDettaglio, LogErroriService, StoreService, AlertService, CointestatarioDettaglio, Immobile, IconeService, MutuoDettaglio, AffittoDettaglio, TassaDettaglio, SpesaDettaglio, DatiCatastaliDettaglio, CancellazioneImmobileRequest } from 'broker-lib';
 import { ImmobiliService, SessionService } from 'broker-lib';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { BaseComponent } from 'src/app/component/base.component';
 import { ModalService } from 'src/app/services/modal/modal.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { AlertController } from '@ionic/angular';
+import { LogoutCommunicationService } from 'src/app/services/logoutCommunication/logoutcommunication.service';
+import { registerLocaleData } from '@angular/common';
+import localeIt from '@angular/common/locales/it';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
     selector: 'app-client-immobile',
@@ -29,9 +34,31 @@ export class ClientImmobilePage extends BaseComponent implements OnInit {
         public storeService: StoreService,
         public alertService: AlertService,
         public modalService: ModalService,
-        public iconeService: IconeService
+        public iconeService: IconeService,
+        public ngZone: NgZone,
+        public alertController: AlertController,
+        public logoutComm: LogoutCommunicationService,
+        public currencyPipe: CurrencyPipe
     ) {
-        super(sessionService, storeService, router, logErroriService, alertService, iconeService);
+        super(sessionService, storeService, router, logErroriService, alertService, iconeService, ngZone);
+        registerLocaleData(localeIt, 'it');
+        this.resetImmobile();
+    }
+
+    ngOnInit() {
+        super.ngOnInit();
+    }
+
+    ionViewDidEnter() {
+        this.initializeApp();
+        this.sessionService.setIntestazionePagina('IMMOBILE');
+    }
+
+    public getCurrency(amount: number) {
+        return this.currencyPipe.transform(amount, 'EUR', '', '1.2-2', 'it');
+    }
+
+    private resetImmobile(): void {
         this.immobile_id = '';
         this.immobile = new ImmobileDettaglio();
         this.immobile.mutuo_dettaglio = new MutuoDettaglio();
@@ -42,62 +69,71 @@ export class ClientImmobilePage extends BaseComponent implements OnInit {
         this.immobile.dati_catastali = new DatiCatastaliDettaglio();
     }
 
-    public goToWizard(): void {
-        this.goToPage("wizard");
-    }
-    ngOnInit() {
-        super.ngOnInit();
-    }
-
-    ionViewDidEnter() {
-        this.initializeApp();
-        this.sessionService.setIntestazionePagina('DETTAGLIO IMMOBILE');
-    }
-
     private initializeApp() {
-        // ottengo il token
-        this.sessionService.userDataObservable.pipe(
+        // this.unsubscribe$.next();
+        // this.unsubscribe$.complete();
+
+        this.logoutComm.logoutObservable.pipe(
             takeUntil(this.unsubscribe$)
-        ).subscribe(present => {
-            if (present) {
-                this.wsToken = this.sessionService.getUserData();
-
-                this.wsToken = this.sessionService.getUserData();
-                if (this.wsToken !== undefined
-                    && this.wsToken !== null
-                    && this.wsToken.token_value !== ''
-                    && this.wsToken.utente !== undefined) {
-
-                    if (this.sessionService.getImmobileDettaglio() !== null
-                        && this.sessionService.getImmobileDettaglio().proprieta_id !== 0
-                        && this.sessionService.getImmobileDettaglio().proprieta_id !== null
-                        && this.sessionService.getImmobileDettaglio().proprieta_id !== undefined) {
-                        this.immobile = this.sessionService.getImmobileDettaglio();
-                        this.sessionService.setImmobileDettaglio(this.immobile);
-                    } else {
-                        this.route.queryParams.pipe(
-                            takeUntil(this.unsubscribe$)
-                        ).subscribe(params => {
-
-                            this.immobile_id = params.immobile_id;
-                            this.immobiliService.getImmobile(this.immobile_id).pipe(
-                                takeUntil(this.unsubscribe$)
-                            ).subscribe(s => {
-                                if (s.Success) {
-                                    this.immobile = s.Data;
-                                    this.sessionService.setImmobileDettaglio(this.immobile);
-                                }
-                            });
-                        });
-                    }
-                } else {
-                    this.goToPage('login');
-                }
-            } else {
-                this.goToPage('login');
-            }
+        ).subscribe(r => {
+            this.unsubscribe$.next();
+            this.unsubscribe$.complete();
+            this.ngZone.run(() => this.router.navigate(['login'])).then();
         });
-        this.sessionService.loadUserData();
+
+        if (this.sessionService.existsSessionData()) {
+            this.wsToken = this.sessionService.getUserData();
+            this.loadPageData();
+        } else {
+            this.sessionService.userDataObservable.pipe(
+                takeUntil(this.unsubscribe$)
+            ).subscribe(present => {
+                if (present) {
+                    this.wsToken = this.sessionService.getUserData();
+                    this.loadPageData();
+                } else {
+                    this.logout();
+                }
+            });
+            this.sessionService.loadUserData();
+        }
+    }
+
+    private loadPageData(): void {
+        if (this.sessionService.getImmobileDettaglio() !== null
+            && this.sessionService.getImmobileDettaglio().proprieta_id !== 0
+            && this.sessionService.getImmobileDettaglio().proprieta_id !== null
+            && this.sessionService.getImmobileDettaglio().proprieta_id !== undefined) {
+            this.immobile = this.sessionService.getImmobileDettaglio();
+            this.sessionService.setImmobileDettaglio(this.immobile);
+        } else {
+            this.route.queryParams.pipe(
+                takeUntil(this.unsubscribe$)
+            ).subscribe(params => {
+
+                this.immobile_id = params.immobile_id;
+                this.loadImmobile(this.immobile_id);
+            });
+        }
+    }
+
+    private logout(): void {
+        this.sessionService.clearUserData();
+        this.logoutComm.comunicateLogout();
+    }
+
+    private loadImmobile(id: string): void {
+        this.immobiliService.getImmobile(id).pipe(
+            takeUntil(this.unsubscribe$)
+        ).subscribe(s => {
+            if (s.Success) {
+                this.immobile = s.Data;
+                this.sessionService.setImmobileDettaglio(this.immobile);
+            }
+        },
+            (error) => {
+                this.manageHttpError(error);
+            });
     }
 
     public getCointestatari(): Array<CointestatarioDettaglio> {
@@ -120,8 +156,10 @@ export class ClientImmobilePage extends BaseComponent implements OnInit {
 
     public getTotaleTasse(immobile: ImmobileDettaglio): number {
         let tasse = 0;
-        for (const tassa of immobile.tasse) {
-            tasse = tasse + tassa.importo_annuale;
+        if (immobile && immobile.tasse) {
+            for (const tassa of immobile.tasse) {
+                tasse = tasse + tassa.importo_annuale;
+            }
         }
         return tasse;
     }
@@ -134,7 +172,8 @@ export class ClientImmobilePage extends BaseComponent implements OnInit {
                 immobile_civico: this.immobile.civico,
                 immobile_citta: this.immobile.citta,
                 immobile_data_aggiornamento: this.immobile.data_aggiornamento,
-                immobile_codice_tipologia: this.immobile.codice_tipologia
+                immobile_codice_tipologia: this.immobile.codice_tipologia,
+                immobile_mutuo_id: this.immobile.mutuo_dettaglio.proprieta_mutuo_id
             }
         });
     }
@@ -143,8 +182,52 @@ export class ClientImmobilePage extends BaseComponent implements OnInit {
         this.goToPage('catastali');
     }
 
+    public deleteImmobile() {
+
+        const alert = this.alertController.create({
+            header: 'Cancellazione Immobile',
+            message: 'Sicuro di voler eliminare questo immobile?',
+            buttons: [
+                {
+                    text: 'Cancel',
+                    role: 'cancel',
+                    cssClass: 'secondary',
+                    handler: (blah) => {
+                        console.log('Confirm Cancel: blah');
+                    }
+                }, {
+                    text: 'Si',
+                    handler: () => {
+                        const cancellazioneImmobileReq = new CancellazioneImmobileRequest();
+                        cancellazioneImmobileReq.immobile_id = this.immobile.proprieta_id;
+                        this.immobiliService.delImmobile(cancellazioneImmobileReq).pipe(
+                            takeUntil(this.unsubscribe$)
+                        ).subscribe(r => {
+                            if (r.Success) {
+                                this.alertService.presentAlert('Immobile cancellato con successo');
+                                // dobbiamo ricaricare la lista degli immobili
+                                this.sessionService.caricaImmobili(this.sessionService.getCliente().cliente_id + '');
+
+                                this.goToHome();
+                            } else {
+                                this.manageError(r);
+                            }
+                        },
+                            (error) => {
+                                this.manageHttpError(error);
+                            });
+                    }
+                }
+            ]
+        });
+        alert.then((_alert: any) => {
+            _alert.present();
+        });
+    }
+
     ionViewDidLeave() {
         this.unsubscribe$.next();
         this.unsubscribe$.complete();
+        this.resetImmobile();
     }
 }

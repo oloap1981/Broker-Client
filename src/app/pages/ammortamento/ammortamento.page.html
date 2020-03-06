@@ -84,45 +84,4 @@
             </div>
         </div>
     </div>
-    <div class="right-area">
-        <div class="header">
-            <div class="row">
-                <div class="header-cell">
-                    <span class="small">immobili di</span>
-                    <span
-                        class="nome">{{sessionService.getCliente().nome + ' ' + sessionService.getCliente().cognome}}</span>
-                </div>
-            </div>
-        </div>
-        <div class="list">
-            <ul class="lista-immobile">
-                <li class="immobile" *ngFor="let immobileLista of sessionService.getImmobiliCliente()"
-                    (click)="apriSchedaImmobile(immobileLista.proprieta_id)">
-                    <div class="indirizzo">{{immobileLista.indirizzo}},
-                        {{immobileLista.civico}}<br>{{immobileLista.cap}} {{immobileLista.citta}}
-                        ({{immobileLista.provincia}})</div>
-                    <div class="tipologia table">
-                        <div class="row">
-                            <div [ngClass]="getIconaClasseImmobileCell(immobileLista.codice_tipologia)">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="quota table">
-                        <div class="row">
-                            <div class="cell">
-                                {{immobileLista.quota}}<small>%</small>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <div class="footer table">
-            <div class="row">
-                <div class="cell">
-                    <a hef="#" class="button add">immobile</a>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>

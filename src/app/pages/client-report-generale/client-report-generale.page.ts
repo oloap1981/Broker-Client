@@ -1,9 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
+import { CurrencyPipe } from '@angular/common';
 import { SessionService, StoreService, LogErroriService, AlertService, ClientiService, LoginService, ReportService, Cliente, ReportGenerale, ReportGeneraleOggettoColonna, IconeService, ReportGeneralePassivo } from 'broker-lib';
 import { Router } from '@angular/router';
 import { BaseComponent } from 'src/app/component/base.component';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { LogoutCommunicationService } from 'src/app/services/logoutCommunication/logoutcommunication.service';
+import { registerLocaleData } from '@angular/common';
+import localeIt from '@angular/common/locales/it';
 
 @Component({
   selector: 'app-report-generale',
@@ -32,13 +36,17 @@ export class ClientReportGeneralePage extends BaseComponent implements OnInit {
     public clientiService: ClientiService,
     public loginService: LoginService,
     public reportService: ReportService,
-    public iconeService: IconeService
+    public iconeService: IconeService,
+    public ngZone: NgZone,
+    public logoutComm: LogoutCommunicationService,
+    public currencyPipe: CurrencyPipe
   ) {
-    super(sessionService, storeService, router, logErroriService, alertService, iconeService);
+    super(sessionService, storeService, router, logErroriService, alertService, iconeService, ngZone);
     this.situazioneImmobili = new Array<ReportGenerale>();
     this.oggettiColonnaDestra = new Array<ReportGeneraleOggettoColonna>();
     this.etichettaColonna = '';
     this.attiviSelezionato = false;
+    registerLocaleData(localeIt, 'it');
   }
 
   ngOnInit() {
@@ -51,40 +59,67 @@ export class ClientReportGeneralePage extends BaseComponent implements OnInit {
   }
 
   private initializeApp() {
-    // ottengo il token
-    this.sessionService.userDataObservable.pipe(
+
+    this.logoutComm.logoutObservable.pipe(
       takeUntil(this.unsubscribe$)
-    ).subscribe(present => {
-      if (present) {
-        this.wsToken = this.sessionService.getUserData();
-
-        if (this.wsToken !== undefined
-          && this.wsToken !== null
-          && this.wsToken.token_value !== ''
-          && this.wsToken.utente !== undefined) {
-
-          const utente = this.wsToken.utente;
-          if (utente.utente_id !== undefined && utente.utente_id !== 0) {
-            this.reportService.getSituazioneGenerale(utente.utente_id).pipe(
-              takeUntil(this.unsubscribe$)
-            ).subscribe(r => {
-              if (r.Success) {
-                this.situazioneImmobili = r.Data.elenco_immobili;
-              } else {
-                this.manageError(r);
-              }
-            });
-          } else {
-            this.goToPage('login');
-          }
-        } else {
-          this.goToPage('login');
-        }
-      } else {
-        this.goToPage('login');
-      }
+    ).subscribe(r => {
+      this.unsubscribe$.next();
+      this.unsubscribe$.complete();
+      this.ngZone.run(() => this.router.navigate(['login'])).then();
     });
-    this.sessionService.loadUserData();
+
+    if (this.sessionService.existsSessionData()) {
+      this.wsToken = this.sessionService.getUserData();
+      this.loadPageData();
+    } else {
+      this.sessionService.userDataObservable.pipe(
+        takeUntil(this.unsubscribe$)
+      ).subscribe(present => {
+        if (present) {
+          this.wsToken = this.sessionService.getUserData();
+          this.loadPageData();
+        } else {
+          this.logout();
+        }
+      });
+      this.sessionService.loadUserData();
+    }
+
+  }
+
+  private loadPageData(): void {
+
+
+    if (this.wsToken !== undefined
+      && this.wsToken !== null
+      && this.wsToken.token_value !== ''
+      && this.wsToken.utente !== undefined) {
+      const utente = this.wsToken.utente;
+      if (utente.utente_id !== undefined && utente.utente_id !== 0) {
+
+        this.reportService.getSituazioneGenerale(utente.utente_id).pipe(
+          takeUntil(this.unsubscribe$)
+        ).subscribe(r => {
+          if (r.Success) {
+            this.situazioneImmobili = r.Data.elenco_immobili;
+          } else {
+            this.manageError(r);
+          }
+        },
+          (error) => {
+            this.manageHttpError(error);
+          });
+      } else {
+        this.logout();
+      }
+    } else {
+      this.logout();
+    }
+  }
+
+  private logout(): void {
+    this.sessionService.clearUserData();
+    this.logoutComm.comunicateLogout();
   }
 
   public goToReportAnalisi(): void {
@@ -115,7 +150,12 @@ export class ClientReportGeneralePage extends BaseComponent implements OnInit {
     let toReturn = 0;
 
     if (immobile.attivo) {
-      toReturn = immobile.attivo.aliquota_cedolare + immobile.attivo.importo_mensile;
+      const totale: number = immobile.attivo.importo_mensile * 12;
+      const aliquota: number = totale / 100 * immobile.attivo.aliquota_cedolare;
+      toReturn = (totale - aliquota);
+    }
+    if (immobile.detrazione_interessi_attivo != null) {
+      toReturn += parseFloat(immobile.detrazione_interessi_attivo.importo_annuale.toFixed(2));
     }
 
     return toReturn;
@@ -123,44 +163,6 @@ export class ClientReportGeneralePage extends BaseComponent implements OnInit {
 
   public getTotaleImmobile(immobile: ReportGenerale): number {
     return this.getTotaleAttiviImmobile(immobile) - this.getTotalePassiviImmobile(immobile);
-  }
-
-  public caricaTotalePassivi(): void {
-    this.oggettiColonnaDestra = new Array<ReportGeneraleOggettoColonna>();
-    this.attiviSelezionato = false;
-    this.etichettaColonna = 'Passivi Totali';
-    for (const immobile of this.situazioneImmobili) {
-      if (immobile.passivi) {
-        for (const passivo of immobile.passivi) {
-          this.addOggettoAColonnaDestra(this.oggettiColonnaDestra, passivo);
-        }
-      }
-    }
-  }
-
-  private addOggettoAColonnaDestra(array: Array<ReportGeneraleOggettoColonna>, oggetto: ReportGeneralePassivo): void {
-
-    if (this.colonnaDestraContieneOggetto(oggetto)) {
-      for (const immobile of this.oggettiColonnaDestra) {
-        if (immobile.descrizione === oggetto.descrizione_passivo) {
-          immobile.valore = (+immobile.valore + +oggetto.importo_annuale) + '';
-        }
-      }
-    } else {
-      const oggettoColonna = new ReportGeneraleOggettoColonna();
-      oggettoColonna.descrizione = oggetto.descrizione_passivo;
-      oggettoColonna.valore = ((oggetto.importo_annuale === "" || oggetto.importo_annuale === "null") ? "0" : oggetto.importo_annuale);
-      this.oggettiColonnaDestra.push(oggettoColonna);
-    }
-  }
-
-  private colonnaDestraContieneOggetto(oggetto: ReportGeneralePassivo): boolean {
-    for (const immobile of this.oggettiColonnaDestra) {
-      if (immobile.descrizione === oggetto.descrizione_passivo) {
-        return true;
-      }
-    }
-    return false;
   }
 
   public caricaPassiviImmobile(immobile: ReportGenerale): void {
@@ -171,44 +173,8 @@ export class ClientReportGeneralePage extends BaseComponent implements OnInit {
     this.goToPageParams('client-report-generale-attivi', { queryParams: { reportGenerale: JSON.stringify(immobile) } });
   }
 
-  public caricaAttiviImmobileOld(immobile: ReportGenerale): void {
-    this.oggettiColonnaDestra = new Array<ReportGeneraleOggettoColonna>();
-    this.attiviSelezionato = true;
-    this.etichettaColonna = 'Attivi';
-    if (immobile.attivo) {
-
-      const oggettoColonnaDescrizioneAffittuario = new ReportGeneraleOggettoColonna();
-      oggettoColonnaDescrizioneAffittuario.descrizione = 'Descrizione Affittuario';
-      oggettoColonnaDescrizioneAffittuario.valore = immobile.attivo.descrizione_affittuario;
-      this.oggettiColonnaDestra.push(oggettoColonnaDescrizioneAffittuario);
-
-      const oggettoColonnaCedolareSecca = new ReportGeneraleOggettoColonna();
-      oggettoColonnaCedolareSecca.descrizione = 'Cedolare Secca';
-      oggettoColonnaCedolareSecca.valore = ((immobile.attivo.cedolare_secca === "" || immobile.attivo.cedolare_secca === "null") ? "NO" : (immobile.attivo.cedolare_secca.toUpperCase() === 'TRUE' ? 'SI' : 'NO'));
-      this.oggettiColonnaDestra.push(oggettoColonnaCedolareSecca);
-
-      if (immobile.attivo.cedolare_secca.toUpperCase() === 'TRUE') {
-        const oggettoColonnaAliquotaCedolare = new ReportGeneraleOggettoColonna();
-        oggettoColonnaAliquotaCedolare.descrizione = 'Aliquota Cedolare';
-        oggettoColonnaAliquotaCedolare.valore = ((immobile.attivo.aliquota_cedolare === null || immobile.attivo.aliquota_cedolare === undefined) ? '0' : immobile.attivo.aliquota_cedolare + '');
-        this.oggettiColonnaDestra.push(oggettoColonnaAliquotaCedolare);
-      }
-
-      const oggettoColonnaPrimaScadenzaAnni = new ReportGeneraleOggettoColonna();
-      oggettoColonnaPrimaScadenzaAnni.descrizione = 'Prima Scadenza Anni';
-      oggettoColonnaPrimaScadenzaAnni.valore = immobile.attivo.prima_scadenza_anni + '';
-      this.oggettiColonnaDestra.push(oggettoColonnaPrimaScadenzaAnni);
-
-      const oggettoColonnaDataInizio = new ReportGeneraleOggettoColonna();
-      oggettoColonnaDataInizio.descrizione = 'Data Inizio';
-      oggettoColonnaDataInizio.valore = immobile.attivo.data_inizio + ''; // formattare la data!!!
-      this.oggettiColonnaDestra.push(oggettoColonnaDataInizio);
-
-      const oggettoColonnaImportoMensile = new ReportGeneraleOggettoColonna();
-      oggettoColonnaImportoMensile.descrizione = 'Importo Mensile';
-      oggettoColonnaImportoMensile.valore = ((immobile.attivo.importo_mensile === null || immobile.attivo.importo_mensile === undefined) ? '0' : immobile.attivo.importo_mensile + '') + '€';
-      this.oggettiColonnaDestra.push(oggettoColonnaImportoMensile);
-    }
+  public getCurrency(amount: number) {
+    return this.currencyPipe.transform(amount, 'EUR', '', '1.2-2', 'it');
   }
 
   public getTotalePassiviImmobili(): number {
@@ -234,13 +200,18 @@ export class ClientReportGeneralePage extends BaseComponent implements OnInit {
   }
 
   public generatePdfReport(): void {
-    this.reportService.getPdfReport(this.sessionService.getCliente().cliente_id).subscribe(r => {
+    this.reportService.getPdfReport(this.sessionService.getCliente().cliente_id).pipe(
+      takeUntil(this.unsubscribe$)
+    ).subscribe(r => {
       if (r.Success) {
         this.alertService.presentAlert('Riepilogo PDF inviato correttamente');
       } else {
         this.manageError(r);
       }
-    });
+    },
+      (error) => {
+        this.manageHttpError(error);
+      });
   }
 
   ionViewDidLeave() {

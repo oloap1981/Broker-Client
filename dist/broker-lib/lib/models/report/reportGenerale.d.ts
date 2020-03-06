@@ -1,5 +1,6 @@
 import { ReportGeneraleAttivo } from './reportGeneraleAttivo';
 import { ReportGeneralePassivo } from './reportGeneralePassivo';
+import { ReportGeneraleInteressi } from './reportGeneraleInteressi';
 export declare class ReportGenerale {
     proprieta_id: number;
     codice_tipologia: string;
@@ -14,4 +15,5 @@ export declare class ReportGenerale {
     prima_casa: string;
     passivi: Array<ReportGeneralePassivo>;
     attivo: ReportGeneraleAttivo;
+    detrazione_interessi_attivo: ReportGeneraleInteressi;
 }

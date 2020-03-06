@@ -32,9 +32,14 @@
                                             <label>Civico</label>
                                             <input type="text" placeholder="" value="" [(ngModel)]="immobile.civico">
                                         </div>
-                                        <div class="form-item left" style="width: 40%;">
-                                            <label>Citt&agrave;</label>
-                                            <input type="text" placeholder="" [(ngModel)]="immobile.citta">
+                                        <div class="form-item left " style="width: 40%;" [formGroup]="form"
+                                            novalidate="">
+                                            <label>Comune</label>
+                                            <ngx-select [items]="ddlComuniOptions" optionValueField="codice"
+                                                optionTextField="descrizione" (typed)="comuneSearchChange($event)"
+                                                (selectionChanges)="comuneSelected($event)"
+                                                [formControl]="selectControl" formControlName="select">
+                                            </ngx-select>
                                         </div>
                                         <div class="form-item left" style="width: 25%;">
                                             <label>Cap</label>
@@ -49,26 +54,25 @@
                                             <select class="select-css"
                                                 (change)="selezionaCategoriaCatastale($event.target)">
                                                 <option *ngFor="let cat of categorieCatastali" value="{{cat.codice}}"
-                                                    selected="{{cat.codice+'' === immobile.catastale_cod ? 'selected' : ''}}">
+                                                    [attr.selected]="cat.codice+'' === immobile.tipologie_catastali_id+'' ? 'selected' : null">
                                                     {{cat.descrizione}}
                                                 </option>
                                             </select>
                                         </div>
                                         <div class="form-item left " style="width: 50%;">
-                                            <label>Comune (ISTAT)</label>
-                                            <ngx-select [items]="ddlComuniOptions" optionValueField="codice"
-                                                optionTextField="descrizione" (typed)="comuneSearchChange($event)"
-                                                (selectionChanges)="comuneSelected($event)">
-                                            </ngx-select>
-                                        </div>
-                                        <div class="form-item left " style="width: 50%;">
-                                            <label>OMI</label>
+                                            <label>Zone OMI</label>
                                             <select class="select-css" (change)="selezionaOmi($event.target)">
-                                                <option *ngFor="let omi of tipiOmi" value="{{omi.codice}}"
-                                                    selected="{{omi.codice+'' === immobile.comune_zone_cod ? 'selected' : ''}}">
+                                                <option *ngFor="let omi of tipiOmi" [ngValue]="omi.codice"
+                                                    value="{{omi.codice}}"
+                                                    [attr.selected]="omi.codice+'' === immobile.comune_zone_cod+'' ? 'selected' : null">
                                                     {{omi.descrizione}}
                                                 </option>
                                             </select>
+                                        </div>
+                                        <div class="form-item left " style="width: 40%;">
+                                            <label>Valore Immobile</label>
+                                            <input type="text" placeholder="" value=""
+                                                [(ngModel)]="ValoreAcquistoString">
                                         </div>
                                     </div>
                                 </div>
@@ -184,9 +188,13 @@
                                             <div class="form-item left">
                                                 <label>Euribor</label>
                                                 <div class="type">
-                                                    <input type="text" placeholder="" digitsonly numericType="decimal"
-                                                        [(ngModel)]="immobile.mutuo_dettaglio.descrizione_euribor"
-                                                        [disabled]="!immobile.mutuo"><span>%</span>
+                                                    <select class="select-css"
+                                                        (change)="selezionaEuribor($event.target)">
+                                                        <option *ngFor="let eur of euribor" value="{{eur.codice}}"
+                                                            selected="{{eur.codice === immobile.mutuo_dettaglio.euribor_id+'' ? 'selected' : ''}}">
+                                                            {{eur.descrizione}}
+                                                        </option>
+                                                    </select>
                                                 </div>
                                             </div>
                                             <div class="form-item right">
@@ -208,7 +216,9 @@
                                             </div>
                                             <div class="form-item single">
                                                 <label>Data inizio</label>
-                                                <ra-date-picker [inputDate]="dataInizioMutuo"></ra-date-picker>
+                                                <ra-date-picker [inputDate]="dataInizioMutuo"
+                                                    [(ngModel)]="dataInizioMutuo" (sendDate)="associaData($event)">
+                                                </ra-date-picker>
                                             </div>
                                             <div class="form-item single">
                                                 <label>Importo iniziale</label>
@@ -246,43 +256,40 @@
                                             <label>Tipo affittuario</label>
                                             <select class="select-css"
                                                 (change)="selezionaTipoAffittuario($event.target)">
-                                                <option *ngFor="let tipo of tipiAffittuario" value="{{tipo.codice}}">
+                                                <option *ngFor="let tipo of tipiAffittuario" [ngValue]="tipo.codice"
+                                                    value="{{tipo.codice}}"
+                                                    [attr.selected]="(immobile.affitto_dettaglio ? (tipo.codice+'' === immobile.affitto_dettaglio.tipo_affittuario_id + '' ? 'selected' : null) : '')">
                                                     {{tipo.descrizione}}</option>
                                             </select>
                                         </div>
                                         <div class="form-item single">
-                                            <label>Durata prima scadenza</label>
+                                            <label>Durata Contratto</label>
                                             <div class="type">
                                                 <input type="text" placeholder="" digitsonly numericType="number"
-                                                    [(ngModel)]="immobile.affitto_dettaglio.prima_scadenza_anni"><span>anni</span>
+                                                    [(ngModel)]="AffittoDettaglioPrimaScadenzaAnniString"><span>anni</span>
                                             </div>
                                         </div>
                                         <div class="form-item single">
                                             <label>Data inizio</label>
-                                            <input type="text" placeholder=""
-                                                [(ngModel)]="immobile.affitto_dettaglio.data_inizio">
+                                            <ra-date-picker [inputDate]="dataInizioAffitto"
+                                                [(ngModel)]="dataInizioAffitto" (sendDate)="associaDataAffitto($event)">
+                                            </ra-date-picker>
                                         </div>
                                         <div class="form-item single">
                                             <label>Importo lordo mensile</label>
                                             <div class="type">
-                                                <input type="text" placeholder="" digitsonly numericType="decimal"
-                                                    [(ngModel)]="immobile.affitto_dettaglio.importo_mensile"><span>&euro;</span>
+                                                <input type="text" name="importo_mensile" ngDefaultControl
+                                                    placeholder="" digitsonly numericType="decimal"
+                                                    [(ngModel)]="AffittoDettaglioMensileString"><span>&euro;</span>
                                             </div>
                                         </div>
                                         <div class="form-item ">
                                             <label>Spese condominiali comprese</label><br>
                                             <label class="switch">
                                                 <input type="checkbox"
-                                                    [(ngModel)]="immobile.affitto_dettaglio.spese_condominiali">
+                                                    [(ngModel)]="AffittoDettaglioSpeseCondominialiString">
                                                 <span class="slider round"></span>
                                             </label>
-                                        </div>
-                                        <div class="form-item single">
-                                            <label>Importo annuo</label>
-                                            <div class="type">
-                                                <input type="text" placeholder="" digitsonly numericType="decimal"
-                                                    [(ngModel)]="immobile.affitto_dettaglio.importo_spese_condominiali"><span>&euro;</span>
-                                            </div>
                                         </div>
                                         <div class="form-item ">
                                             <label>Cedolare secca</label><br>
@@ -296,7 +303,7 @@
                                             <label>Aliquota</label>
                                             <div class="type">
                                                 <input type="text" placeholder="" digitsonly numericType="number"
-                                                    [(ngModel)]="immobile.affitto_dettaglio.aliquota_cedolare"><span>mesi</span>
+                                                    [(ngModel)]="AffittoDettaglioAliquotaCedolareString"><span>%</span>
                                             </div>
                                         </div>
                                     </div>
@@ -363,27 +370,27 @@
                                         </div>
                                         <div class="form-item left">
                                             <label>Consistenza</label>
-                                            <input type="text" placeholder="???">
+                                            <input type="text" placeholder="">
                                         </div>
                                         <div class="form-item right">
                                             <label>Rendita</label>
                                             <div class="type">
                                                 <input type="text" placeholder="" digitsonly numericType="decimal"
-                                                    [(ngModel)]="immobile.dati_catastali.rendita"><span>&euro;</span>
+                                                    [(ngModel)]="DatiCatastaliRenditaString"><span>&euro;</span>
                                             </div>
                                         </div>
                                         <div class="form-item left">
-                                            <label>Sup. catastale</label>
+                                            <label>S.catastale tot.</label>
                                             <div class="type">
                                                 <input type="text" placeholder="" digitsonly numericType="decimal"
-                                                    [(ngModel)]="immobile.dati_catastali.superficie_totale"><span>m<sup>2</sup></span>
+                                                    [(ngModel)]="DatiCatastaliSuperficieTotaleString"><span>m<sup>2</sup></span>
                                             </div>
                                         </div>
                                         <div class="form-item right">
-                                            <label>&nbsp;</label>
+                                            <label>S. cat.tot. esc.a.s.</label>
                                             <div class="type">
                                                 <input type="text" placeholder="" digitsonly numericType="decimal"
-                                                    [(ngModel)]="immobile.dati_catastali.superficie_interni"><span>m<sup>2</sup></span>
+                                                    [(ngModel)]="DatiCatastaliSuperficieInterniString"><span>m<sup>2</sup></span>
                                             </div>
                                         </div>
                                     </div>
@@ -418,14 +425,16 @@
                                             <label>Codice Fiscale</label>
                                             <div class="type">
                                                 <input type="text" placeholder="" value="24"
-                                                    [(ngModel)]="cointestatarioSelezionato.codice_fiscale">
+                                                    [(ngModel)]="cointestatarioSelezionato.codice_fiscale"
+                                                    pattern="^[a-zA-Z]{6}[0-9]{2}[a-zA-Z][0-9]{2}[a-zA-Z][0-9]{3}[a-zA-Z]$"
+                                                    required="required">
                                             </div>
                                         </div>
                                         <div class="form-item single">
                                             <label>Quota</label>
                                             <div class="type">
                                                 <input type="text" placeholder="" digitsonly numericType="number"
-                                                    [(ngModel)]="cointestatarioSelezionato.quota"><span>%</span>
+                                                    [(ngModel)]="importoQuotaCointestatarioSelezionataString"><span>%</span>
                                             </div>
                                         </div>
                                         <div class="form-item single">
@@ -437,6 +446,17 @@
                                         <li><span>Nominativo</span><span>Quota</span></li>
                                         <li *ngFor="let cointestatario of immobile.cointestatari">
                                             <span>{{cointestatario.nominativo}}</span><span>{{cointestatario.quota}}
+                                                %
+                                                <button class="button small"
+                                                    (click)="rimuoviCointestatario(cointestatario)">x</button></span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="item">
+                                    <ul class="item-list single">
+                                        <li><span>Nominativo</span><span>Quota</span></li>
+                                        <li *ngFor="let cointestatario of immobile.cointestatari">
+                                            <span>{{cointestatario.nominativo}}</span><span>{{(cointestatario.quota+'').replace('.',',')}}
                                                 %
                                                 <button class="button small"
                                                     (click)="rimuoviCointestatario(cointestatario)">x</button></span>
@@ -467,7 +487,7 @@
                                             <select class="select-css" (change)="selezionaTassa($event.target)">
                                                 <option *ngFor="let tipologia of tipologieTasse"
                                                     value="{{tipologia.codice}}"
-                                                    selected="{{tipologia.codice === tassaSelezionata.tassa_id ? 'selected' : ''}}">
+                                                    selected="{{tipologia.codice === tassaSelezionata.tassa_id+'' ? 'selected' : ''}}">
                                                     {{tipologia.descrizione}}
                                                 </option>
                                             </select>
@@ -476,8 +496,8 @@
                                             <label>Importo annuale</label>
                                             <div class="type">
                                                 <input type="text" placeholder="" value="24" digitsonly
-                                                    numericType="decimal"
-                                                    [(ngModel)]="tassaSelezionata.importo_annuale"><span>&euro;</span>
+                                                    numericType="decimalIta"
+                                                    [(ngModel)]="importoTassaSelezionataString"><span>&euro;</span>
                                             </div>
                                         </div>
                                         <div class="form-item single">
@@ -487,7 +507,7 @@
                                     <ul class="item-list form  auto-height">
                                         <li><span>Tipologia tassa</span><span>Importo annuale</span></li>
                                         <li *ngFor="let tassa of immobile.tasse">
-                                            <span>{{tassa.descrizione_tassa}}</span><span>{{tassa.importo_annuale}}
+                                            <span>{{tassa.descrizione_tassa}}</span><span>{{(tassa.importo_annuale+'').replace('.',',')}}
                                                 &euro;
                                                 <button class="button small"
                                                     (click)="rimuoviTassa(tassa)">x</button></span></li>
@@ -499,44 +519,6 @@
                 </div>
             </div>
         </div>
-        <!--<div class="footer table">
-            <div class="row">
-                <div class="cell">
-                    <div class="scheda-table single-column">
-                        <div class="item">
-                            <div class="item-list" id="wizard-start" *ngIf="wizardStart">
-                                <button class="button light back left" style="display: hidden" >indietro</button>
-                                <button class="button forward right" (click)="goToDestinazione()">avanti</button>
-                            </div>
-                            <div class="item-list" id="wizard-destinazione" *ngIf="wizardDestinazione">
-                                <button class="button light back left" (click)="goToStart()">indietro</button>
-                            </div>
-                            <div class="item-list" id="wizard-dati-destinazione" *ngIf="wizardDatiDestinazione">
-                                <button class="button light back left" (click)="goToDestinazione()">indietro</button>
-                                <button class="button forward right" (click)="goToDati()">avanti</button>
-                            </div>
-                            <div class="item-list" id="wizard-dati" *ngIf="wizardDati">
-                                <button class="button light back left"
-                                    (click)="goToDatiDestinazione()">indietro</button>
-                                <button class="button forward right" (click)="goToCatastali()">avanti</button>
-                            </div>
-                            <div class="item-list" id="wizard-catastali" *ngIf="wizardCatastali">
-                                <button class="button light back left" (click)="goToDatiBack()">indietro</button>
-                                <button class="button forward right" (click)="goToCointestatari()">avanti</button>
-                            </div>
-                            <div class="item-list" id="wizard-cointestatari" *ngIf="wizardCointestatari">
-                                <button class="button light back left" (click)="goToCatastali()">indietro</button>
-                                <button class="button forward right" (click)="goToTassazione()">avanti</button>
-                            </div>
-                            <div class="item-list" id="wizard-tassazione" *ngIf="wizardTassazione">
-                                <button class="button light back left" (click)="goToCointestatari()">indietro</button>
-                                <button class="button forward right" (click)="salvaImmobile()">salva</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>-->
         <div class="footer table">
             <div class="row">
                 <div class="cell" id="wizard-start" *ngIf="wizardStart">

@@ -1,11 +1,12 @@
 import { ImmobileDettaglio, PianoAmmortamento, AnnoPianoAmmortamento, LogErroriService, StoreService, AlertService, IconeService, Immobile } from 'broker-lib';
 import { ImmobiliService, SessionService } from 'broker-lib';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { BaseComponent } from 'src/app/component/base.component';
 import { ModalService } from 'src/app/services/modal/modal.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { LogoutCommunicationService } from 'src/app/services/logoutCommunication/logoutcommunication.service';
 
 @Component({
   selector: 'app-ammortamento',
@@ -32,9 +33,11 @@ export class AmmortamentoPage extends BaseComponent implements OnInit {
     public storeService: StoreService,
     public alertService: AlertService,
     public modalService: ModalService,
-    public iconeService: IconeService
+    public iconeService: IconeService,
+    public ngZone: NgZone,
+    public logoutComm: LogoutCommunicationService
   ) {
-    super(sessionService, storeService, router, logErroriService, alertService, iconeService);
+    super(sessionService, storeService, router, logErroriService, alertService, iconeService, ngZone);
     this.pianoAmmortamento = new Array<PianoAmmortamento>();
     this.anniPianoAmmortamento = new Array<AnnoPianoAmmortamento>();
     this.immobile = new ImmobileDettaglio();
@@ -50,44 +53,60 @@ export class AmmortamentoPage extends BaseComponent implements OnInit {
   }
 
   private initializeApp() {
-    // ottengo il token
-    this.sessionService.userDataObservable.pipe(
+
+    this.logoutComm.logoutObservable.pipe(
       takeUntil(this.unsubscribe$)
-    ).subscribe(present => {
-      if (present) {
-        this.route.queryParams.pipe(
-          takeUntil(this.unsubscribe$)
-        ).subscribe(params => {
+    ).subscribe(r => {
+      this.unsubscribe$.next();
+      this.unsubscribe$.complete();
+      this.ngZone.run(() => this.router.navigate(['login'])).then();
+    });
 
-          this.immobile.indirizzo = params.immobile_indirizzo;
-          this.immobile.civico = params.immobile_civico;
-          this.immobile.citta = params.immobile_citta;
-          this.immobile.data_aggiornamento = params.immobile_data_aggiornamento;
-          this.immobile.proprieta_id = params.immobile_id;
-          this.immobile.codice_tipologia = params.immobile_codice_tipologia;
+    if (this.sessionService.existsSessionData()) {
+      this.wsToken = this.sessionService.getUserData();
+      this.loadPageData();
+    } else {
+      this.sessionService.userDataObservable.pipe(
+        takeUntil(this.unsubscribe$)
+      ).subscribe(present => {
+        if (present) {
+          this.wsToken = this.sessionService.getUserData();
+          this.loadPageData();
+        } else {
+          this.logout();
+        }
+      });
+      this.sessionService.loadUserData();
+    }
+  }
 
-          this.immobiliService.getPianoAmmortamentoImmobile(params.immobile_id).pipe(
-            takeUntil(this.unsubscribe$)
-          ).subscribe(r => {
-            if (r.Success) {
-              this.pianoAmmortamento = r.Data.piano_ammortamento;
-              this.organizzaPiano();
-            } else {
-              this.manageError(r);
-            }
-          });
+  private logout(): void {
+    this.sessionService.clearUserData();
+    this.logoutComm.comunicateLogout();
+  }
 
-          const cliente_id = this.sessionService.getCliente().cliente_id;
-          if (cliente_id === 0 || cliente_id === undefined) {
-            // non ho clienti selezionati
-            this.presentAlert("E' necessario selezionare un cliente");
-            this.goToPage('home');
-          }
-        });
+  private loadPageData() {
+    this.route.queryParams.pipe(
+      takeUntil(this.unsubscribe$)
+    ).subscribe(params => {
 
-      } else {
-        this.goToPage('login');
-      }
+      this.immobile.indirizzo = params.immobile_indirizzo;
+      this.immobile.civico = params.immobile_civico;
+      this.immobile.citta = params.immobile_citta;
+      this.immobile.data_aggiornamento = params.immobile_data_aggiornamento;
+      this.immobile.proprieta_id = params.immobile_id;
+      this.immobile.codice_tipologia = params.immobile_codice_tipologia;
+
+      this.immobiliService.getPianoAmmortamentoImmobile(params.immobile_id).pipe(
+        takeUntil(this.unsubscribe$)
+      ).subscribe(r => {
+        if (r.Success) {
+          this.pianoAmmortamento = r.Data.piano_ammortamento;
+          this.organizzaPiano();
+        } else {
+          this.manageError(r);
+        }
+      });
     });
   }
 
@@ -171,7 +190,7 @@ export class AmmortamentoPage extends BaseComponent implements OnInit {
   }
 
   public apriSchedaImmobile(immobile: number) {
-    this.goToPageParams('scheda-immobile', { queryParams: { immobile_id: immobile } });
+    this.goToPageParams('client-immobile', { queryParams: { immobile_id: immobile } });
   }
 
   ionViewDidLeave() {

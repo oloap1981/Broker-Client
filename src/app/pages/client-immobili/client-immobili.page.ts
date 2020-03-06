@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { Immobile, ClientiService, SessionService, StoreService, LogErroriService, AlertService, IconeService, ImmobiliService } from 'broker-lib';
 import { BaseComponent } from 'src/app/component/base.component';
 import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { LogoutCommunicationService } from 'src/app/services/logoutCommunication/logoutcommunication.service';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-client-immobili',
@@ -21,8 +23,11 @@ export class ClientImmobiliPage extends BaseComponent implements OnInit {
     public logErroriService: LogErroriService,
     public alertService: AlertService,
     public iconeService: IconeService,
-    public immobiliService: ImmobiliService) {
-    super(sessionService, storeService, router, logErroriService, alertService, iconeService);
+    public immobiliService: ImmobiliService,
+    public ngZone: NgZone,
+    public logoutComm: LogoutCommunicationService,
+    public currencyPipe: CurrencyPipe) {
+    super(sessionService, storeService, router, logErroriService, alertService, iconeService, ngZone);
 
   }
 
@@ -36,31 +41,55 @@ export class ClientImmobiliPage extends BaseComponent implements OnInit {
   }
 
   private initializeApp() {
-
-    this.sessionService.userDataObservable.pipe(
+    this.logoutComm.logoutObservable.pipe(
       takeUntil(this.unsubscribe$)
-    ).subscribe(present => {
-      if (present) {
-        this.wsToken = this.sessionService.getUserData();
-        if (this.wsToken !== undefined
-          && this.wsToken !== null
-          && this.wsToken.token_value !== ''
-          && this.wsToken.utente !== undefined) {
-          console.log('Utente in possesso di token');
-
-          this.sessionService.setCliente(this.wsToken.cliente);
-        } else {
-          this.goToPage('login');
-        }
-      } else {
-        this.goToPage('login');
-      }
+    ).subscribe(r => {
+      this.unsubscribe$.next();
+      this.unsubscribe$.complete();
+      this.ngZone.run(() => this.router.navigate(['login'])).then();
     });
-    this.sessionService.loadUserData();
+    // ottengo il token
+    if (this.sessionService.existsSessionData()) {
+      this.wsToken = this.sessionService.getUserData();
+      this.loadPageData();
+    } else {
+      this.sessionService.userDataObservable.pipe(
+        takeUntil(this.unsubscribe$)
+      ).subscribe(present => {
+        if (present) {
+          this.wsToken = this.sessionService.getUserData();
+          this.loadPageData();
+        } else {
+          this.logout();
+        }
+      });
+      this.sessionService.loadUserData();
+    }
+  }
+
+  private logout(): void {
+    this.sessionService.clearUserData();
+    this.logoutComm.comunicateLogout();
+  }
+
+  private loadPageData() {
+    if (this.wsToken !== undefined
+      && this.wsToken !== null
+      && this.wsToken.token_value !== ''
+      && this.wsToken.utente !== undefined) {
+      console.log('Utente in possesso di token');
+
+      this.sessionService.setCliente(this.wsToken.cliente);
+    } else {
+      this.goToPage('login');
+    }
+  }
+
+  public getCurrency(amount: number) {
+    return this.currencyPipe.transform(amount, 'EUR', '', '1.2-2', 'it');
   }
 
   public apriSchedaImmobile(immobile: number) {
-    // this.router.navigate(['scheda-immobile'], { queryParams: { immobile_id: immobile } });
     this.goToPageParams('client-immobile', { queryParams: { immobile_id: immobile } });
   }
 

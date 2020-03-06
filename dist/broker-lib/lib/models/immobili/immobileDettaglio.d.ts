@@ -13,6 +13,8 @@ export declare class ImmobileDettaglio {
     descrizione_tipologia: string;
     data_aggiornamento: number;
     valore_acquisto: number;
+    valore_catastale: number;
+    valore_commerciale: number;
     quota: number;
     catastale_cod: string;
     comune_zone_cod: string;

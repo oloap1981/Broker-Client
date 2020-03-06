@@ -1,5 +1,6 @@
 import { Injectable, Injector, NgZone, NgModule } from '@angular/core';
 import { HttpClient, HttpBackend, HttpClientModule } from '@angular/common/http';
+import { timeout } from 'rxjs/operators';
 import { __awaiter } from 'tslib';
 import { AlertController } from '@ionic/angular';
 import { Storage, IonicStorageModule } from '@ionic/Storage';
@@ -24,7 +25,7 @@ class ConstantsService {
         this.putImmobileServiceName = 'putimmobile';
         this.delImmobileServiceName = 'delimmobile';
         this.getCatastoServiceName = 'getcatasto';
-        this.getPianoAmmortamentoServiceName = 'getPiano';
+        this.getPianoAmmortamentoServiceName = 'getpiano';
         // clienti
         this.getClientiServiceName = 'getclienti';
         this.getClienteServiceName = 'getcliente';
@@ -63,6 +64,7 @@ class ConstantsService {
         this.tipologiaImmobilePonte = 'ponte';
         this.tipologiaImmobileStazione = 'stazione';
         this.tipologiaImmobileCantiere = 'cantiere';
+        this.tipologiaImmobileTerreno = 'terreno';
         // dropdown
         this.getDdlEuribor = 'get_ddl_tipo_euribor';
         this.getDdlAffittuari = 'get_ddl_tipo_affittuari';
@@ -70,6 +72,8 @@ class ConstantsService {
         this.getDdlOmi = 'get_ddl_omi';
         this.getDdlTipologiaCatastale = 'get_ddl_tipologia_catastale';
         this.getDdlComuni = 'get_ddl_comuni';
+        // vari
+        this.httpTimeout = 5000; // per il momento il timeout è impostato a 5 secondi per le chiamate get e post
     }
 }
 ConstantsService.decorators = [
@@ -167,6 +171,8 @@ if (false) {
     /** @type {?} */
     ConstantsService.prototype.tipologiaImmobileCantiere;
     /** @type {?} */
+    ConstantsService.prototype.tipologiaImmobileTerreno;
+    /** @type {?} */
     ConstantsService.prototype.getDdlEuribor;
     /** @type {?} */
     ConstantsService.prototype.getDdlAffittuari;
@@ -178,6 +184,8 @@ if (false) {
     ConstantsService.prototype.getDdlTipologiaCatastale;
     /** @type {?} */
     ConstantsService.prototype.getDdlComuni;
+    /** @type {?} */
+    ConstantsService.prototype.httpTimeout;
 }
 
 /**
@@ -201,7 +209,7 @@ class BrokerHttpService {
      * @return {?}
      */
     get(path) {
-        return this.http.get(this.constants.baseAppUrl + "/" + path);
+        return this.http.get(this.constants.baseAppUrl + "/" + path).pipe(timeout(this.constants.httpTimeout));
     }
     /**
      * @param {?} path
@@ -209,7 +217,7 @@ class BrokerHttpService {
      */
     getNoToken(path) {
         console.log("HttpService get " + path);
-        return this.httpClientLogin.get(this.constants.baseAppUrl + "/" + path);
+        return this.httpClientLogin.get(this.constants.baseAppUrl + "/" + path).pipe(timeout(this.constants.httpTimeout));
     }
     /**
      * @param {?} path
@@ -217,7 +225,7 @@ class BrokerHttpService {
      * @return {?}
      */
     post(path, body) {
-        return this.http.post(this.constants.baseAppUrl + "/" + path, body);
+        return this.http.post(this.constants.baseAppUrl + "/" + path, body).pipe(timeout(this.constants.httpTimeout));
     }
     /**
      * @param {?} path
@@ -226,7 +234,7 @@ class BrokerHttpService {
      */
     postNoToken(path, body) {
         console.log("HttpService post " + path);
-        return this.httpClientLogin.post(this.constants.baseAppUrl + "/" + path, body);
+        return this.httpClientLogin.post(this.constants.baseAppUrl + "/" + path, body).pipe(timeout(this.constants.httpTimeout));
     }
 }
 BrokerHttpService.decorators = [
@@ -684,6 +692,8 @@ class ImmobileDettaglio {
         this.descrizione_tipologia = "";
         this.data_aggiornamento = 0;
         this.valore_acquisto = 0;
+        this.valore_catastale = 0;
+        this.valore_commerciale = 0;
         this.quota = 0;
         this.catastale_cod = "";
         this.comune_zone_cod = "";
@@ -717,6 +727,10 @@ if (false) {
     ImmobileDettaglio.prototype.data_aggiornamento;
     /** @type {?} */
     ImmobileDettaglio.prototype.valore_acquisto;
+    /** @type {?} */
+    ImmobileDettaglio.prototype.valore_catastale;
+    /** @type {?} */
+    ImmobileDettaglio.prototype.valore_commerciale;
     /** @type {?} */
     ImmobileDettaglio.prototype.quota;
     /** @type {?} */
@@ -917,7 +931,7 @@ class AffittoDettaglio {
         this.cedolare_secca = false;
         this.aliquota_cedolare = 0;
         this.prima_scadenza_anni = 0;
-        this.data_inizio = '';
+        this.data_inizio = 0;
         this.importo_mensile = 0;
     }
 }
@@ -1008,7 +1022,14 @@ class SessionService {
      */
     setCliente(cliente) {
         this.cliente = cliente;
-        this.immobiliService.getImmobili(this.cliente.cliente_id + '').subscribe((/**
+        this.caricaImmobili(this.cliente.cliente_id + '');
+    }
+    /**
+     * @param {?} idCliente
+     * @return {?}
+     */
+    caricaImmobili(idCliente) {
+        this.immobiliService.getImmobili(idCliente).subscribe((/**
          * @param {?} r
          * @return {?}
          */
@@ -1026,6 +1047,7 @@ class SessionService {
      */
     clearUserData() {
         this.storeService.clearUserData();
+        this.cliente = new Cliente();
         this.userData = new WsToken();
     }
     /**
@@ -1068,8 +1090,14 @@ class SessionService {
     /**
      * @return {?}
      */
+    existsSessionData() {
+        return (this.userData !== null && this.userData !== undefined && JSON.stringify(this.userData) !== '{}' && this.userData.token_value !== '');
+    }
+    /**
+     * @return {?}
+     */
     loadUserData() {
-        if (this.userData !== null && this.userData !== undefined && this.userData.token_value === '') {
+        if (this.userData !== null && this.userData !== undefined && JSON.stringify(this.userData) !== '{}' && this.userData.token_value !== '') {
             this.userDataSubject.next(true);
         }
         else {
@@ -1638,6 +1666,9 @@ class IconeService {
             "A/6",
             "D/10"
         ];
+        this.tipologiaTerreno = [
+            "T/1"
+        ];
         this.tipologiaUfficio = [
             "A/10",
             "C/3",
@@ -1715,6 +1746,9 @@ class IconeService {
      * @return {?}
      */
     getClasseIcona(tipologia) {
+        if (this.tipologiaTerreno.includes(tipologia)) {
+            return this.constants.tipologiaImmobileTerreno;
+        }
         if (this.tipologiaAgricolo.includes(tipologia)) {
             return this.constants.tipologiaImmobileAgricolo;
         }
@@ -1798,6 +1832,11 @@ if (false) {
      * @private
      */
     IconeService.prototype.tipologiaAgricolo;
+    /**
+     * @type {?}
+     * @private
+     */
+    IconeService.prototype.tipologiaTerreno;
     /**
      * @type {?}
      * @private
@@ -2218,6 +2257,8 @@ if (false) {
     ReportGenerale.prototype.passivi;
     /** @type {?} */
     ReportGenerale.prototype.attivo;
+    /** @type {?} */
+    ReportGenerale.prototype.detrazione_interessi_attivo;
 }
 
 /**

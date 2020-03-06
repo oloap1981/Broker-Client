@@ -1,4 +1,4 @@
 export declare class DdlItem {
-    codice: number;
+    codice: string;
     descrizione: string;
 }

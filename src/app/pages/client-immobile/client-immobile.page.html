@@ -15,10 +15,15 @@
                                         class="button view only-icon"
                                         (click)="openModal('custom-modal-1')">&nbsp;</button></h3>
                                 <ul class="item-list">
-                                    <li><span>Book Value</span><span>{{immobile.valore_acquisto}}</span></li>
-                                    <li><span>Valore catastale</span><span>{{immobile.valore_acquisto}}</span></li>
-                                    <li><span>Valore commerciale</span><span>-</span></li>
-                                    <li><span>Rendita</span><span>{{immobile.dati_catastali ? immobile.dati_catastali.rendita : '-'}}</span>
+                                    <li><span>Book Value</span><span>{{getCurrency(immobile.valore_acquisto)}}
+                                            €</span></li>
+                                    <li><span>Valore catastale</span><span>{{getCurrency(immobile.valore_catastale)}}
+                                            €</span></li>
+                                    <li><span>Valore
+                                            commerciale</span><span>{{getCurrency(immobile.valore_commerciale)}}
+                                            €</span></li>
+                                    <li><span>Rendita</span><span>{{immobile.dati_catastali ? getCurrency(immobile.dati_catastali.rendita) : '-'}}
+                                            €</span>
                                     </li>
                                     <li><span>1ª casa</span><span>{{immobile.prima_casa ? 'Si' : 'No'}}</span></li>
                                 </ul>
@@ -34,7 +39,8 @@
                                     </li>
 
                                     <li><span>Durata</span><span>{{immobile.mutuo_dettaglio.durata}}</span></li>
-                                    <li><span>Tasso</span><span>{{immobile.mutuo_dettaglio.tipo_tasso}}</span></li>
+                                    <li><span>Tasso</span><span>{{immobile.mutuo_dettaglio.tipo_tasso == 'F' ? 'Fisso' : 'Variabile'}}</span>
+                                    </li>
                                 </ul>
                                 <ul class="item-list" *ngIf="!immobile.mutuo">
                                     <li><span><i>Mutuo Assente</i></span><span>&nbsp;</span>&nbsp;</li>
@@ -43,22 +49,27 @@
                         </div>
                         <div class="scheda-row full-width">
                             <div class="item">
-                                <h3 class="item-title">Tasse <span>{{getTotaleTasse(immobile)}} €</span></h3>
+                                <h3 class="item-title">Tasse <span>{{getCurrency(getTotaleTasse(immobile))}} €</span>
+                                </h3>
                                 <ul class="item-list">
                                     <li *ngFor="let t of immobile.tasse">
-                                        <span>{{t.descrizione_tassa}}</span><span>{{t.importo_annuale}} €</span></li>
+                                        <span>{{t.descrizione_tassa}}</span><span>{{getCurrency(t.importo_annuale)}}
+                                            €</span></li>
                                 </ul>
                             </div>
                         </div>
                         <div class="scheda-row full-width">
                             <div class="item">
-                                <h3 class="item-title">Affitti
-                                    <span>{{immobile.affitto_dettaglio ? immobile.affitto_dettaglio.importo_mensile : '-'}}</span>
+                                <h3 class="item-title">Affitto
+                                    <span>{{immobile.affitto_dettaglio ? getCurrency(immobile.affitto_dettaglio.importo_mensile) + ' €' : ''}}</span>
                                 </h3>
-                                <ul class="item-list">
+                                <ul class="item-list" *ngIf="immobile.affitto_dettaglio">
                                     <li><span>Affittuario</span><span>{{immobile.affitto_dettaglio ? immobile.affitto_dettaglio.descrizione_affittuario : '-'}}</span>
                                     </li>
                                 </ul>
+                                <div *ngIf="!immobile.affitto_dettaglio">
+                                    <span>Non affittato</span>
+                                </div>
                             </div>
                         </div>
                     </div>

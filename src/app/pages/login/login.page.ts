@@ -22,7 +22,6 @@ export class LoginPage implements OnInit {
 
   constructor(
     private loginService: LoginService,
-    private storeService: StoreService,
     private router: Router,
     private clientiService: ClientiService,
     private alertService: AlertService,

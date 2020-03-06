@@ -44,10 +44,12 @@ export declare class ConstantsService {
     readonly tipologiaImmobilePonte: string;
     readonly tipologiaImmobileStazione: string;
     readonly tipologiaImmobileCantiere: string;
+    readonly tipologiaImmobileTerreno: string;
     readonly getDdlEuribor: string;
     readonly getDdlAffittuari: string;
     readonly getDdlTasse: string;
     readonly getDdlOmi: string;
     readonly getDdlTipologiaCatastale: string;
     readonly getDdlComuni: string;
+    readonly httpTimeout: number;
 }
