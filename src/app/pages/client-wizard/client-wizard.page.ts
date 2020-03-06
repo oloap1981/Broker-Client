@@ -309,7 +309,7 @@ export class ClientWizardPage extends BaseComponent implements OnInit {
         if (!this.immobile.mutuo) {
             delete this.immobile.mutuo_dettaglio;
         } else {
-            this.immobile.mutuo_dettaglio.data_inizio = this.dataInizioMutuo.getDay() + '/' + (this.dataInizioMutuo.getMonth() + 1) + '/' + this.dataInizioMutuo.getFullYear();
+            this.immobile.mutuo_dettaglio.data_inizio = this.dataInizioMutuo.getTime();
         }
         if (this.immobile.tasse && this.immobile.tasse.length === 0) {
             delete this.immobile.tasse;
