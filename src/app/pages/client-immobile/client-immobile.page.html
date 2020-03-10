@@ -11,9 +11,7 @@
                     <div class="scheda-table">
                         <div class="scheda-row full-width">
                             <div class="item">
-                                <h3 class="item-title">Proprietà: {{immobile.quota}} %<button
-                                        class="button view only-icon"
-                                        (click)="openModal('custom-modal-1')">&nbsp;</button></h3>
+                                <h3 class="item-title">Proprietà: {{immobile.quota}} %<button class="button view only-icon" (click)="openModal('custom-modal-1')">&nbsp;</button></h3>
                                 <ul class="item-list">
                                     <li><span>Book Value</span><span>{{getCurrency(immobile.valore_acquisto)}}
                                             €</span></li>
@@ -31,8 +29,7 @@
                         </div>
                         <div class="scheda-row full-width">
                             <div class="item">
-                                <h3 class="item-title">Mutuo: <button class="button view only-icon"
-                                        *ngIf="immobile.mutuo" (click)="apriPianoAmmortamento()">&nbsp;</button>
+                                <h3 class="item-title">Mutuo: <button class="button view only-icon" *ngIf="immobile.mutuo" (click)="apriPianoAmmortamento()">&nbsp;</button>
                                 </h3>
                                 <ul class="item-list" *ngIf="immobile.mutuo">
                                     <li><span>Data</span><span>{{immobile.mutuo_dettaglio.data_inizio | raDateFormat_gg_mm_aaaa}}</span>
