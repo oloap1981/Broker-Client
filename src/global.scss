@@ -600,6 +600,7 @@ input:checked + .slider:before {
 }
 .main-header {
     &.client {
+        width: 100%;
         &:after {
             content: "";
             position: absolute; 
@@ -2453,6 +2454,9 @@ input:checked + .slider:before {
                 border-top-left-radius: 0;
                 border-bottom-left-radius: 0;
                 margin-left: 1px;
+            }
+            &:only-of-type{
+                border-radius: 15px;
             }
         }
     }
