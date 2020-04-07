@@ -22,15 +22,19 @@
                                             secca</span><span>{{(reportGenerale.attivo.cedolare_secca ? 'SI' : 'NO')}}</span>
                                     </li>
                                     <li *ngIf="reportGenerale.attivo.cedolare_secca"><span>Aliquota
-                                            Cedolare</span><span>{{reportGenerale.attivo.aliquota_cedolare}}k
-                                            &euro;</span></li>
+                                            Cedolare</span><span>{{reportGenerale.attivo.aliquota_cedolare}}
+                                            </span></li>
                                     <li><span>Prima Scadenza
                                             Anni</span><span>{{reportGenerale.attivo.prima_scadenza_anni}}</span></li>
                                     <li><span>Data
                                             Inizio</span><span>{{reportGenerale.attivo.data_inizio | raDateFormat_gg_mm_aaaa}}</span>
                                     </li>
-                                    <li><span>Importo Mensile</span><span>{{reportGenerale.attivo.importo_mensile}}k
+                                    <li><span>Importo Mensile</span><span>{{getCurrency(reportGenerale.attivo.importo_mensile)}}
                                             &euro;</span></li>
+                                    <li><span>Importo Annuale</span><span>{{getCurrency(totale)}}
+                                            &euro;</span></li>
+                                    <li><span>Importo Netto</span><span>{{getCurrency(netto)}}
+                                        &euro;</span></li>
                                 </ul>
                             </div>
                         </div>

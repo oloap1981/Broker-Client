@@ -115,15 +115,23 @@ export class ClientHomePage extends BaseComponent implements OnInit {
           if (r.Success) {
             if (r.Data.elencoTipologieCatastaliA) {
               this.patrimoniA = r.Data.elencoTipologieCatastaliA;
+              this.totalePatrimoniA = 0;
               this.calcolaTotalePatrimoniA();
             }
             if (r.Data.elencoTipologieCatastaliC) {
-              this.patrimoniA = r.Data.elencoTipologieCatastaliC;
+              this.patrimoniC = r.Data.elencoTipologieCatastaliC;
+              this.totalePatrimoniC = 0
               this.calcolaTotalePatrimoniC();
             }
             if (r.Data.elencoTipologieCatastaliT) {
-              this.patrimoniA = r.Data.elencoTipologieCatastaliT;
+              this.patrimoniT = r.Data.elencoTipologieCatastaliT;
+              this.totalePatrimoniT = 0
               this.calcolaTotalePatrimoniT();
+            }
+            if (r.Data.elencoTipologieCatastaliAltro) {
+              this.patrimoniX = r.Data.elencoTipologieCatastaliAltro;
+              this.totalePatrimoniX = 0
+              this.calcolaTotalePatrimoniX();
             }
           } else {
             this.manageError(r);

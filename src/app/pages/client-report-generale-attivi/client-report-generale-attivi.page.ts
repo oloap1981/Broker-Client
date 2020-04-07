@@ -6,6 +6,9 @@ import { BaseComponent } from 'src/app/component/base.component';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { LogoutCommunicationService } from 'src/app/services/logoutCommunication/logoutcommunication.service';
+import { CurrencyPipe } from '@angular/common';
+import { registerLocaleData } from '@angular/common';
+import localeIt from '@angular/common/locales/it';
 
 @Component({
   selector: 'app-client-report-generale-attivi',
@@ -16,6 +19,8 @@ export class ClientReportGeneraleAttiviPage extends BaseComponent implements OnI
 
   private unsubscribe$ = new Subject<void>();
   public reportGenerale: ReportGenerale;
+  public totale: number;
+  public netto: number;
 
   constructor(
     public sessionService: SessionService,
@@ -29,11 +34,13 @@ export class ClientReportGeneraleAttiviPage extends BaseComponent implements OnI
     public reportService: ReportService,
     public iconeService: IconeService,
     public ngZone: NgZone,
-    public logoutComm: LogoutCommunicationService
+    public logoutComm: LogoutCommunicationService,
+    public currencyPipe: CurrencyPipe
   ) {
     super(sessionService, storeService, router, logErroriService, alertService, iconeService, ngZone);
     this.reportGenerale = new ReportGenerale();
     this.reportGenerale.passivi = new Array<ReportGeneralePassivo>();
+    registerLocaleData(localeIt, 'it');
   }
 
   ngOnInit() {
@@ -87,7 +94,10 @@ export class ClientReportGeneraleAttiviPage extends BaseComponent implements OnI
         takeUntil(this.unsubscribe$)
       ).subscribe(params => {
         this.reportGenerale = JSON.parse(params.reportGenerale) as ReportGenerale;
-        console.log(this.reportGenerale);
+        this.totale = this.reportGenerale.attivo.importo_mensile * 12;
+        var aliquota: number = this.totale / 100 * this.reportGenerale.attivo.aliquota_cedolare;
+        this.netto = this.totale - aliquota;
+        //console.log(this.reportGenerale);
       });
 
     } else {
@@ -99,4 +109,9 @@ export class ClientReportGeneraleAttiviPage extends BaseComponent implements OnI
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
+
+  public getCurrency(amount: number) {
+    return this.currencyPipe.transform(amount, 'EUR', '', '1.2-2', 'it');
+  }
+
 }

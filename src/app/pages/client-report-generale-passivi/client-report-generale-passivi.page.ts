@@ -6,6 +6,9 @@ import { BaseComponent } from 'src/app/component/base.component';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { LogoutCommunicationService } from 'src/app/services/logoutCommunication/logoutcommunication.service';
+import { CurrencyPipe } from '@angular/common';
+import { registerLocaleData } from '@angular/common';
+import localeIt from '@angular/common/locales/it';
 
 @Component({
   selector: 'app-client-report-generale-passivi',
@@ -29,11 +32,13 @@ export class ClientReportGeneralePassiviPage extends BaseComponent implements On
     public reportService: ReportService,
     public iconeService: IconeService,
     public ngZone: NgZone,
-    public logoutComm: LogoutCommunicationService
+    public logoutComm: LogoutCommunicationService,
+    public currencyPipe: CurrencyPipe
   ) {
     super(sessionService, storeService, router, logErroriService, alertService, iconeService, ngZone);
     this.reportGenerale = new ReportGenerale();
     this.reportGenerale.passivi = new Array<ReportGeneralePassivo>();
+    registerLocaleData(localeIt, 'it');
   }
 
   ngOnInit() {
@@ -72,6 +77,10 @@ export class ClientReportGeneralePassiviPage extends BaseComponent implements On
     }
   }
 
+  public getCurrency(amount: number) {
+    return this.currencyPipe.transform(amount, 'EUR', '', '1.2-2', 'it');
+  }
+  
   private logout(): void {
     this.sessionService.clearUserData();
     this.logoutComm.comunicateLogout();

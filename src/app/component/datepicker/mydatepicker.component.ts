@@ -22,11 +22,8 @@ export class MyDatePicker implements OnInit {
 
     public ngOnInit() {
         // setting to yesterday
-        if (this.inputDate) {
-            this.date1.setDate(this.inputDate.getDate());
-        } else {
-            this.date1.setDate(this.date1.getDate());
-        }
+        this.date1 = this.inputDate;
+        this.date1.setDate(this.date1.getDate());
     }
 
     private getFormattedMonth(date: Date): string {

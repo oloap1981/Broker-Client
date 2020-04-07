@@ -15,11 +15,11 @@
                         </div>-->
                         <div class="scheda-row full-width">
                             <div class="item">
-                                <div class="item-title">Abitazioni <span>{{totalePatrimoniA}} K</span></div>
+                                <div class="item-title">Abitazioni <span>{{getCurrency(totalePatrimoniA)}}</span></div>
                                 <ul class="item-list half-height">
                                     <li *ngFor="let patrimonio of patrimoniA">
-                                        <span>{{patrimonio.codice_catastale}}</span><span>{{patrimonio.book_value}}
-                                            K</span>
+                                        <span class="badge patrimonio">{{patrimonio.numero_proprieta}}</span>
+                                        <span>{{patrimonio.codice_catastale}}</span><span>{{getCurrency(patrimonio.book_value) + ''}}</span>
                                     </li>
                                     <li *ngIf="patrimoniA.length == 0">--</li>
                                 </ul>
@@ -27,25 +27,34 @@
                         </div>
                         <div class="scheda-row full-width">
                             <div class="item">
-                                <div class="item-title">Commerciali <span>{{totalePatrimoniC}} K</span></div>
+                                <div class="item-title">Commerciali <span>{{getCurrency(totalePatrimoniC)}}</span></div>
                                 <ul class="item-list half-height">
                                     <li *ngFor="let patrimonio of patrimoniC">
-                                        <span>{{patrimonio.codice_catastale}}</span><span>{{patrimonio.book_value}}
-                                            K</span>
+                                        <span>{{patrimonio.codice_catastale}}</span><span>{{getCurrency(patrimonio.book_value) + ''}}</span>
                                     </li>
-                                    <li *ngIf="patrimoniA.length == 0">--</li>
+                                    <li *ngIf="patrimoniC.length == 0">--</li>
                                 </ul>
                             </div>
                         </div>
                         <div class="scheda-row full-width">
                             <div class="item">
-                                <div class="item-title">Terreni <span>{{totalePatrimoniT}} K</span></div>
+                                <div class="item-title">Terreni <span>{{getCurrency(totalePatrimoniT)}}</span></div>
                                 <ul class="item-list half-height">
                                     <li *ngFor="let patrimonio of patrimoniT">
-                                        <span>{{patrimonio.codice_catastale}}</span><span>{{patrimonio.book_value}}
-                                            K</span>
+                                        <span>{{patrimonio.codice_catastale}}</span><span>{{getCurrency(patrimonio.book_value) + ''}}</span>
                                     </li>
-                                    <li *ngIf="patrimoniA.length == 0">--</li>
+                                    <li *ngIf="patrimoniT.length == 0">--</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="scheda-row full-width">
+                            <div class="item">
+                                <div class="item-title">Altro <span>{{getCurrency(totalePatrimoniX)}}</span></div>
+                                <ul class="item-list half-height">
+                                    <li *ngFor="let patrimonio of patrimoniX">
+                                        <span>{{patrimonio.codice_catastale}}</span><span>{{getCurrency(patrimonio.book_value) + ''}}</span>
+                                    </li>
+                                    <li *ngIf="patrimoniX.length == 0">--</li>
                                 </ul>
                             </div>
                         </div>

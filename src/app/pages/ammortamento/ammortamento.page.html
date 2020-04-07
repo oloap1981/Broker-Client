@@ -1,7 +1,10 @@
 <div class="main-body client">
     <div class="content-area">
         <div class="area-spec">
-            <div class="item path"><button class="button back only-icon">&nbsp;</button><span [ngClass]="getIconaClasseImmobileItem(immobile.codice_tipologia)">&nbsp;</span> {{immobile.indirizzo + ' ' + immobile.civico + ', ' + immobile.citta}}</div>
+            <div class="item path"><button class="button back only-icon"
+                (click)="apriSchedaImmobile(immobile.proprieta_id)">&nbsp;</button>
+                &nbsp;&nbsp;
+                <span [ngClass]="getIconaClasseImmobileItem(immobile.codice_tipologia)">&nbsp;</span> {{immobile.indirizzo + ' ' + immobile.civico + ', ' + immobile.citta}}</div>
         </div>
         <div class="content">
             <div class="scheda">

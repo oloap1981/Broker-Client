@@ -18,14 +18,15 @@
                                 <ul class="item-list">
                                     <li><span>Possesso</span><span>{{immobile.quota}}%</span></li>
                                     <li><span>Categoria</span><span>{{immobile.codice_tipologia}}</span></li>
-                                    <li><span>Passivi</span><span>{{getTotalePassiviImmobile(immobile) | k_money}}
+                                    <li><span>Passivi</span><span>{{getCurrency(getTotalePassiviImmobile(immobile))}}
                                             &euro; <img src="/assets/img/icon-view-blue-mini@2x.png"
                                                 style="margin-left: 10px"
                                                 (click)="caricaPassiviImmobile(immobile)"></span></li>
-                                    <li><span>Attivi</span><span>{{getTotaleAttiviImmobile(immobile) | k_money}} &euro;
+                                    <li><span>Attivi</span><span>{{getCurrency(getTotaleAttiviImmobile(immobile))}} &euro;
                                             <img src="/assets/img/icon-view-blue-mini@2x.png" style="margin-left: 10px"
+                                                *ngIf="getTotaleAttiviImmobile(immobile) > 0"
                                                 (click)="caricaAttiviImmobile(immobile)"></span></li>
-                                    <li><b><span>Totale</span><span>{{getTotaleImmobile(immobile) | k_money}}
+                                    <li><b><span>Totale</span><span>{{getCurrency(getTotaleImmobile(immobile))}}
                                                 &euro;</span></b></li>
                                 </ul>
                             </div>

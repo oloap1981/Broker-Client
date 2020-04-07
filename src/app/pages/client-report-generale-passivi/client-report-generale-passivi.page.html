@@ -17,7 +17,7 @@
                                 </h3>
                                 <ul class="item-list">
                                     <li *ngFor="let passivo of reportGenerale.passivi">
-                                        <span>{{passivo.descrizione_passivo}}</span><span>{{passivo.importo_annuale | k_money}}
+                                        <span>{{passivo.descrizione_passivo}}</span><span>{{getCurrency(passivo.importo_annuale)}}
                                             &euro;</span></li>
                                 </ul>
                             </div>

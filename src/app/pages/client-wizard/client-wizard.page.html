@@ -69,7 +69,7 @@
                                                 </option>
                                             </select>
                                         </div>
-                                        <div class="form-item left " style="width: 40%;">
+                                        <div class="form-item left " style="width: 50%;">
                                             <label>Valore Immobile</label>
                                             <input type="text" placeholder="" value=""
                                                 [(ngModel)]="ValoreAcquistoString">
@@ -91,7 +91,7 @@
 
                                 </div>
                             </div>
-                            <div class="scheda-table">
+                            <div class="scheda-table" *ngIf="isAbitazione">
                                 <div class="item">
                                     <div class="item-list form auto-height">
                                         <div class="form-item">
@@ -117,6 +117,25 @@
                                                 residente</a>
                                             <a [routerLink]="" (click)="scegliDestinazione(false, true, true)"
                                                 [ngClass]="{'button': true, 'choice': true, 'full-width': true, 'chosen': (!primacasa && affittata && !isNewImmobile)}">Affittata</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="scheda-table" *ngIf="!isAbitazione">
+                                <div class="item">
+                                    <div class="item-list form">
+                                        <div class="form-item">
+                                            <a [routerLink]="" (click)="scegliAffitto(true)"
+                                                [ngClass]="{'button': true, 'choice': true, 'full-width': true, 'chosen': (affittata && !isNewImmobile)}">Affittato</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <div class="item-list form">
+                                        <div class="form-item">
+                                            <a [routerLink]="" (click)="scegliAffitto(false)"
+                                                [ngClass]="{'button': true, 'choice': true, 'full-width': true, 'chosen': (!affittata && !isNewImmobile)}">Non
+                                                Affittato</a>
                                         </div>
                                     </div>
                                 </div>
@@ -216,7 +235,7 @@
                                             </div>
                                             <div class="form-item single">
                                                 <label>Data inizio</label>
-                                                <ra-date-picker [inputDate]="dataInizioMutuo"
+                                                <ra-date-picker [inputDate]="dataInizioMutuo" ngDefaultControl
                                                     [(ngModel)]="dataInizioMutuo" (sendDate)="associaData($event)">
                                                 </ra-date-picker>
                                             </div>
@@ -271,7 +290,7 @@
                                         </div>
                                         <div class="form-item single">
                                             <label>Data inizio</label>
-                                            <ra-date-picker [inputDate]="dataInizioAffitto"
+                                            <ra-date-picker [inputDate]="dataInizioAffitto" ngDefaultControl
                                                 [(ngModel)]="dataInizioAffitto" (sendDate)="associaDataAffitto($event)">
                                             </ra-date-picker>
                                         </div>
@@ -446,17 +465,6 @@
                                         <li><span>Nominativo</span><span>Quota</span></li>
                                         <li *ngFor="let cointestatario of immobile.cointestatari">
                                             <span>{{cointestatario.nominativo}}</span><span>{{cointestatario.quota}}
-                                                %
-                                                <button class="button small"
-                                                    (click)="rimuoviCointestatario(cointestatario)">x</button></span>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="item">
-                                    <ul class="item-list single">
-                                        <li><span>Nominativo</span><span>Quota</span></li>
-                                        <li *ngFor="let cointestatario of immobile.cointestatari">
-                                            <span>{{cointestatario.nominativo}}</span><span>{{(cointestatario.quota+'').replace('.',',')}}
                                                 %
                                                 <button class="button small"
                                                     (click)="rimuoviCointestatario(cointestatario)">x</button></span>

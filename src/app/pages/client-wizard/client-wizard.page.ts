@@ -155,7 +155,7 @@ export class ClientWizardPage extends BaseComponent implements OnInit {
 
     ionViewDidEnter() {
         this.initializeApp();
-        this.sessionService.setIntestazionePagina('EDIT IMMOBILE');
+        this.sessionService.setIntestazionePagina('MODIFICA IMMOBILE');
     }
 
     private initializeApp() {
@@ -602,6 +602,10 @@ export class ClientWizardPage extends BaseComponent implements OnInit {
     public aggiungiCointestatario(): void {
 
         //const pattern = /^[a-zA-Z]{6}[0-9]{2}[a-zA-Z][0-9]{2}[a-zA-Z][0-9]{3}[a-zA-Z]$/;
+        var q_tot:number = 0;
+        for (const coint of this.immobile.cointestatari) {
+            q_tot += coint.quota;
+        }
 
         if (this.cointestatarioSelezionato.codice_fiscale === '') {
             this.alertService.presentAlert('il codice fiscale è obbligatorio');
@@ -613,11 +617,12 @@ export class ClientWizardPage extends BaseComponent implements OnInit {
             cointestatarioDaAggiungere.codice_fiscale = this.cointestatarioSelezionato.codice_fiscale;
             cointestatarioDaAggiungere.quota = parseFloat(this.importoQuotaCointestatarioSelezionataString.replace(',', '.'));
 
-
             if (this.cointestatarioSelezionato.quota > 100 || this.cointestatarioSelezionato.quota < 0) {
                 this.alertService.presentAlert('La quota deve essere un numero compreso tra 0 e 100');
             } else if (this.codiceFiscaleCointestatarioPresente(this.cointestatarioSelezionato.codice_fiscale)) {
                 this.alertService.presentAlert('Il codice fiscale inserito è già presente in elenco');
+            } else if ((cointestatarioDaAggiungere.quota+q_tot) > 100) {
+                this.alertService.presentAlert('Quote eccedenti 100%');
             } else {
                 this.immobile.cointestatari.push(cointestatarioDaAggiungere);
 
@@ -625,7 +630,7 @@ export class ClientWizardPage extends BaseComponent implements OnInit {
                 this.cointestatarioSelezionato.nominativo = '';
                 this.cointestatarioSelezionato.quota = 0;
 
-                console.log(JSON.stringify(this.immobile.cointestatari));
+                //console.log(JSON.stringify(this.immobile.cointestatari));
 
             }
         }

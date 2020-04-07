@@ -97,7 +97,7 @@ export class AmmortamentoPage extends BaseComponent implements OnInit {
       this.immobile.proprieta_id = params.immobile_id;
       this.immobile.codice_tipologia = params.immobile_codice_tipologia;
 
-      this.immobiliService.getPianoAmmortamentoImmobile(params.immobile_id).pipe(
+      this.immobiliService.getPianoAmmortamentoImmobile(params.immobile_mutuo_id).pipe(
         takeUntil(this.unsubscribe$)
       ).subscribe(r => {
         if (r.Success) {
