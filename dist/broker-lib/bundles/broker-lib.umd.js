@@ -2456,6 +2456,87 @@
      * @fileoverview added by tsickle
      * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
+    var DocumentiService = /** @class */ (function () {
+        function DocumentiService(httpService, constants) {
+            this.httpService = httpService;
+            this.constants = constants;
+        }
+        /**
+         * @param {?} idcliente
+         * @param {?} idcartella
+         * @return {?}
+         */
+        DocumentiService.prototype.getCartelle = /**
+         * @param {?} idcliente
+         * @param {?} idcartella
+         * @return {?}
+         */
+        function (idcliente, idcartella) {
+            return this.httpService.get(this.constants.getCartelle
+                + this.constants.pathSeparator + idcliente
+                + this.constants.pathSeparator + idcartella);
+        };
+        /**
+         * @param {?} iddocumento
+         * @return {?}
+         */
+        DocumentiService.prototype.getDocumento = /**
+         * @param {?} iddocumento
+         * @return {?}
+         */
+        function (iddocumento) {
+            return this.httpService.get(this.constants.getDocumento
+                + this.constants.pathSeparator + iddocumento);
+        };
+        /**
+         * @param {?} cartella
+         * @return {?}
+         */
+        DocumentiService.prototype.putCartelle = /**
+         * @param {?} cartella
+         * @return {?}
+         */
+        function (cartella) {
+            return this.httpService.post(this.constants.putCartelle, cartella);
+        };
+        /**
+         * @param {?} documento
+         * @return {?}
+         */
+        DocumentiService.prototype.putDocumento = /**
+         * @param {?} documento
+         * @return {?}
+         */
+        function (documento) {
+            return this.httpService.post(this.constants.putDocumento, documento);
+        };
+        DocumentiService.decorators = [
+            { type: core.Injectable }
+        ];
+        /** @nocollapse */
+        DocumentiService.ctorParameters = function () { return [
+            { type: BrokerHttpService },
+            { type: ConstantsService }
+        ]; };
+        return DocumentiService;
+    }());
+    if (false) {
+        /**
+         * @type {?}
+         * @private
+         */
+        DocumentiService.prototype.httpService;
+        /**
+         * @type {?}
+         * @private
+         */
+        DocumentiService.prototype.constants;
+    }
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
     var BrokerLibModule = /** @class */ (function () {
         function BrokerLibModule() {
         }
@@ -2482,6 +2563,7 @@
                             ConstantsService,
                             BrokerHttpService,
                             ImmobiliService,
+                            DocumentiService,
                             ClientiService,
                             DropdownService,
                             LogErroriService,
@@ -2596,87 +2678,6 @@
          * @private
          */
         ReportService.prototype.constants;
-    }
-
-    /**
-     * @fileoverview added by tsickle
-     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
-     */
-    var DocumentiService = /** @class */ (function () {
-        function DocumentiService(httpService, constants) {
-            this.httpService = httpService;
-            this.constants = constants;
-        }
-        /**
-         * @param {?} idcliente
-         * @param {?} idcartella
-         * @return {?}
-         */
-        DocumentiService.prototype.getCartelle = /**
-         * @param {?} idcliente
-         * @param {?} idcartella
-         * @return {?}
-         */
-        function (idcliente, idcartella) {
-            return this.httpService.get(this.constants.getCartelle
-                + this.constants.pathSeparator + idcliente
-                + this.constants.pathSeparator + idcartella);
-        };
-        /**
-         * @param {?} iddocumento
-         * @return {?}
-         */
-        DocumentiService.prototype.getDocumento = /**
-         * @param {?} iddocumento
-         * @return {?}
-         */
-        function (iddocumento) {
-            return this.httpService.get(this.constants.getDocumento
-                + this.constants.pathSeparator + iddocumento);
-        };
-        /**
-         * @param {?} cartella
-         * @return {?}
-         */
-        DocumentiService.prototype.putCartelle = /**
-         * @param {?} cartella
-         * @return {?}
-         */
-        function (cartella) {
-            return this.httpService.post(this.constants.putCartelle, cartella);
-        };
-        /**
-         * @param {?} documento
-         * @return {?}
-         */
-        DocumentiService.prototype.putDocumento = /**
-         * @param {?} documento
-         * @return {?}
-         */
-        function (documento) {
-            return this.httpService.post(this.constants.putDocumento, documento);
-        };
-        DocumentiService.decorators = [
-            { type: core.Injectable }
-        ];
-        /** @nocollapse */
-        DocumentiService.ctorParameters = function () { return [
-            { type: BrokerHttpService },
-            { type: ConstantsService }
-        ]; };
-        return DocumentiService;
-    }());
-    if (false) {
-        /**
-         * @type {?}
-         * @private
-         */
-        DocumentiService.prototype.httpService;
-        /**
-         * @type {?}
-         * @private
-         */
-        DocumentiService.prototype.constants;
     }
 
     /**

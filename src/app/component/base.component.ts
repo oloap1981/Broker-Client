@@ -146,8 +146,7 @@ export class BaseComponent implements OnInit {
     }
 
     public manageHttpError(error: any) {
-        console.log("Si è verificato un errore di comunicazione:");
-        console.log(error);
+        console.log(error.error.ErrorMessage.msg_testo);
         if (error instanceof TimeoutError) {
             this.alertService.presentErrorAlert("Timeout scaduto");
         } else {

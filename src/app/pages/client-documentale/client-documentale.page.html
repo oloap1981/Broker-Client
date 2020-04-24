@@ -1,26 +1,14 @@
 <div class="main-body client">
     <div class="content-area">
         <div class="area-spec">
-            <div class="item path"><button class="button back only-icon">&nbsp;</button><span class="tipologia casa">&nbsp;</span> Viale nino bixio cincillà</div>
+            <div class="item path"><button (click)="indietro()" class="button back only-icon">&nbsp;</button><span class="tipologia casa">&nbsp;</span>{{indirizzoImmobile}}</div>
         </div>
         <div class="content lista-documentali">
             <div class="list">
-                <ul class="folder-documentali">
-                    <li class="documentale folder" routerLink="/client-documentale-file">Prova nome cartella<div class="item-count"><span class="badge">10</span></div></li>
-                    <li class="documentale folder">Prova nome cartella<div class="item-count"><span class="badge">10</span></div></li>
-                    <li class="documentale folder">Prova nome cartella<div class="item-count"><span class="badge">10</span></div></li>
-                    <li class="documentale folder">Prova nome cartella<div class="item-count"><span class="badge">10</span></div></li>
-                    <li class="documentale folder">Prova nome cartella<div class="item-count"><span class="badge">10</span></div></li>
-                    <li class="documentale folder">Prova nome cartella<div class="item-count"><span class="badge">10</span></div></li>
-                    <li class="documentale folder">Prova nome cartella<div class="item-count"><span class="badge">10</span></div></li>
-                    <li class="documentale folder">Prova nome cartella<div class="item-count"><span class="badge">10</span></div></li>
-                    <li class="documentale folder">Prova nome cartella<div class="item-count"><span class="badge">10</span></div></li>
-                    <li class="documentale folder">Prova nome cartella<div class="item-count"><span class="badge">10</span></div></li>
-                    <li class="documentale folder">Prova nome cartella<div class="item-count"><span class="badge">10</span></div></li>
-                    <li class="documentale folder">Prova nome cartella<div class="item-count"><span class="badge">10</span></div></li>
-                    <li class="documentale folder">Prova nome cartella<div class="item-count"><span class="badge">10</span></div></li>
-                    <li class="documentale folder">Prova nome cartella<div class="item-count"><span class="badge">10</span></div></li>
+                <ul class="folder-documentali" *ngIf="documenti.length > 0">
+                    <li (click)="clickFile(oggetto)" *ngFor="let oggetto of documenti" [ngClass]="{'documentale': true, 'folder': isCartella(oggetto), 'file': isDocumento(oggetto)}" >{{(isCartella(oggetto) ? oggetto.cartella_desc : oggetto.nome_file)}}</li><!-- <div class="item-count"><span class="badge">10</span></div> -->
                 </ul>
+                <h2 *ngIf="documenti.length === 0">Cartella vuota</h2>
             </div>
         </div>
     </div>

@@ -58,6 +58,9 @@ export class RaHttpInterceptor implements HttpInterceptor {
             // if you've caught / handled the error, you don't want to rethrow it unless you also want downstream consumers to have to handle it as well.
             return of(err.message); // or EMPTY may be appropriate here
         }
+        if (err.status === 404) {
+            return err.error;
+        }
         return throwError(err);
     }
 
