@@ -9,7 +9,7 @@
 
         </div>
         <div class="content bottom-footer">
-            <div id="wizard-start" *ngIf="wizardStart">
+            <div id="wizard-start" [hidden]="!wizardStart">
                 <div class="scheda">
                     <div class="scheda-content">
                         <div class="scheda-table single-column">
@@ -81,7 +81,7 @@
                     </div>
                 </div>
             </div>
-            <div id="wizard-destinazione" *ngIf="wizardDestinazione">
+            <div id="wizard-destinazione" [hidden]="!wizardDestinazione">
                 <div class="scheda">
                     <div class="scheda-content">
                         <div class="scheda-table single-column">
@@ -144,7 +144,7 @@
                     </div>
                 </div>
             </div>
-            <div id="wizard-dati-destinazione" *ngIf="wizardDatiDestinazione">
+            <div id="wizard-dati-destinazione" [hidden]="!wizardDatiDestinazione">
                 <div class="scheda">
                     <div class="scheda-content">
                         <div class="scheda-table single-column">
@@ -256,7 +256,7 @@
                     </div>
                 </div>
             </div>
-            <div id="wizard-dati" *ngIf="wizardDati">
+            <div id="wizard-dati" [hidden]="!wizardDati">
                 <div class="scheda">
                     <div class="scheda-content">
                         <div class="scheda-table single-column">
@@ -332,7 +332,7 @@
                     </div>
                 </div>
             </div>
-            <div id="wizard-catastali" *ngIf="wizardCatastali">
+            <div id="wizard-catastali" [hidden]="!wizardCatastali">
                 <div class="scheda">
                     <div class="scheda-content">
                         <div class="scheda-table single-column">
@@ -419,7 +419,7 @@
                     </div>
                 </div>
             </div>
-            <div id="wizard-cointestatari" *ngIf="wizardCointestatari">
+            <div id="wizard-cointestatari" [hidden]="!wizardCointestatari">
                 <div class="scheda">
                     <div class="scheda-content">
                         <div class="scheda-table single-column">
@@ -476,7 +476,7 @@
                     </div>
                 </div>
             </div>
-            <div id="wizard-tassazione" *ngIf="wizardTassazione">
+            <div id="wizard-tassazione" [hidden]="!wizardTassazione">
                 <div class="scheda">
                     <div class="scheda-content">
                         <div class="scheda-table single-column">
@@ -529,30 +529,30 @@
         </div>
         <div class="footer table">
             <div class="row">
-                <div class="cell" id="wizard-start" *ngIf="wizardStart">
+                <div class="cell" id="wizard-start" [hidden]="!wizardStart">
                     <button class="button light back left" style="display: none">indietro</button>
                     <button class="button forward right" (click)="goToDestinazione()">avanti</button>
                 </div>
-                <div class="cell" id="wizard-destinazione" *ngIf="wizardDestinazione">
+                <div class="cell" id="wizard-destinazione" [hidden]="!wizardDestinazione">
                     <button class="button light back left" (click)="goToStart()">indietro</button>
                 </div>
-                <div class="cell" id="wizard-dati-destinazione" *ngIf="wizardDatiDestinazione">
+                <div class="cell" id="wizard-dati-destinazione" [hidden]="!wizardDatiDestinazione">
                     <button class="button light back left" (click)="goToDestinazione()">indietro</button>
                     <button class="button forward right" (click)="goToDati()">avanti</button>
                 </div>
-                <div class="cell" id="wizard-dati" *ngIf="wizardDati">
+                <div class="cell" id="wizard-dati" [hidden]="!wizardDati">
                     <button class="button light back left" (click)="goToDatiDestinazione()">indietro</button>
                     <button class="button forward right" (click)="goToCatastali()">avanti</button>
                 </div>
-                <div class="cell" id="wizard-catastali" *ngIf="wizardCatastali">
+                <div class="cell" id="wizard-catastali" [hidden]="!wizardCatastali">
                     <button class="button light back left" (click)="goToDatiBack()">indietro</button>
                     <button class="button forward right" (click)="goToCointestatari()">avanti</button>
                 </div>
-                <div class="cell" id="wizard-cointestatari" *ngIf="wizardCointestatari">
+                <div class="cell" id="wizard-cointestatari" [hidden]="!wizardCointestatari">
                     <button class="button light back left" (click)="goToCatastali()">indietro</button>
                     <button class="button forward right" (click)="goToTassazione()">avanti</button>
                 </div>
-                <div class="cell" id="wizard-tassazione" *ngIf="wizardTassazione">
+                <div class="cell" id="wizard-tassazione" [hidden]="!wizardTassazione">
                     <button class="button light back left" (click)="goToCointestatari()">indietro</button>
                     <button class="button forward right" (click)="salvaImmobile()">salva</button>
                 </div>
