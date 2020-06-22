@@ -225,6 +225,10 @@ export class ClientImmobilePage extends BaseComponent implements OnInit {
         });
     }
 
+    public goDocumenti() {
+        this.goToPageParams('client-documentale', { queryParams: { indirizzoImmobile: this.immobile.indirizzo + ' ' + this.immobile.civico + ', ' + this.immobile.citta }});
+    }
+
     ionViewDidLeave() {
         this.unsubscribe$.next();
         this.unsubscribe$.complete();

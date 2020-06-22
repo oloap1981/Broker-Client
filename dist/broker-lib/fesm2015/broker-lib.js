@@ -1928,6 +1928,73 @@ if (false) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+class DocumentiService {
+    /**
+     * @param {?} httpService
+     * @param {?} constants
+     */
+    constructor(httpService, constants) {
+        this.httpService = httpService;
+        this.constants = constants;
+    }
+    /**
+     * @param {?} idcliente
+     * @param {?} idcartella
+     * @return {?}
+     */
+    getCartelle(idcliente, idcartella) {
+        return this.httpService.get(this.constants.getCartelle
+            + this.constants.pathSeparator + idcliente
+            + this.constants.pathSeparator + idcartella);
+    }
+    /**
+     * @param {?} iddocumento
+     * @return {?}
+     */
+    getDocumento(iddocumento) {
+        return this.httpService.get(this.constants.getDocumento
+            + this.constants.pathSeparator + iddocumento);
+    }
+    /**
+     * @param {?} cartella
+     * @return {?}
+     */
+    putCartelle(cartella) {
+        return this.httpService.post(this.constants.putCartelle, cartella);
+    }
+    /**
+     * @param {?} documento
+     * @return {?}
+     */
+    putDocumento(documento) {
+        return this.httpService.post(this.constants.putDocumento, documento);
+    }
+}
+DocumentiService.decorators = [
+    { type: Injectable }
+];
+/** @nocollapse */
+DocumentiService.ctorParameters = () => [
+    { type: BrokerHttpService },
+    { type: ConstantsService }
+];
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    DocumentiService.prototype.httpService;
+    /**
+     * @type {?}
+     * @private
+     */
+    DocumentiService.prototype.constants;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 class BrokerLibModule {
     /**
      * @return {?}
@@ -1950,6 +2017,7 @@ BrokerLibModule.decorators = [
                     ConstantsService,
                     BrokerHttpService,
                     ImmobiliService,
+                    DocumentiService,
                     ClientiService,
                     DropdownService,
                     LogErroriService,
@@ -2026,73 +2094,6 @@ if (false) {
      * @private
      */
     ReportService.prototype.constants;
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-class DocumentiService {
-    /**
-     * @param {?} httpService
-     * @param {?} constants
-     */
-    constructor(httpService, constants) {
-        this.httpService = httpService;
-        this.constants = constants;
-    }
-    /**
-     * @param {?} idcliente
-     * @param {?} idcartella
-     * @return {?}
-     */
-    getCartelle(idcliente, idcartella) {
-        return this.httpService.get(this.constants.getCartelle
-            + this.constants.pathSeparator + idcliente
-            + this.constants.pathSeparator + idcartella);
-    }
-    /**
-     * @param {?} iddocumento
-     * @return {?}
-     */
-    getDocumento(iddocumento) {
-        return this.httpService.get(this.constants.getDocumento
-            + this.constants.pathSeparator + iddocumento);
-    }
-    /**
-     * @param {?} cartella
-     * @return {?}
-     */
-    putCartelle(cartella) {
-        return this.httpService.post(this.constants.putCartelle, cartella);
-    }
-    /**
-     * @param {?} documento
-     * @return {?}
-     */
-    putDocumento(documento) {
-        return this.httpService.post(this.constants.putDocumento, documento);
-    }
-}
-DocumentiService.decorators = [
-    { type: Injectable }
-];
-/** @nocollapse */
-DocumentiService.ctorParameters = () => [
-    { type: BrokerHttpService },
-    { type: ConstantsService }
-];
-if (false) {
-    /**
-     * @type {?}
-     * @private
-     */
-    DocumentiService.prototype.httpService;
-    /**
-     * @type {?}
-     * @private
-     */
-    DocumentiService.prototype.constants;
 }
 
 /**
