@@ -20,6 +20,7 @@ export class ClientDocumentalePage extends BaseComponent implements OnInit {
   private unsubscribe$ = new Subject<void>();
 
   private idCartella = 0;
+  private idCartellaPadre = 0;
   private nomeCartella = 'root';
   public indirizzoImmobile = '';
 
@@ -131,20 +132,20 @@ export class ClientDocumentalePage extends BaseComponent implements OnInit {
     if (this.navigation.length === 1) {
       this.goToPage('client-immobile');
     } else {
-      const navigationObject = this.navigation.pop();// //tolgo l'ultimo
+      const navigationObject = this.navigation.pop(); // //tolgo l'ultimo
       this.idCartella = this.navigation[this.navigation.length - 1].id;
       this.nomeCartella = this.navigation[this.navigation.length - 1].descrizione;
       this.loadPageData();
-    }    
+    }
   }
 
   public clickFile(oggetto) {
     if (this.isCartella(oggetto)) {
-      
+
       const cartella = oggetto as Cartella;
       this.idCartellaPadre = cartella.doc_cartella_padre_id;
       this.idCartella = cartella.doc_cartella_id;
-      
+
       const navigationObject = new NavigationObject();
       navigationObject.id = this.idCartella;
       navigationObject.descrizione = this.nomeCartella;
