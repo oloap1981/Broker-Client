@@ -59,4 +59,16 @@ export declare class ImmobiliService {
      */
     invioDatiCatastali(immobile_id: number): Observable<Http.HttpResponse>;
     getPianoAmmortamentoImmobile(immobile_id: number): Observable<Http.HttpResponse>;
+    /**
+     * Chiamata per ottenere la tassazione imu dell'immobile
+     *
+     * @param  primacasa
+     * @param  affittata
+     * @param  anno anno per il quale viene richiesta l'IMU
+     * @param  immobile_id
+     * @returns response contenente l'esito in Success e ErrorMessages. Contenente l'oggetto
+     * Data dentro al quale si trova l'oggetto Imu
+     */
+    getImu(primacasa: boolean, affittata: boolean, anno: string, immobile_id: string): Observable<Http.HttpResponse>;
+    private getBooleanAsString;
 }

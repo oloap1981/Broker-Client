@@ -1,5 +1,5 @@
 import { Component, OnInit, NgZone } from '@angular/core';
-import { StoreService, ImmobileDettaglio, ImmobiliService, AlertService, LogErroriService, WsLogErrore, CointestatarioDettaglio, TassaDettaglio, SpesaDettaglio, AffittoDettaglio, MutuoDettaglio, DatiCatastaliDettaglio, OmiDettaglio, DdlItem, SessionService, DropdownService, IconeService, DdlItemSearch } from 'broker-lib';
+import { StoreService, ImmobileDettaglio, ImmobiliService, AlertService, LogErroriService, WsLogErrore, CointestatarioDettaglio, TassaDettaglio, SpesaDettaglio, AffittoDettaglio, MutuoDettaglio, DatiCatastaliDettaglio, OmiDettaglio, DdlItem, SessionService, DropdownService, IconeService, DdlItemSearch, Imu } from 'broker-lib';
 import { Router } from '@angular/router';
 import { BaseComponent } from 'src/app/component/base.component';
 import { Subject } from 'rxjs';
@@ -221,6 +221,7 @@ export class ClientWizardPage extends BaseComponent implements OnInit {
         this.loadDdlEuribor();
         this.loadDdlTipiAffittuari();
         this.loadDdlTipologieTasse();
+        this.loadImu();
 
         // this.cointestatarioSelezionato.nominativo = this.sessionService.getCliente().cognome + ' ' + this.sessionService.getCliente().nome;
         // this.cointestatarioSelezionato.quota = 100;
@@ -320,6 +321,50 @@ export class ClientWizardPage extends BaseComponent implements OnInit {
             });
     }
 
+    private loadImu() {
+
+        if (this.immobile.tasse && this.immobile.tasse.length == 0) {
+          
+          var data_oggi = new Date();
+    
+          this.immobiliService.getImu(this.immobile.prima_casa, this.immobile.affitto, data_oggi.getFullYear().toString(), this.immobile.proprieta_id.toString()).pipe(
+            takeUntil(this.unsubscribe$)
+          ).subscribe(r => {
+            if (r.Success) {
+      
+              var dati:Imu = r.Data;
+              if (dati.importo_tassa > 0){
+    
+                for (const tassa of this.tipologieTasse) {
+                  if (tassa.descrizione.toLowerCase().search("imu") >= 0){
+      
+                    const tassaDaAggiungere: TassaDettaglio = new TassaDettaglio();
+                    tassaDaAggiungere.descrizione_tassa = tassa.descrizione;
+                    tassaDaAggiungere.importo_annuale = dati.importo_tassa + 10;
+                    tassaDaAggiungere.proprieta_tasse_id = 0;
+                    tassaDaAggiungere.tassa_id = parseInt(tassa.codice);
+              
+                    this.immobile.tasse.push(tassaDaAggiungere);
+                    break;
+              
+                  }
+                }
+    
+              }
+    
+            } else {
+              this.manageError(r);
+            }
+          },
+            (error) => {
+              this.manageHttpError(error);
+            });      
+          
+        }
+    
+      }
+    
+    
     private loadDdlEuribor() {
         this.euribor = new Array<DdlItem>();
         this.dropdownService.getEuribor().pipe(

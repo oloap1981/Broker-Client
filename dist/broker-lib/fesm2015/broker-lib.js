@@ -13,12 +13,15 @@ import { Router } from '@angular/router';
  */
 class ConstantsService {
     constructor() {
+        // ng build broker-lib
+        // public readonly baseAppUrl: string = 'https://cli.readvice.it:444/services';
+        // public readonly baseAppUrl: string = 'http://89.31.75.77:443/Spring-JPA-Security';
         this.baseAppUrl = 'http://89.31.75.45:443/Spring-JPA-Security';
         // public readonly baseAppUrl: string = 'http://test.readvice.it:443/Spring-JPA-Security';
         this.tokenHeaderKey = 'Authorization';
         this.pathSeparator = '/';
         this.loginServiceName = 'login';
-        this.cambioPasswordServiceName = 'putPassword';
+        this.cambioPasswordServiceName = 'putpassword';
         // immobili
         this.getImmobiliServiceName = 'getimmobili';
         this.getImmobileServiceName = 'getimmobile';
@@ -26,6 +29,7 @@ class ConstantsService {
         this.delImmobileServiceName = 'delimmobile';
         this.getCatastoServiceName = 'getcatasto';
         this.getPianoAmmortamentoServiceName = 'getpiano';
+        this.getImuServiceName = 'get_imu';
         // clienti
         this.getClientiServiceName = 'getclienti';
         this.getClienteServiceName = 'getcliente';
@@ -102,6 +106,8 @@ if (false) {
     ConstantsService.prototype.getCatastoServiceName;
     /** @type {?} */
     ConstantsService.prototype.getPianoAmmortamentoServiceName;
+    /** @type {?} */
+    ConstantsService.prototype.getImuServiceName;
     /** @type {?} */
     ConstantsService.prototype.getClientiServiceName;
     /** @type {?} */
@@ -625,6 +631,36 @@ class ImmobiliService {
      */
     getPianoAmmortamentoImmobile(immobile_id) {
         return this.httpService.get(this.constants.getPianoAmmortamentoServiceName + this.constants.pathSeparator + immobile_id);
+    }
+    /**
+     * Chiamata per ottenere la tassazione imu dell'immobile
+     *
+     * @param {?} primacasa
+     * @param {?} affittata
+     * @param {?} anno anno per il quale viene richiesta l'IMU
+     * @param {?} immobile_id
+     * @return {?} response contenente l'esito in Success e ErrorMessages. Contenente l'oggetto
+     * Data dentro al quale si trova l'oggetto Imu
+     */
+    getImu(primacasa, affittata, anno, immobile_id) {
+        // return this.httpService.get(this.constants.getImmobileServiceName + this.constants.pathSeparator + immobile_id, tokenValue);
+        return this.httpService.get(this.constants.getImuServiceName
+            + this.constants.pathSeparator
+            + this.getBooleanAsString(primacasa)
+            + this.constants.pathSeparator
+            + this.getBooleanAsString(affittata)
+            + this.constants.pathSeparator
+            + anno
+            + this.constants.pathSeparator
+            + immobile_id);
+    }
+    /**
+     * @private
+     * @param {?} input
+     * @return {?}
+     */
+    getBooleanAsString(input) {
+        return (input ? 'true' : 'false');
     }
 }
 ImmobiliService.decorators = [
@@ -2508,6 +2544,15 @@ if (false) {
     /** @type {?} */
     TassaDettaglio.prototype.importo_annuale;
 }
+class Imu {
+    constructor() {
+        this.importo_tassa = 0;
+    }
+}
+if (false) {
+    /** @type {?} */
+    Imu.prototype.importo_tassa;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -2687,5 +2732,5 @@ if (false) {
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-export { AbilitaAppClienteRequest, AffittoDettaglio, AlertService, AnnoPianoAmmortamento, BookValue, BrokerLibModule, CambioPasswordRequest, CancellazioneImmobileRequest, Cartella, Cliente, ClientiService, CointestatarioDettaglio, Connection, DatiCatastaliDettaglio, DdlItem, DdlItemSearch, DocumentiService, Documento, DropdownService, ErrorHandlerService, ErrorMessage, Grafici, GraficiAffittuario, GraficiAndamentoAnnuale, GraficiConcentrazione, GraficiIndicatore, IconeService, Immobile, ImmobileDettaglio, ImmobileDettaglioVM, ImmobiliService, InserimentoClienteRequest, InserimentoClienteResponse, InserimentoImmobileResponse, LogErroriService, LoginRequest, LoginService, MutuoDettaglio, OmiDettaglio, PianoAmmortamento, ReportGenerale, ReportGeneraleAttivo, ReportGeneraleOggettoColonna, ReportGeneralePassivo, ReportService, SessionService, SpesaDettaglio, StoreService, TassaDettaglio, Utente, WsLogErrore, WsToken, ConstantsService as ɵa, BrokerHttpService as ɵb };
+export { AbilitaAppClienteRequest, AffittoDettaglio, AlertService, AnnoPianoAmmortamento, BookValue, BrokerLibModule, CambioPasswordRequest, CancellazioneImmobileRequest, Cartella, Cliente, ClientiService, CointestatarioDettaglio, Connection, DatiCatastaliDettaglio, DdlItem, DdlItemSearch, DocumentiService, Documento, DropdownService, ErrorHandlerService, ErrorMessage, Grafici, GraficiAffittuario, GraficiAndamentoAnnuale, GraficiConcentrazione, GraficiIndicatore, IconeService, Immobile, ImmobileDettaglio, ImmobileDettaglioVM, ImmobiliService, Imu, InserimentoClienteRequest, InserimentoClienteResponse, InserimentoImmobileResponse, LogErroriService, LoginRequest, LoginService, MutuoDettaglio, OmiDettaglio, PianoAmmortamento, ReportGenerale, ReportGeneraleAttivo, ReportGeneraleOggettoColonna, ReportGeneralePassivo, ReportService, SessionService, SpesaDettaglio, StoreService, TassaDettaglio, Utente, WsLogErrore, WsToken, ConstantsService as ɵa, BrokerHttpService as ɵb };
 //# sourceMappingURL=broker-lib.js.map

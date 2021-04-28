@@ -207,12 +207,15 @@
      */
     var ConstantsService = /** @class */ (function () {
         function ConstantsService() {
+            // ng build broker-lib
+            // public readonly baseAppUrl: string = 'https://cli.readvice.it:444/services';
+            // public readonly baseAppUrl: string = 'http://89.31.75.77:443/Spring-JPA-Security';
             this.baseAppUrl = 'http://89.31.75.45:443/Spring-JPA-Security';
             // public readonly baseAppUrl: string = 'http://test.readvice.it:443/Spring-JPA-Security';
             this.tokenHeaderKey = 'Authorization';
             this.pathSeparator = '/';
             this.loginServiceName = 'login';
-            this.cambioPasswordServiceName = 'putPassword';
+            this.cambioPasswordServiceName = 'putpassword';
             // immobili
             this.getImmobiliServiceName = 'getimmobili';
             this.getImmobileServiceName = 'getimmobile';
@@ -220,6 +223,7 @@
             this.delImmobileServiceName = 'delimmobile';
             this.getCatastoServiceName = 'getcatasto';
             this.getPianoAmmortamentoServiceName = 'getpiano';
+            this.getImuServiceName = 'get_imu';
             // clienti
             this.getClientiServiceName = 'getclienti';
             this.getClienteServiceName = 'getcliente';
@@ -297,6 +301,8 @@
         ConstantsService.prototype.getCatastoServiceName;
         /** @type {?} */
         ConstantsService.prototype.getPianoAmmortamentoServiceName;
+        /** @type {?} */
+        ConstantsService.prototype.getImuServiceName;
         /** @type {?} */
         ConstantsService.prototype.getClientiServiceName;
         /** @type {?} */
@@ -946,6 +952,61 @@
          */
         function (immobile_id) {
             return this.httpService.get(this.constants.getPianoAmmortamentoServiceName + this.constants.pathSeparator + immobile_id);
+        };
+        /**
+         * Chiamata per ottenere la tassazione imu dell'immobile
+         *
+         * @param  primacasa
+         * @param  affittata
+         * @param  anno anno per il quale viene richiesta l'IMU
+         * @param  immobile_id
+         * @returns response contenente l'esito in Success e ErrorMessages. Contenente l'oggetto
+         * Data dentro al quale si trova l'oggetto Imu
+         */
+        /**
+         * Chiamata per ottenere la tassazione imu dell'immobile
+         *
+         * @param {?} primacasa
+         * @param {?} affittata
+         * @param {?} anno anno per il quale viene richiesta l'IMU
+         * @param {?} immobile_id
+         * @return {?} response contenente l'esito in Success e ErrorMessages. Contenente l'oggetto
+         * Data dentro al quale si trova l'oggetto Imu
+         */
+        ImmobiliService.prototype.getImu = /**
+         * Chiamata per ottenere la tassazione imu dell'immobile
+         *
+         * @param {?} primacasa
+         * @param {?} affittata
+         * @param {?} anno anno per il quale viene richiesta l'IMU
+         * @param {?} immobile_id
+         * @return {?} response contenente l'esito in Success e ErrorMessages. Contenente l'oggetto
+         * Data dentro al quale si trova l'oggetto Imu
+         */
+        function (primacasa, affittata, anno, immobile_id) {
+            // return this.httpService.get(this.constants.getImmobileServiceName + this.constants.pathSeparator + immobile_id, tokenValue);
+            return this.httpService.get(this.constants.getImuServiceName
+                + this.constants.pathSeparator
+                + this.getBooleanAsString(primacasa)
+                + this.constants.pathSeparator
+                + this.getBooleanAsString(affittata)
+                + this.constants.pathSeparator
+                + anno
+                + this.constants.pathSeparator
+                + immobile_id);
+        };
+        /**
+         * @private
+         * @param {?} input
+         * @return {?}
+         */
+        ImmobiliService.prototype.getBooleanAsString = /**
+         * @private
+         * @param {?} input
+         * @return {?}
+         */
+        function (input) {
+            return (input ? 'true' : 'false');
         };
         ImmobiliService.decorators = [
             { type: core.Injectable }
@@ -3154,6 +3215,16 @@
         /** @type {?} */
         TassaDettaglio.prototype.importo_annuale;
     }
+    var Imu = /** @class */ (function () {
+        function Imu() {
+            this.importo_tassa = 0;
+        }
+        return Imu;
+    }());
+    if (false) {
+        /** @type {?} */
+        Imu.prototype.importo_tassa;
+    }
 
     /**
      * @fileoverview added by tsickle
@@ -3384,6 +3455,7 @@
     exports.ImmobileDettaglio = ImmobileDettaglio;
     exports.ImmobileDettaglioVM = ImmobileDettaglioVM;
     exports.ImmobiliService = ImmobiliService;
+    exports.Imu = Imu;
     exports.InserimentoClienteRequest = InserimentoClienteRequest;
     exports.InserimentoClienteResponse = InserimentoClienteResponse;
     exports.InserimentoImmobileResponse = InserimentoImmobileResponse;

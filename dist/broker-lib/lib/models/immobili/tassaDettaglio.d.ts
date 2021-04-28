@@ -4,3 +4,6 @@ export declare class TassaDettaglio {
     descrizione_tassa: string;
     importo_annuale: number;
 }
+export declare class Imu {
+    importo_tassa: number;
+}

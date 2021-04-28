@@ -10,6 +10,7 @@ export declare class ConstantsService {
     readonly delImmobileServiceName: string;
     readonly getCatastoServiceName: string;
     readonly getPianoAmmortamentoServiceName: string;
+    readonly getImuServiceName: string;
     readonly getClientiServiceName: string;
     readonly getClienteServiceName: string;
     readonly putClientiServiceName: string;

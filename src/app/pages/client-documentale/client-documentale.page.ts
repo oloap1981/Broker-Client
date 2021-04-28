@@ -20,6 +20,7 @@ export class ClientDocumentalePage extends BaseComponent implements OnInit {
   private unsubscribe$ = new Subject<void>();
 
   private idCartella = 0;
+  private idCartellaPadre = 0;
   private nomeCartella = 'root';
   public indirizzoImmobile = '';
 
